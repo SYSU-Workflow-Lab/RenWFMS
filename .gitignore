@@ -37,8 +37,8 @@ hs_err_pid*
 .idea/**/uiDesigner.xml
 
 # Gradle:
-.idea/**/gradle.xml
-.idea/**/libraries
+**/.idea/**/gradle.xml
+**/.idea/**/libraries
 
 # CMake
 cmake-build-debug/
@@ -172,14 +172,9 @@ venv.bak/
 COrgan/GlobalConfigContext.pyc
 ModelChecker/target/classes/org/
 ModelChecker/target/generated-sources/
-RenResourceService/.DS_Store
-RenResourceService/target/classes/org/sysu/renResourcing/resource/Agent.class
-RenResourceService/target/classes/org/sysu/renResourcing/resource/Human.class
-RenResourceService/target/generated-sources/
-RenResourceService/target/generated-test-sources/
 /COrgan/COrgan.iml
-/RenMasterPanel/RenMasterPanel/bin/
-/RenMasterPanel/RenMasterPanel/obj/
+/externalImplSrc/RenMasterPanel/RenMasterPanel/bin/
+/externalImplSrc/RenMasterPanel/RenMasterPanel/obj/
 /RenMasterPanel/packages/
 /RenMasterPanel/.vs/RenMasterPanel/v15/Server/sqlite3/db.lock
 /RenMasterPanel/.vs/RenMasterPanel/v15/Server/sqlite3/storage.ide-shm
@@ -193,11 +188,7 @@ RenResourceService/target/generated-test-sources/
 /.idea/sqldialects.xml
 /.idea/vcs.xml
 /BOEngine/BOEngine.iml
-/COrgan/.idea/COrgan.iml
-/COrgan/.idea/inspectionProfiles/Project_Default.xml
-/COrgan/.idea/misc.xml
-/COrgan/.idea/modules.xml
-/COrgan/.idea/workspace.xml
+COrgan/.idea/*
 /COrgan/static/bootstrap-dist/css/bootstrap.css
 /COrgan/static/bootstrap-dist/css/bootstrap.min.css
 /COrgan/static/bootstrap-dist/css/bootstrap-theme.css
@@ -277,4 +268,3 @@ RenResourceService/target/generated-test-sources/
 /demoSrc/ResourcingSpeedTester/ResourcingSpeedTester/bin/Debug/ResourcingSpeedTester.exe
 /demoSrc/ResourcingSpeedTester/ResourcingSpeedTester/bin/Debug/Newtonsoft.Json.dll
 /demoSrc/ResourcingSpeedTester/ResourcingSpeedTester/bin/Debug/ResourcingSpeedTester.pdb
-/externalImplSrc/RenMasterPanel/RenMasterPanel/obj/

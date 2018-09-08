@@ -9,13 +9,13 @@ namespace ArticleCrowdSourcingDemo
     {
         public const string DBServerIPAddress = "127.0.0.1";
         
-        public const string DBUsername = "boengine";
+        public const string DBUsername = "root";
         
-        public const string DBPassword = "boengine";
+        public const string DBPassword = "18214860";
         
         public const string DBName = "rencsdemo";
 
-        public const string ProcessPID = "Process_41e7252a-b75e-43b5-8e46-df4965aa7250";
+        public const string ProcessPID = "Process_b654ff84-980a-4329-bdaa-aa7397dd956e";
 
         public const string Signature = "PrUpNw1dM3zRH6j3eviklCHE9Zbvk9NavGcJ_CibW19h50Yvr-ZZYZqn5Gi_SG1cPVQEIZf2wAJgBmq4dhNj7w7t9wUEz2pcGhn-6kIRO--QqWy121gksPE8B103RtMzuOsQDcErk4LriRQRO7-Xqks-RtpBUnpInnS_lkkajQs";
 
