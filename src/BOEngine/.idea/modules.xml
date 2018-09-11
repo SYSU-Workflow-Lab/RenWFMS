@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/BOEngine.iml" filepath="$PROJECT_DIR$/BOEngine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../RenCommon/RenCommon.iml" filepath="$PROJECT_DIR$/../RenCommon/RenCommon.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../RenNameService/RenNameService.iml" filepath="$PROJECT_DIR$/../RenNameService/RenNameService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../RenResourceService/RenResourceService.iml" filepath="$PROJECT_DIR$/../RenResourceService/RenResourceService.iml" />
+    </modules>
+  </component>
+</project>
