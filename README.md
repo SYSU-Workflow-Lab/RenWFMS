@@ -99,6 +99,7 @@ PS：建议使用IntelliJ IDEA打开本项目
 - 用于模拟整个众包的执行流程
 - 使用Visual Studio打开
 - 运行这个之前要做一个代码上的修改，文件在GlobalDataPackage.cs中，我们要修改PID为我们对应上传的流程文件的PID，这个可以从数据库中查看，是```renboengine```数据库中的```ren_process```表
+- 同时还需要修改数据库的参数
 - 修改完后，就可以运行了
 
 ### 5. 运行ArticleCrowdSourcingQueueMonitor

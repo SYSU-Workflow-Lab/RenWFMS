@@ -11,7 +11,7 @@ namespace ArticleCrowdSourcingDemo
         
         public const string DBUsername = "root";
         
-        public const string DBPassword = "18214860";
+        public const string DBPassword = "root";
         
         public const string DBName = "rencsdemo";
 
