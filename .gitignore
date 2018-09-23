@@ -24,12 +24,12 @@ hs_err_pid*
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # IntelliJ IDEA
-**/.idea/*
+.idea/
 *.iws
 *.iml
 *.ipr
-**/out/*
-**/target/*
+out/
+target/
 
 # CMake
 cmake-build-debug/
@@ -149,10 +149,10 @@ venv.bak/
 .mypy_cache/
 
 # vs generated files
-**/.vs/*
-**/bin/*
-**/obj/*
-**/packages/*
+.vs/
+bin/
+obj/
+packages/
 
 # web UI
-**/static/*
+static/
