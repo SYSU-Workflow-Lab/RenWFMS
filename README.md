@@ -72,7 +72,7 @@ PS：建议使用IntelliJ IDEA打开本项目
 
 ### 1. 写入数据库
 
-与众包相关的有两个数据库，分别是```rencorgan```（sql脚本文件为```.\exampleProcess\Crowdsourcing\COranDB\rencorgan.sql```和```rencsdemo```(sql脚本文件为```.\exampleProcess\Crowdsourcing\COranDB\rencsdemo.sql```），参照上一节第三步进行写入数据库操作。
+与众包相关的有两个数据库，分别是```rencorgan```（sql脚本文件为```.\exampleProcess\Crowdsourcing\COrganDB\rencorgan.sql```和```rencsdemo```(sql脚本文件为```.\exampleProcess\Crowdsourcing\DBSchema\rencsdemo.sql```），参照上一节第三步进行写入数据库操作。
 
 ### 2. 运行COrgan
 
