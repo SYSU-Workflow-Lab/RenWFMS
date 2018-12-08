@@ -171,7 +171,7 @@ namespace RenMasterPanel.Forms
                 MPController.CurrentTransaction.ProcessName = npf.ProcessName;
                 MPController.CurrentTransaction.ProcessPID = pid;
                 var BRList = new List<string>();
-                // upload BO Content
+                // upload BO Content (BOVector: e.g. { { "bo_name", Request }, { "bo_content", content of Request.xml } })
                 foreach (var boDict in MPController.CurrentTransaction.BOVector)
                 {
                     var retKVP = MPController.UploadBO(boDict["bo_name"], boDict["bo_content"]).First();

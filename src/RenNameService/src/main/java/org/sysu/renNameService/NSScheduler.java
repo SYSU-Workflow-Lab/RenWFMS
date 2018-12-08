@@ -3,6 +3,7 @@
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
 package org.sysu.renNameService;
+import org.springframework.stereotype.Component;
 import org.sysu.renCommon.utility.TimestampUtil;
 import org.sysu.renNameService.transaction.NameServiceTransaction;
 import org.sysu.renNameService.utility.LogUtil;
@@ -19,13 +20,16 @@ import java.util.concurrent.locks.ReentrantLock;
  * Date  : 2018/1/24
  * Usage : Name service scheduler for concurrent control.
  */
+
+@Component
 public class NSScheduler implements Observer {
+
+
     /**
-     * Get the name service scheduler.
-     * @return {@code NSScheduler} global unique instance
+     * Constructor for singleton scheduler.
      */
-    public static NSScheduler GetInstance() {
-        return NSScheduler.syncObject;
+    private NSScheduler() {
+
     }
 
     /**
@@ -133,11 +137,6 @@ public class NSScheduler implements Observer {
     }
 
     /**
-     * Private constructor for singleton scheduler.
-     */
-    private NSScheduler() { }
-
-    /**
      * Pending transaction queue.
      */
     private PriorityBlockingQueue<NameServiceTransaction> TransactionQueue = new PriorityBlockingQueue<>();
@@ -151,9 +150,4 @@ public class NSScheduler implements Observer {
      * Lock for executing set.
      */
     private ReentrantLock executingSetLock = new ReentrantLock();
-
-    /**
-     * Scheduler global unique instance.
-     */
-    private static final NSScheduler syncObject = new NSScheduler();
 }

@@ -3,17 +3,17 @@
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
 package org.sysu.renNameService;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.sysu.renNameService.entity.*;
 import org.sysu.renNameService.nameSpacing.NameSpacingService;
 import org.sysu.renNameService.roleMapping.RoleMappingService;
 import org.sysu.renNameService.transaction.NameServiceTransaction;
 import org.sysu.renNameService.transaction.TransactionType;
-import org.sysu.renNameService.utility.HibernateUtil;
 import org.sysu.renNameService.utility.LogUtil;
 import org.sysu.renNameService.utility.SerializationUtil;
-import org.sysu.renCommon.utility.TimestampUtil;
+import org.sysu.renNameService.utility.SpringContextUtil;
 
 import java.util.*;
 
@@ -21,19 +21,26 @@ import java.util.*;
  * Author: Rinkako
  * Date  : 2018/1/24
  * Usage : This class actually handle a specific transaction.
- *         An executor should be supervise by the main scheduler or a tracker.
+ * An executor should be supervise by the main scheduler or a tracker.
  */
+
 public class NSExecutor extends Observable {
+
+    private RoleMappingService roleMappingService;
+
     /**
      * Create a new name service transaction executor.
+     *
      * @param executorObserver executor supervisor
      */
     NSExecutor(Observer executorObserver) {
         this.addObserver(executorObserver);
+        roleMappingService = (RoleMappingService) SpringContextUtil.getBean("roleMappingService");
     }
 
     /**
      * Execute name service transaction synchronously.
+     *
      * @param nst {@code NameServiceTransaction} instance
      * @return execution result
      */
@@ -51,51 +58,51 @@ public class NSExecutor extends Observable {
                     String rtid = (String) args.get("rtid");
                     switch (act) {
                         case "getWorkerByBRole":
-                            ArrayList<String> bRoles = RoleMappingService.GetWorkerByBusinessRole(rtid, (String) args.get("brole"));
+                            ArrayList<String> bRoles = roleMappingService.GetWorkerByBusinessRole(rtid, (String) args.get("brole"));
                             retStr = SerializationUtil.JsonSerialization(bRoles, rtid);
                             execResult.put("rtid", rtid);
                             break;
                         case "getBRoleByWorker":
-                            ArrayList<String> gidList = RoleMappingService.GetBusinessRoleByGlobalId(rtid, (String) args.get("gid"));
+                            ArrayList<String> gidList = roleMappingService.GetBusinessRoleByGlobalId(rtid, (String) args.get("gid"));
                             retStr = SerializationUtil.JsonSerialization(gidList, rtid);
                             execResult.put("rtid", rtid);
                             break;
                         case "register":
-                            RoleMappingService.RegisterRoleMapService(rtid, (String) args.get("organGid"), (String) args.get("dataVersion"), (String) args.get("map"));
+                            roleMappingService.RegisterRoleMapService(rtid, (String) args.get("organGid"), (String) args.get("dataVersion"), (String) args.get("map"));
                             retStr = "OK";
                             execResult.put("rtid", rtid);
                             break;
                         case "fin":
-                            RoleMappingService.FinishRoleMapService(rtid);
+                            roleMappingService.FinishRoleMapService(rtid);
                             retStr = "OK";
                             execResult.put("rtid", rtid);
                             break;
                         case "getAllResourceFromCOrgan":
-                            retStr = RoleMappingService.GetAllResourceFromCOrgan((String) args.get("renid"), rtid == null ? "": rtid, nst.getTransactionContext().getNsid());
+                            retStr = roleMappingService.GetAllResourceFromCOrgan((String) args.get("renid"), rtid == null ? "" : rtid, nst.getTransactionContext().getNsid());
                             if (rtid != null) {
                                 execResult.put("rtid", rtid);
                             }
                             break;
                         case "getAllConnectionFromCOrgan":
-                            retStr = RoleMappingService.GetAllConnectionFromCOrgan((String) args.get("renid"), rtid == null ? "": rtid, nst.getTransactionContext().getNsid());
+                            retStr = roleMappingService.GetAllConnectionFromCOrgan((String) args.get("renid"), rtid == null ? "" : rtid, nst.getTransactionContext().getNsid());
                             if (rtid != null) {
                                 execResult.put("rtid", rtid);
                             }
                             break;
                         case "getDataVersionAndGidFromCOrgan":
-                            retStr = RoleMappingService.GetDataVersionAndGidFromCOrgan((String) args.get("renid"), nst.getTransactionContext().getNsid());
+                            retStr = roleMappingService.GetDataVersionAndGidFromCOrgan((String) args.get("renid"), nst.getTransactionContext().getNsid());
                             break;
                         case "getInvolved":
-                            ArrayList<RenRolemapEntity> involves = RoleMappingService.GetInvolvedResource(rtid);
+                            ArrayList<RenRolemapEntity> involves = roleMappingService.GetInvolvedResource(rtid);
                             retStr = SerializationUtil.JsonSerialization(involves, rtid);
                             execResult.put("rtid", rtid);
                             break;
                         case "loadParticipant":
-                            RoleMappingService.LoadParticipant((String) args.get("renid"), rtid, nst.getTransactionContext().getNsid());
+                            roleMappingService.LoadParticipant((String) args.get("renid"), rtid, nst.getTransactionContext().getNsid());
                             retStr = "OK";
                             break;
                         case "unloadParticipant":
-                            RoleMappingService.UnloadParticipant(rtid);
+                            roleMappingService.UnloadParticipant(rtid);
                             retStr = "OK";
                             break;
                     }
@@ -223,15 +230,14 @@ public class NSExecutor extends Observable {
 //                HibernateUtil.CloseLocalSession();
 //            }
             return retStr;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             LogUtil.Log("Executor Exception Occurred, " + ex, NSExecutor.class.getName(),
                     LogUtil.LogLevelType.ERROR, context.getRtid());
+            ex.printStackTrace();
             execResult.put("context", nst);
             execResult.put("nsid", context.getNsid());
             execResult.put("execCode", GlobalContext.TRANSACTION_EXECUTOR_FAILED);
-        }
-        finally {
+        } finally {
             // bubble notification to scheduler or tracker which supervise this executor
             this.setChanged();
             this.notifyObservers(execResult);
