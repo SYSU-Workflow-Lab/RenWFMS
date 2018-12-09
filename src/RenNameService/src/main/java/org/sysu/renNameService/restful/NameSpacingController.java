@@ -4,6 +4,7 @@
  */
 package org.sysu.renNameService.restful;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.sysu.renCommon.utility.AuthDomainHelper;
 import org.sysu.renNameService.GlobalContext;
@@ -31,6 +32,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/ns")
 public class NameSpacingController {
+
+    /**
+     * Transaction scheduler.
+     */
+    @Autowired
+    private NSScheduler scheduler;
 
     /**
      * Create a new process for a ren user.
@@ -69,7 +76,7 @@ public class NameSpacingController {
             args.put("name", name);
             args.put("mainbo", mainbo);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "createProcess", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -115,7 +122,7 @@ public class NameSpacingController {
             args.put("name", name);
             args.put("content", content);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "uploadBO", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -153,7 +160,7 @@ public class NameSpacingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("pid", pid);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "getProcessBOList", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -191,7 +198,7 @@ public class NameSpacingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("renid", renid);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "getProcessByRenId", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -229,7 +236,7 @@ public class NameSpacingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("domain", domain);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "getProcessByDomain", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -267,7 +274,7 @@ public class NameSpacingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("pid", pid);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "getProcessByPid", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -309,7 +316,7 @@ public class NameSpacingController {
             args.put("renid", renid);
             args.put("processName", processName);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "containProcess", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -350,7 +357,7 @@ public class NameSpacingController {
             args.put("boid", boid);
             args.put("rtid", rtid == null ? "" : rtid);  // rtid not exist for selecting process to launch
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "getBO", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -413,7 +420,7 @@ public class NameSpacingController {
             args.put("authType", authType);
             args.put("binding", binding == null ? "" : binding);  // binding not exist when using business role map service
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "submitProcess", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -451,7 +458,7 @@ public class NameSpacingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("rtid", rtid);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "startProcess", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -489,7 +496,7 @@ public class NameSpacingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("rtid", rtid);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "checkFinish", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -528,7 +535,7 @@ public class NameSpacingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("rtid", rtid);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "getRuntimeRecord", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -567,7 +574,7 @@ public class NameSpacingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("activeOnly", activeOnly);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "getAllRuntimeRecord", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -611,7 +618,7 @@ public class NameSpacingController {
             args.put("domain", domain);
             args.put("activeOnly", activeOnly);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "getRuntimeRecordByDomain", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -655,7 +662,7 @@ public class NameSpacingController {
             args.put("launcher", launcher);
             args.put("activeOnly", activeOnly);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "getRuntimeRecordByLauncher", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -694,7 +701,7 @@ public class NameSpacingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("rtid", rtid);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "getRuntimeLogByRTID", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -732,7 +739,7 @@ public class NameSpacingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("rtid", rtid);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "transshipGetSpanTree", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.ScheduleSync(t);
+            String jsonifyResult = (String) this.scheduler.ScheduleSync(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -791,7 +798,7 @@ public class NameSpacingController {
             args.put("event", event);
             args.put("payload", payload);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "transshipCallback", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.ScheduleSync(t);
+            String jsonifyResult = (String) this.scheduler.ScheduleSync(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -837,7 +844,7 @@ public class NameSpacingController {
             args.put("workerId", workerId);
             args.put("payload", payload);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "transshipWorkitem", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.ScheduleSync(t);
+            String jsonifyResult = (String) this.scheduler.ScheduleSync(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -883,7 +890,7 @@ public class NameSpacingController {
             args.put("workerId", workerId);
             args.put("payload", payload);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "transshipWorkitem", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.ScheduleSync(t);
+            String jsonifyResult = (String) this.scheduler.ScheduleSync(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -929,7 +936,7 @@ public class NameSpacingController {
             args.put("workerId", workerId);
             args.put("payload", payload);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "transshipWorkitem", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.ScheduleSync(t);
+            String jsonifyResult = (String) this.scheduler.ScheduleSync(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -975,7 +982,7 @@ public class NameSpacingController {
             args.put("workerId", workerId);
             args.put("payload", payload);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "transshipWorkitem", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.ScheduleSync(t);
+            String jsonifyResult = (String) this.scheduler.ScheduleSync(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -1021,7 +1028,7 @@ public class NameSpacingController {
             args.put("workerId", workerId);
             args.put("payload", payload);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "transshipWorkitem", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.ScheduleSync(t);
+            String jsonifyResult = (String) this.scheduler.ScheduleSync(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -1067,7 +1074,7 @@ public class NameSpacingController {
             args.put("workerId", workerId);
             args.put("payload", payload);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "transshipWorkitem", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.ScheduleSync(t);
+            String jsonifyResult = (String) this.scheduler.ScheduleSync(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -1113,7 +1120,7 @@ public class NameSpacingController {
             args.put("workerId", workerId);
             args.put("payload", payload);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "transshipWorkitem", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.ScheduleSync(t);
+            String jsonifyResult = (String) this.scheduler.ScheduleSync(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -1159,7 +1166,7 @@ public class NameSpacingController {
             args.put("workerId", workerId);
             args.put("payload", payload);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "transshipWorkitem", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.ScheduleSync(t);
+            String jsonifyResult = (String) this.scheduler.ScheduleSync(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -1205,7 +1212,7 @@ public class NameSpacingController {
             args.put("workerId", workerId);
             args.put("payload", payload);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "transshipWorkitem", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.ScheduleSync(t);
+            String jsonifyResult = (String) this.scheduler.ScheduleSync(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -1252,7 +1259,7 @@ public class NameSpacingController {
             args.put("rtid", rtid);
             args.put("workerId", workerId);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "transshipWorkqueue", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.ScheduleSync(t);
+            String jsonifyResult = (String) this.scheduler.ScheduleSync(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -1299,7 +1306,7 @@ public class NameSpacingController {
             args.put("type", type);
             args.put("workerIdList", workerIdList);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "transshipWorkqueue", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.ScheduleSync(t);
+            String jsonifyResult = (String) this.scheduler.ScheduleSync(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -1337,7 +1344,7 @@ public class NameSpacingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("rtid", rtid);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "transshipGetAll", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.ScheduleSync(t);
+            String jsonifyResult = (String) this.scheduler.ScheduleSync(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -1377,7 +1384,7 @@ public class NameSpacingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("domain", domain);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "transshipGetAllWorkitemsForDomain", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.ScheduleSync(t);
+            String jsonifyResult = (String) this.scheduler.ScheduleSync(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -1415,7 +1422,7 @@ public class NameSpacingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("workerId", workerId);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "transshipGetAllActiveForParticipant", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.ScheduleSync(t);
+            String jsonifyResult = (String) this.scheduler.ScheduleSync(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -1453,7 +1460,7 @@ public class NameSpacingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("wid", wid);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.Namespacing, "transshipGetWorkitem", args);
-            String jsonifyResult = (String) NameSpacingController.scheduler.ScheduleSync(t);
+            String jsonifyResult = (String) this.scheduler.ScheduleSync(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -1462,8 +1469,4 @@ public class NameSpacingController {
         return rnModel;
     }
 
-    /**
-     * Transaction scheduler.
-     */
-    private static NSScheduler scheduler = NSScheduler.GetInstance();
 }

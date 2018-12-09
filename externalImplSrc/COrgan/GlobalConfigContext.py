@@ -12,7 +12,7 @@ initialization and runtime environment.
 RAPPKEY = '@\xc2\xbbK\xd1\xb0\x95i\x8d\xfa#\xf3\xebX\xa9\xde\xa3Sb\xfb\xf5\x00\xa1\xe1'
 RDBHOST = '127.0.0.1'
 RDBUSER = 'root'
-RDBPASSWORD = '18214860'
+RDBPASSWORD = 'root'
 RDBPORT = '3306'
 RDBPATH = 'rencorgan'
 UNAUTHORIZED = "__COrgan_Unauthorized__"

@@ -3,6 +3,7 @@
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
 package org.sysu.renNameService.restful;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.sysu.renNameService.NSScheduler;
 import org.sysu.renNameService.authorization.AuthorizationService;
@@ -25,6 +26,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/rolemap")
 public class RoleMappingController {
+
+    /**
+     * Transaction scheduler.
+     */
+    @Autowired
+    private NSScheduler scheduler;
+
     /**
      * Get worker's id by his business role.
      * @param rtid process rtid (required)
@@ -56,7 +64,7 @@ public class RoleMappingController {
             args.put("rtid", rtid);
             args.put("brole", brole);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.BusinessRoleMapping, "getWorkerByBRole", args);
-            String jsonifyResult = (String) RoleMappingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -96,7 +104,7 @@ public class RoleMappingController {
             args.put("rtid", rtid);
             args.put("gid", gid);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.BusinessRoleMapping, "getBRoleByWorker", args);
-            String jsonifyResult = (String) RoleMappingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -146,7 +154,7 @@ public class RoleMappingController {
             args.put("dataVersion", dataVersion);
             args.put("map", map);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.BusinessRoleMapping, "register", args);
-            String jsonifyResult = (String) RoleMappingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -182,7 +190,7 @@ public class RoleMappingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("rtid", rtid);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.BusinessRoleMapping, "fin", args);
-            String jsonifyResult = (String) RoleMappingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -218,7 +226,7 @@ public class RoleMappingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("rtid", rtid);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.BusinessRoleMapping, "getInvolved", args);
-            String jsonifyResult = (String) RoleMappingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -259,7 +267,7 @@ public class RoleMappingController {
             args.put("renid", renid);
             args.put("rtid", rtid);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.BusinessRoleMapping, "loadParticipant", args);
-            String jsonifyResult = (String) RoleMappingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -296,7 +304,7 @@ public class RoleMappingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("rtid", rtid);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.BusinessRoleMapping, "unloadParticipant", args);
-            String jsonifyResult = (String) RoleMappingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -333,7 +341,7 @@ public class RoleMappingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("renid", renid);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.BusinessRoleMapping, "getAllResourceFromCOrgan", args);
-            String jsonifyResult = (String) RoleMappingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -370,7 +378,7 @@ public class RoleMappingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("renid", renid);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.BusinessRoleMapping, "getAllConnectionFromCOrgan", args);
-            String jsonifyResult = (String) RoleMappingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -406,7 +414,7 @@ public class RoleMappingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("renid", renid);
             NameServiceTransaction t = TransactionCreator.Create(TransactionType.BusinessRoleMapping, "getDataVersionAndGidFromCOrgan", args);
-            String jsonifyResult = (String) RoleMappingController.scheduler.Schedule(t);
+            String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -414,9 +422,4 @@ public class RoleMappingController {
         }
         return rnModel;
     }
-
-    /**
-     * Transaction scheduler.
-     */
-    private static NSScheduler scheduler = NSScheduler.GetInstance();
 }

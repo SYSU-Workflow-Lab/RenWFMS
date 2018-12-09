@@ -505,6 +505,7 @@ public class AuthorizationService {
             if (!cmtFlag) {
                 transaction.rollback();
             }
+            ex.printStackTrace();
             LogUtil.Log(String.format("CheckWorkitemSignature(KEY:%s, WID:%s) but exception occurred, %s",
                     signature, workitemId, ex), AuthorizationService.class.getName(), LogUtil.LogLevelType.ERROR, "");
             throw ex;

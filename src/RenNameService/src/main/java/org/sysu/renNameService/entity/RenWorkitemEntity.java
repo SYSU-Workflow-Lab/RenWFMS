@@ -35,7 +35,7 @@ public class RenWorkitemEntity {
     private String timertrigger;
     private String timerexpiry;
     private Timestamp latestStartTime;
-    private long executeTime;
+    private Long executeTime;
 
     @Id
     @Column(name = "wid")
@@ -68,7 +68,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "processId")
+    @Column(name = "process_id")
     public String getProcessId() {
         return processId;
     }
@@ -78,7 +78,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "boId")
+    @Column(name = "bo_id")
     public String getBoId() {
         return boId;
     }
@@ -98,7 +98,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "taskPolymorphismId")
+    @Column(name = "task_polymorphism_id")
     public String getTaskPolymorphismId() {
         return taskPolymorphismId;
     }
@@ -118,7 +118,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "firingTime")
+    @Column(name = "firing_time")
     public Timestamp getFiringTime() {
         return firingTime;
     }
@@ -128,7 +128,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "enablementTime")
+    @Column(name = "enablement_time")
     public Timestamp getEnablementTime() {
         return enablementTime;
     }
@@ -138,7 +138,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "startTime")
+    @Column(name = "start_time")
     public Timestamp getStartTime() {
         return startTime;
     }
@@ -148,7 +148,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "completionTime")
+    @Column(name = "completion_time")
     public Timestamp getCompletionTime() {
         return completionTime;
     }
@@ -168,7 +168,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "resourceStatus")
+    @Column(name = "resource_status")
     public String getResourceStatus() {
         return resourceStatus;
     }
@@ -178,7 +178,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "startedBy")
+    @Column(name = "started_by")
     public String getStartedBy() {
         return startedBy;
     }
@@ -188,7 +188,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "completedBy")
+    @Column(name = "completed_by")
     public String getCompletedBy() {
         return completedBy;
     }
@@ -218,7 +218,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "latestStartTime")
+    @Column(name = "latest_start_time")
     public Timestamp getLatestStartTime() {
         return latestStartTime;
     }
@@ -228,12 +228,12 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "executeTime")
-    public long getExecuteTime() {
+    @Column(name = "execute_time")
+    public Long getExecuteTime() {
         return executeTime;
     }
 
-    public void setExecuteTime(long executeTime) {
+    public void setExecuteTime(Long executeTime) {
         this.executeTime = executeTime;
     }
 
