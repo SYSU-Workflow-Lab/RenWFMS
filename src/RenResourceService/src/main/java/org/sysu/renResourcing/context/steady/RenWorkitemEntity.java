@@ -69,7 +69,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "processId", nullable = false, length = 64)
+    @Column(name = "process_id", nullable = false, length = 64)
     public String getProcessId() {
         return processId;
     }
@@ -79,7 +79,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "boId", nullable = false, length = 64)
+    @Column(name = "bo_id", nullable = false, length = 64)
     public String getBoId() {
         return boId;
     }
@@ -99,7 +99,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "taskPolymorphismId", nullable = false, length = -1)
+    @Column(name = "task_polymorphism_id", nullable = false, length = -1)
     public String getTaskPolymorphismId() {
         return taskPolymorphismId;
     }
@@ -119,7 +119,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "firingTime", nullable = true)
+    @Column(name = "firing_time", nullable = true)
     public Timestamp getFiringTime() {
         return firingTime;
     }
@@ -129,7 +129,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "enablementTime", nullable = true)
+    @Column(name = "enablement_time", nullable = true)
     public Timestamp getEnablementTime() {
         return enablementTime;
     }
@@ -139,7 +139,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "startTime", nullable = true)
+    @Column(name = "start_time", nullable = true)
     public Timestamp getStartTime() {
         return startTime;
     }
@@ -149,7 +149,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "completionTime", nullable = true)
+    @Column(name = "completion_time", nullable = true)
     public Timestamp getCompletionTime() {
         return completionTime;
     }
@@ -169,7 +169,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "resourceStatus", nullable = true, length = 128)
+    @Column(name = "resource_status", nullable = true, length = 128)
     public String getResourceStatus() {
         return resourceStatus;
     }
@@ -179,7 +179,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "startedBy", nullable = true, length = 64)
+    @Column(name = "started_by", nullable = true, length = 64)
     public String getStartedBy() {
         return startedBy;
     }
@@ -189,7 +189,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "completedBy", nullable = true, length = 64)
+    @Column(name = "completed_by", nullable = true, length = 64)
     public String getCompletedBy() {
         return completedBy;
     }
@@ -219,7 +219,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "latestStartTime", nullable = true)
+    @Column(name = "latest_start_time", nullable = true)
     public Timestamp getLatestStartTime() {
         return latestStartTime;
     }
@@ -229,7 +229,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "executeTime", nullable = false)
+    @Column(name = "execute_time", nullable = false)
     public long getExecuteTime() {
         return executeTime;
     }
@@ -239,7 +239,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "callbackNodeId", nullable = false, length = 64)
+    @Column(name = "callback_node_id", nullable = false, length = 64)
     public String getCallbackNodeId() {
         return callbackNodeId;
     }
