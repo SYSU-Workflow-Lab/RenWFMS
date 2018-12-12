@@ -1,4 +1,4 @@
-package org.sysu.renNameService.entity;
+package org.sysu.renNameService.entity.multikeyclass;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -10,7 +10,7 @@ import java.util.Objects;
  * Date  : 2018/6/1
  * Usage :
  */
-public class RenAuthuserEntityPK implements Serializable {
+public class RenAuthuserEntityMKC implements Serializable {
     private String username;
     private String domain;
 
@@ -38,7 +38,7 @@ public class RenAuthuserEntityPK implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RenAuthuserEntityPK that = (RenAuthuserEntityPK) o;
+        RenAuthuserEntityMKC that = (RenAuthuserEntityMKC) o;
         return Objects.equals(username, that.username) &&
                 Objects.equals(domain, that.domain);
     }

@@ -39,6 +39,12 @@ public class NameSpacingController {
     @Autowired
     private NSScheduler scheduler;
 
+    @Autowired
+    private AuthorizationService authorizationService;
+
+    @Autowired
+    private AuthTokenManager authTokenManager;
+
     /**
      * Create a new process for a ren user.
      *
@@ -67,7 +73,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (!AuthorizationService.CheckValid(token)) {
+            if (!authorizationService.CheckValid(token)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
@@ -113,7 +119,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (!AuthorizationService.CheckValid(token)) {
+            if (!authorizationService.CheckValid(token)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
@@ -153,7 +159,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (!AuthorizationService.CheckValid(token)) {
+            if (!authorizationService.CheckValid(token)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
@@ -191,7 +197,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (!AuthorizationService.CheckValid(token)) {
+            if (!authorizationService.CheckValid(token)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
@@ -229,7 +235,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (!AuthorizationService.CheckValid(token)) {
+            if (!authorizationService.CheckValid(token)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
@@ -267,7 +273,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (!AuthorizationService.CheckValid(token)) {
+            if (!authorizationService.CheckValid(token)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
@@ -308,7 +314,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (!AuthorizationService.CheckValid(token)) {
+            if (!authorizationService.CheckValid(token)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
@@ -349,7 +355,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (!AuthorizationService.CheckValid(token)) {
+            if (!authorizationService.CheckValid(token)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
@@ -405,7 +411,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (!AuthorizationService.CheckValid(token)) {
+            if (!authorizationService.CheckValid(token)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
@@ -451,7 +457,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (!AuthorizationService.CheckValid(token)) {
+            if (!authorizationService.CheckValid(token)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
@@ -489,7 +495,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // check authorization
-            if (!AuthorizationService.CheckRTIDSignature(signature, rtid)) {
+            if (!authorizationService.CheckRTIDSignature(signature, rtid)) {
                 return ReturnModelHelper.UnauthorizedResponse(signature);
             }
             // logic
@@ -526,8 +532,8 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if ((AuthorizationService.CheckValidLevel(token) < 0 &&
-                    AuthTokenManager.GetDomain(token).equals(AuthDomainHelper.GetDomainByRTID(rtid))) &&
+            if ((authorizationService.CheckValidLevel(token) < 0 &&
+                    authTokenManager.GetDomain(token).equals(AuthDomainHelper.GetDomainByRTID(rtid))) &&
                     !token.equals(GlobalContext.INTERNAL_TOKEN)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
@@ -564,7 +570,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check, only super admin can use this function
-            if (!AuthTokenManager.GetDomain(token).equals("admin") && !token.equals(GlobalContext.INTERNAL_TOKEN)) {
+            if (!authTokenManager.GetDomain(token).equals("admin") && !token.equals(GlobalContext.INTERNAL_TOKEN)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
@@ -605,8 +611,8 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if ((AuthorizationService.CheckValidLevel(token) < 0 &&
-                    AuthTokenManager.GetDomain(token).equals(domain)) &&
+            if ((authorizationService.CheckValidLevel(token) < 0 &&
+                    authTokenManager.GetDomain(token).equals(domain)) &&
                     !token.equals(GlobalContext.INTERNAL_TOKEN)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
@@ -649,8 +655,8 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if ((AuthorizationService.CheckValidLevel(token) < 0 &&
-                    AuthTokenManager.GetDomain(token).equals(AuthDomainHelper.GetDomainByAuthName(launcher))) &&
+            if ((authorizationService.CheckValidLevel(token) < 0 &&
+                    authTokenManager.GetDomain(token).equals(AuthDomainHelper.GetDomainByAuthName(launcher))) &&
                     !token.equals(GlobalContext.INTERNAL_TOKEN)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
@@ -692,8 +698,8 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if ((AuthorizationService.CheckValidLevel(token) < 0 &&
-                    AuthTokenManager.GetDomain(token).equals(AuthDomainHelper.GetDomainByRTID(rtid))) &&
+            if ((authorizationService.CheckValidLevel(token) < 0 &&
+                    authTokenManager.GetDomain(token).equals(AuthDomainHelper.GetDomainByRTID(rtid))) &&
                     !token.equals(GlobalContext.INTERNAL_TOKEN)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
@@ -732,7 +738,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // check authorization
-            if (!signature.equals(GlobalContext.INTERNAL_TOKEN) && !AuthorizationService.CheckRTIDSignature(signature, rtid)) {
+            if (!signature.equals(GlobalContext.INTERNAL_TOKEN) && !authorizationService.CheckRTIDSignature(signature, rtid)) {
                 return ReturnModelHelper.UnauthorizedResponse(signature);
             }
             // logic
@@ -782,7 +788,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // check authorization
-            if (!AuthorizationService.CheckRTIDSignature(signature, rtid)) {
+            if (!authorizationService.CheckRTIDSignature(signature, rtid)) {
                 return ReturnModelHelper.UnauthorizedResponse(signature);
             }
             // logic
@@ -834,7 +840,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // check authorization
-            if (!signature.equals(GlobalContext.INTERNAL_TOKEN) && !AuthorizationService.CheckWorkitemSignature(signature, workitemId)) {
+            if (!signature.equals(GlobalContext.INTERNAL_TOKEN) && !authorizationService.CheckWorkitemSignature(signature, workitemId)) {
                 return ReturnModelHelper.UnauthorizedResponse(signature);
             }
             // logic
@@ -880,7 +886,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // check authorization
-            if (!signature.equals(GlobalContext.INTERNAL_TOKEN) && !AuthorizationService.CheckWorkitemSignature(signature, workitemId)) {
+            if (!signature.equals(GlobalContext.INTERNAL_TOKEN) && !authorizationService.CheckWorkitemSignature(signature, workitemId)) {
                 return ReturnModelHelper.UnauthorizedResponse(signature);
             }
             // logic
@@ -926,7 +932,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // check authorization
-            if (!signature.equals(GlobalContext.INTERNAL_TOKEN) && !AuthorizationService.CheckWorkitemSignature(signature, workitemId)) {
+            if (!signature.equals(GlobalContext.INTERNAL_TOKEN) && !authorizationService.CheckWorkitemSignature(signature, workitemId)) {
                 return ReturnModelHelper.UnauthorizedResponse(signature);
             }
             // logic
@@ -972,7 +978,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // check authorization
-            if (!signature.equals(GlobalContext.INTERNAL_TOKEN) && !AuthorizationService.CheckWorkitemSignature(signature, workitemId)) {
+            if (!signature.equals(GlobalContext.INTERNAL_TOKEN) && !authorizationService.CheckWorkitemSignature(signature, workitemId)) {
                 return ReturnModelHelper.UnauthorizedResponse(signature);
             }
             // logic
@@ -1018,7 +1024,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // check authorization
-            if (!signature.equals(GlobalContext.INTERNAL_TOKEN) && !AuthorizationService.CheckWorkitemSignature(signature, workitemId)) {
+            if (!signature.equals(GlobalContext.INTERNAL_TOKEN) && !authorizationService.CheckWorkitemSignature(signature, workitemId)) {
                 return ReturnModelHelper.UnauthorizedResponse(signature);
             }
             // logic
@@ -1064,7 +1070,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // check authorization
-            if (!signature.equals(GlobalContext.INTERNAL_TOKEN) && !AuthorizationService.CheckWorkitemSignature(signature, workitemId)) {
+            if (!signature.equals(GlobalContext.INTERNAL_TOKEN) && !authorizationService.CheckWorkitemSignature(signature, workitemId)) {
                 return ReturnModelHelper.UnauthorizedResponse(signature);
             }
             // logic
@@ -1110,7 +1116,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // check authorization
-            if (!signature.equals(GlobalContext.INTERNAL_TOKEN) && !AuthorizationService.CheckWorkitemSignature(signature, workitemId)) {
+            if (!signature.equals(GlobalContext.INTERNAL_TOKEN) && !authorizationService.CheckWorkitemSignature(signature, workitemId)) {
                 return ReturnModelHelper.UnauthorizedResponse(signature);
             }
             // logic
@@ -1156,7 +1162,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // check authorization
-            if (!signature.equals(GlobalContext.INTERNAL_TOKEN) && !AuthorizationService.CheckWorkitemSignature(signature, workitemId)) {
+            if (!signature.equals(GlobalContext.INTERNAL_TOKEN) && !authorizationService.CheckWorkitemSignature(signature, workitemId)) {
                 return ReturnModelHelper.UnauthorizedResponse(signature);
             }
             // logic
@@ -1202,7 +1208,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // check authorization
-            if (!signature.equals(GlobalContext.INTERNAL_TOKEN) && !AuthorizationService.CheckWorkitemSignature(signature, workitemId)) {
+            if (!signature.equals(GlobalContext.INTERNAL_TOKEN) && !authorizationService.CheckWorkitemSignature(signature, workitemId)) {
                 return ReturnModelHelper.UnauthorizedResponse(signature);
             }
             // logic
@@ -1249,7 +1255,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // check authorization
-            if (!AuthorizationService.CheckRTIDSignature(signature, rtid)) {
+            if (!authorizationService.CheckRTIDSignature(signature, rtid)) {
                 return ReturnModelHelper.UnauthorizedResponse(signature);
             }
             // logic
@@ -1296,7 +1302,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // check authorization
-            if (!AuthorizationService.CheckRTIDSignature(signature, rtid)) {
+            if (!authorizationService.CheckRTIDSignature(signature, rtid)) {
                 return ReturnModelHelper.UnauthorizedResponse(signature);
             }
             // logic
@@ -1337,7 +1343,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // check authorization
-            if (!AuthorizationService.CheckRTIDSignature(signature, rtid)) {
+            if (!authorizationService.CheckRTIDSignature(signature, rtid)) {
                 return ReturnModelHelper.UnauthorizedResponse(signature);
             }
             // logic
@@ -1375,8 +1381,8 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // check authorization, admin only
-            if ((AuthorizationService.CheckValidLevel(token) < 1 &&
-                    AuthTokenManager.GetDomain(token).equals(domain)) &&
+            if ((authorizationService.CheckValidLevel(token) < 1 &&
+                    authTokenManager.GetDomain(token).equals(domain)) &&
                     !token.equals(GlobalContext.INTERNAL_TOKEN)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
@@ -1415,7 +1421,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // check authorization
-            if (AuthorizationService.CheckValidLevel(token) < 0 && !token.equals(GlobalContext.INTERNAL_TOKEN)) {
+            if (authorizationService.CheckValidLevel(token) < 0 && !token.equals(GlobalContext.INTERNAL_TOKEN)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
@@ -1453,7 +1459,7 @@ public class NameSpacingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // check authorization
-            if (AuthorizationService.CheckValidLevel(token) < 0 && !token.equals(GlobalContext.INTERNAL_TOKEN)) {
+            if (authorizationService.CheckValidLevel(token) < 0 && !token.equals(GlobalContext.INTERNAL_TOKEN)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic

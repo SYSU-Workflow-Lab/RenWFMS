@@ -33,6 +33,9 @@ public class RoleMappingController {
     @Autowired
     private NSScheduler scheduler;
 
+    @Autowired
+    private AuthorizationService authorizationService;
+
     /**
      * Get worker's id by his business role.
      * @param rtid process rtid (required)
@@ -56,7 +59,7 @@ public class RoleMappingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (!AuthorizationService.CheckValid(token)) {
+            if (!authorizationService.CheckValid(token)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
@@ -96,7 +99,7 @@ public class RoleMappingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (!AuthorizationService.CheckValid(token)) {
+            if (!authorizationService.CheckValid(token)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
@@ -144,7 +147,7 @@ public class RoleMappingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (!AuthorizationService.CheckValid(token)) {
+            if (!authorizationService.CheckValid(token)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
@@ -183,7 +186,7 @@ public class RoleMappingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (!AuthorizationService.CheckValid(token)) {
+            if (!authorizationService.CheckValid(token)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
@@ -259,7 +262,7 @@ public class RoleMappingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (!AuthorizationService.CheckValid(token)) {
+            if (!authorizationService.CheckValid(token)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
@@ -297,7 +300,7 @@ public class RoleMappingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (!AuthorizationService.CheckValid(token)) {
+            if (!authorizationService.CheckValid(token)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
@@ -334,7 +337,7 @@ public class RoleMappingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (!AuthorizationService.CheckValid(token)) {
+            if (!authorizationService.CheckValid(token)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
@@ -371,7 +374,7 @@ public class RoleMappingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (!AuthorizationService.CheckValid(token)) {
+            if (!authorizationService.CheckValid(token)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
@@ -407,7 +410,7 @@ public class RoleMappingController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (!AuthorizationService.CheckValid(token)) {
+            if (!authorizationService.CheckValid(token)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic

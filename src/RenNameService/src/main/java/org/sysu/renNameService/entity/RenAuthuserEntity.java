@@ -1,5 +1,7 @@
 package org.sysu.renNameService.entity;
 
+import org.sysu.renNameService.entity.multikeyclass.RenAuthuserEntityMKC;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -11,7 +13,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "ren_authuser", schema = "renboengine", catalog = "")
-@IdClass(RenAuthuserEntityPK.class)
+@IdClass(RenAuthuserEntityMKC.class)
 public class RenAuthuserEntity {
     private String username;
     private String domain;

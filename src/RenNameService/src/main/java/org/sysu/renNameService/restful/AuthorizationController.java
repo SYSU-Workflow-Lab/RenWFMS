@@ -4,12 +4,12 @@
  */
 package org.sysu.renNameService.restful;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.sysu.renNameService.GlobalContext;
 import org.sysu.renNameService.authorization.AuthTokenManager;
 import org.sysu.renNameService.authorization.AuthorizationService;
 import org.sysu.renCommon.dto.ReturnModel;
-import org.sysu.renNameService.restful.ReturnModelHelper;
 import org.sysu.renCommon.dto.StatusCode;
 import org.sysu.renNameService.utility.SerializationUtil;
 
@@ -27,6 +27,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/auth")
 public class AuthorizationController {
+
+    @Autowired
+    private AuthorizationService authorizationService;
+
+    @Autowired
+    private AuthTokenManager authTokenManager;
+
     /**
      * Request for an auth token by an authorization username and password.
      * @param username user unique name (required)
@@ -48,7 +55,7 @@ public class AuthorizationController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // logic
-            String jsonifyResult = AuthorizationService.Connect(username, password);
+            String jsonifyResult = authorizationService.Connect(username, password);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -75,7 +82,7 @@ public class AuthorizationController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // logic
-            AuthorizationService.Disconnect(token);
+            authorizationService.Disconnect(token);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, "OK");
         } catch (Exception e) {
@@ -102,7 +109,7 @@ public class AuthorizationController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // logic
-            String jsonifyResult = SerializationUtil.JsonSerialization(AuthorizationService.CheckValid(token), "");
+            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.CheckValid(token), "");
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -139,14 +146,14 @@ public class AuthorizationController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (AuthorizationService.CheckValidLevel(token) < 2) {
+            if (authorizationService.CheckValidLevel(token) < 2) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
             if (level == null) {
                 level = "0";
             }
-            String jsonifyResult = AuthorizationService.AddDomain(name, password, level, corgan);
+            String jsonifyResult = authorizationService.AddDomain(name, password, level, corgan);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -176,11 +183,11 @@ public class AuthorizationController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (AuthorizationService.CheckValidLevel(token) < 2) {
+            if (authorizationService.CheckValidLevel(token) < 2) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
-            String jsonifyResult = SerializationUtil.JsonSerialization(AuthorizationService.RemoveDomain(name),"");
+            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.RemoveDomain(name),"");
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -216,7 +223,7 @@ public class AuthorizationController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // check token
-            int tokenLevel = AuthorizationService.CheckValidLevel(token);
+            int tokenLevel = authorizationService.CheckValidLevel(token);
             if (tokenLevel == -1) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
@@ -242,7 +249,7 @@ public class AuthorizationController {
                 ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, "OK");
             }
             else {
-                String jsonifyResult = SerializationUtil.JsonSerialization(AuthorizationService.UpdateDomain(name, updateArgs, tokenLevel >= 2), "");
+                String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.UpdateDomain(name, updateArgs, tokenLevel >= 2), "");
                 ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
             }
         } catch (Exception e) {
@@ -272,11 +279,11 @@ public class AuthorizationController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (AuthorizationService.CheckValidLevel(token) < 2) {
+            if (authorizationService.CheckValidLevel(token) < 2) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
-            String jsonifyResult = SerializationUtil.JsonSerialization(AuthorizationService.ContainDomain(name),"");
+            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.ContainDomain(name),"");
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -306,11 +313,11 @@ public class AuthorizationController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (AuthorizationService.CheckValidLevel(token) < 2) {
+            if (authorizationService.CheckValidLevel(token) < 2) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
-            String jsonifyResult = SerializationUtil.JsonSerialization(AuthorizationService.RetrieveDomain(name),"");
+            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.RetrieveDomain(name),"");
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -337,11 +344,11 @@ public class AuthorizationController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if (AuthorizationService.CheckValidLevel(token) < 2) {
+            if (authorizationService.CheckValidLevel(token) < 2) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
-            String jsonifyResult = SerializationUtil.JsonSerialization(AuthorizationService.RetrieveAllDomain(),"");
+            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.RetrieveAllDomain(),"");
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -381,14 +388,14 @@ public class AuthorizationController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if ((AuthorizationService.CheckValidLevel(token) < 1 &&
-                    AuthTokenManager.GetDomain(token).equals(domain)) &&
+            if ((authorizationService.CheckValidLevel(token) < 1 &&
+                    authTokenManager.GetDomain(token).equals(domain)) &&
                     !token.equals(GlobalContext.INTERNAL_TOKEN)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
             assert level != null;
-            String jsonifyResult = AuthorizationService.AddAuthUser(username, password, Integer.valueOf(level), domain, gid);
+            String jsonifyResult = authorizationService.AddAuthUser(username, password, Integer.valueOf(level), domain, gid);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -421,13 +428,13 @@ public class AuthorizationController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if ((AuthorizationService.CheckValidLevel(token) < 1 &&
-                    AuthTokenManager.GetDomain(token).equals(domain)) &&
+            if ((authorizationService.CheckValidLevel(token) < 1 &&
+                    authTokenManager.GetDomain(token).equals(domain)) &&
                     !token.equals(GlobalContext.INTERNAL_TOKEN)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
-            String jsonifyResult = SerializationUtil.JsonSerialization(AuthorizationService.RemoveAuthorizationUser(username, domain),"");
+            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.RemoveAuthorizationUser(username, domain),"");
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -467,7 +474,7 @@ public class AuthorizationController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // check token
-            int tokenLevel = AuthorizationService.CheckValidLevel(token);
+            int tokenLevel = authorizationService.CheckValidLevel(token);
             if (tokenLevel == -1 || token.equals(GlobalContext.INTERNAL_TOKEN) &&
                     !token.equals(GlobalContext.INTERNAL_TOKEN)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
@@ -497,7 +504,7 @@ public class AuthorizationController {
                 ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, "OK");
             }
             else {
-                String jsonifyResult = SerializationUtil.JsonSerialization(AuthorizationService.UpdateAuthorizationUser(username, domain, updateArgs, tokenLevel > 0), "");
+                String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.UpdateAuthorizationUser(username, domain, updateArgs, tokenLevel > 0), "");
                 ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
             }
         } catch (Exception e) {
@@ -529,13 +536,13 @@ public class AuthorizationController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if ((AuthorizationService.CheckValidLevel(token) < 0 &&
-                    AuthTokenManager.GetDomain(token).equals(domain)) &&
+            if ((authorizationService.CheckValidLevel(token) < 0 &&
+                    authTokenManager.GetDomain(token).equals(domain)) &&
                     !token.equals(GlobalContext.INTERNAL_TOKEN)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
-            String jsonifyResult = SerializationUtil.JsonSerialization(AuthorizationService.ContainAuthorizationUser(username, domain),"");
+            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.ContainAuthorizationUser(username, domain),"");
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -567,13 +574,13 @@ public class AuthorizationController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if ((AuthorizationService.CheckValidLevel(token) < 0 &&
-                    AuthTokenManager.GetDomain(token).equals(domain)) &&
+            if ((authorizationService.CheckValidLevel(token) < 0 &&
+                    authTokenManager.GetDomain(token).equals(domain)) &&
                     !token.equals(GlobalContext.INTERNAL_TOKEN)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
-            String jsonifyResult = SerializationUtil.JsonSerialization(AuthorizationService.RetrieveAuthorizationUser(username, domain),"");
+            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.RetrieveAuthorizationUser(username, domain),"");
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -602,13 +609,13 @@ public class AuthorizationController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // token check
-            if ((AuthorizationService.CheckValidLevel(token) < 0 &&
-                    AuthTokenManager.GetDomain(token).equals(domain)) &&
+            if ((authorizationService.CheckValidLevel(token) < 0 &&
+                    authTokenManager.GetDomain(token).equals(domain)) &&
                     !token.equals(GlobalContext.INTERNAL_TOKEN)) {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
-            String jsonifyResult = SerializationUtil.JsonSerialization(AuthorizationService.RetrieveAllAuthorizationUser(domain),"");
+            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.RetrieveAllAuthorizationUser(domain),"");
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
