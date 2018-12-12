@@ -3,6 +3,7 @@
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
 package org.sysu.renNameService.transaction;
+import org.springframework.stereotype.Service;
 import org.sysu.renNameService.GlobalContext;
 import org.sysu.renNameService.entity.RenNsTransactionEntity;
 import org.sysu.renCommon.utility.TimestampUtil;
@@ -15,7 +16,10 @@ import java.util.UUID;
  * Date  : 2018/1/24
  * Usage : Static method for name service transaction creator.
  */
+
+@Service
 public class TransactionCreator {
+
     /**
      * Create a name service transaction package and save to steady.
      * @param type transaction type
@@ -23,7 +27,7 @@ public class TransactionCreator {
      * @param args argument dictionary
      * @return {@code NameServiceTransaction} instance
      */
-    public static NameServiceTransaction Create(TransactionType type, String action, HashMap<String, String> args) {
+    public NameServiceTransaction Create(TransactionType type, String action, HashMap<String, String> args) {
 //        Session session = HibernateUtil.GetLocalSession();
 //        Transaction dbTrans = session.beginTransaction();
         try {
