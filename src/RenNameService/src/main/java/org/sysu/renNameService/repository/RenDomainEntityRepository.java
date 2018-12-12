@@ -8,4 +8,7 @@ import org.sysu.renNameService.entity.RenDomainEntity;
  */
 
 public interface RenDomainEntityRepository extends JpaRepository<RenDomainEntity, String> {
+
+    RenDomainEntity findByUrlsafeSignature(String signature);
+
 }
