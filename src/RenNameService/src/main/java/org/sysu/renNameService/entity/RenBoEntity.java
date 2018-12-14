@@ -34,8 +34,9 @@ public class RenBoEntity {
         this.boid = boid;
     }
 
-    @Basic
-    @Column(name = "bo_name", nullable = false, length = -1)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "bo_name", nullable = false, columnDefinition = "Text")
     public String getBoName() {
         return boName;
     }
@@ -64,8 +65,9 @@ public class RenBoEntity {
         this.state = state;
     }
 
-    @Basic
-    @Column(name = "bo_content", nullable = true, length = -1)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "bo_content", columnDefinition = "Text")
     public String getBoContent() {
         return boContent;
     }
@@ -74,8 +76,9 @@ public class RenBoEntity {
         this.boContent = boContent;
     }
 
+    @Lob
     @Basic
-    @Column(name = "serialized", nullable = true)
+    @Column(name = "serialized")
     public byte[] getSerialized() {
         return serialized;
     }
@@ -84,8 +87,9 @@ public class RenBoEntity {
         this.serialized = serialized;
     }
 
-    @Basic
-    @Column(name = "broles", nullable = true, length = -1)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "broles", columnDefinition = "Text")
     public String getBroles() {
         return broles;
     }
@@ -114,5 +118,18 @@ public class RenBoEntity {
         int result = Objects.hash(boid, boName, pid, state, boContent, broles);
         result = 31 * result + Arrays.hashCode(serialized);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "RenBoEntity{" +
+                "boid='" + boid + '\'' +
+                ", boName='" + boName + '\'' +
+                ", pid='" + pid + '\'' +
+                ", state=" + state +
+                ", boContent='" + boContent + '\'' +
+                ", serialized=" + Arrays.toString(serialized) +
+                ", broles='" + broles + '\'' +
+                '}';
     }
 }

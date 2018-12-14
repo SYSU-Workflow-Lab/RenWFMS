@@ -2,7 +2,7 @@
  * Project Ren @ 2018
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
-package org.sysu.renNameService.roleMapping;
+package org.sysu.renNameService.rolemapping;
 import java.util.Hashtable;
 
 /**

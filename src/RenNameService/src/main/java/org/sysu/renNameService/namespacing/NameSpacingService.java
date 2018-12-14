@@ -2,14 +2,21 @@
  * Project Ren @ 2018
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
-package org.sysu.renNameService.nameSpacing;
+package org.sysu.renNameService.namespacing;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.sysu.renCommon.interactionRouter.LocationContext;
 import org.sysu.renCommon.utility.AuthDomainHelper;
 import org.sysu.renCommon.utility.TimestampUtil;
 import org.sysu.renNameService.GlobalContext;
+import org.sysu.renNameService.dao.RenBoEntityDAO;
+import org.sysu.renNameService.dao.RenLogEntityDAO;
+import org.sysu.renNameService.dao.RenProcessEntityDAO;
+import org.sysu.renNameService.dao.RenRuntimerecordEntityDAO;
 import org.sysu.renNameService.entity.RenBoEntity;
 import org.sysu.renNameService.entity.RenLogEntity;
 import org.sysu.renNameService.entity.RenProcessEntity;
@@ -23,7 +30,24 @@ import java.util.*;
  * Date  : 2018/1/26
  * Usage : All name space service will be handled in this service module.
  */
+
+@Service
 public class NameSpacingService {
+
+    @Autowired
+    private RenProcessEntityDAO renProcessEntityDAO;
+
+    @Autowired
+    private RenBoEntityDAO renBoEntityDAO;
+
+    @Autowired
+    private RenRuntimerecordEntityDAO renRuntimerecordEntityDAO;
+
+    @Autowired
+    private RenLogEntityDAO renLogEntityDAO;
+
+    @Autowired
+    private AssistantService assistantService;
 
     /**
      * Create a new process.
@@ -33,9 +57,8 @@ public class NameSpacingService {
      * @param mainBOName  process entry point BO name
      * @return process pid
      */
-    public static String CreateProcess(String renid, String processName, String mainBOName) {
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
+    @Transactional(rollbackFor = Exception.class)
+    public String CreateProcess(String renid, String processName, String mainBOName) {
         try {
             RenProcessEntity rpe = new RenProcessEntity();
             String pid = "Process_" + UUID.randomUUID().toString();
@@ -47,16 +70,13 @@ public class NameSpacingService {
             rpe.setAverageCost(0L);
             rpe.setLaunchCount(0);
             rpe.setSuccessCount(0);
-            session.save(rpe);
-            transaction.commit();
+            renProcessEntityDAO.saveOrUpdate(rpe);
             return pid;
         } catch (Exception ex) {
-            transaction.rollback();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             LogUtil.Log("Create process but exception occurred, service rollback, " + ex, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, "");
-        } finally {
-            HibernateUtil.CloseLocalSession();
+            return "";
         }
-        return "";
     }
 
     /**
@@ -67,36 +87,22 @@ public class NameSpacingService {
      * @param content BO content string
      * @return pair of boid - involved business role names string
      */
-    public static AbstractMap.SimpleEntry<String, String> UploadBOContent(String pid, String name, String content) {
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
-        boolean cmtFlag = false;
+    public AbstractMap.SimpleEntry<String, String> UploadBOContent(String pid, String name, String content) {
         try {
             String boid = "BO_" + UUID.randomUUID().toString();
-            RenBoEntity rbe = new RenBoEntity();
-            rbe.setBoid(boid);
-            rbe.setPid(pid);
-            rbe.setBoName(name);
-            rbe.setBoContent(content);
-            session.save(rbe);
+            boolean cmtFlag = assistantService.newBo(boid, pid, name, content);
+            if (!cmtFlag) {
+                throw new Exception("Error in creating a new bo");
+            }
             // send to engine for get business role
             HashMap<String, String> args = new HashMap<>();
             args.put("boidlist", boid);
-            transaction.commit();
-            cmtFlag = true;
             String involveBRs = GlobalContext.Interaction.Send(LocationContext.URL_BOENGINE_SERIALIZEBO, args, "");
             return new AbstractMap.SimpleEntry<>(boid, involveBRs);
-            //return new AbstractMap.SimpleEntry<>(boid, "TEST_INVOLVED");
         } catch (Exception ex) {
-            if (!cmtFlag) {
-                transaction.rollback();
-                LogUtil.Log("Upload BO but exception occurred, service rollback, " + ex, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, "");
-            }
             LogUtil.Log("Upload BO but exception occurred, " + ex, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, "");
-        } finally {
-            HibernateUtil.CloseLocalSession();
+            return null;
         }
-        return null;
     }
 
     /**
@@ -105,21 +111,16 @@ public class NameSpacingService {
      * @param renid ren user id
      * @return a list of process
      */
+    @Transactional(rollbackFor = Exception.class)
     @SuppressWarnings("unchecked")
-    public static ArrayList<RenProcessEntity> GetProcessByRenId(String renid) {
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
+    public List<RenProcessEntity> GetProcessByRenId(String renid) {
         try {
-            ArrayList<RenProcessEntity> qRet = (ArrayList<RenProcessEntity>) session.createQuery(String.format("FROM RenProcessEntity WHERE creatorRenid = '%s' AND state = 0", renid)).list();
-            transaction.commit();
-            return qRet;
+            return renProcessEntityDAO.getProcessByRenId(renid);
         } catch (Exception ex) {
-            transaction.rollback();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             LogUtil.Log("Get Processes of Ren User but exception occurred, service rollback, " + ex, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, "");
-        } finally {
-            HibernateUtil.CloseLocalSession();
+            return null;
         }
-        return null;
     }
 
     /**
@@ -128,16 +129,14 @@ public class NameSpacingService {
      * @param domain domain name
      * @return a list of process
      */
+    @Transactional(rollbackFor = Exception.class)
     @SuppressWarnings("unchecked")
-    public static ArrayList<RenProcessEntity> GetProcessByDomain(String domain) {
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
+    public List<RenProcessEntity> GetProcessByDomain(String domain) {
         boolean cmtFlag = false;
         try {
-            ArrayList<RenProcessEntity> qRet = (ArrayList<RenProcessEntity>) session.createQuery(String.format("FROM RenProcessEntity WHERE LOCATE('%s', creatorRenid) > 0 AND state = 0", "@" + domain)).list();
-            transaction.commit();
+            List<RenProcessEntity> qRet = renProcessEntityDAO.getProcessByDomain("@" + domain);
             cmtFlag = true;
-            ArrayList<RenProcessEntity> pureRet = new ArrayList<>();
+            List<RenProcessEntity> pureRet = new ArrayList<>();
             for (RenProcessEntity cp : qRet) {
                 if (AuthDomainHelper.GetDomainByAuthName(cp.getCreatorRenid()).equals(domain)) {
                     pureRet.add(cp);
@@ -146,11 +145,9 @@ public class NameSpacingService {
             return pureRet;
         } catch (Exception ex) {
             if (!cmtFlag) {
-                transaction.rollback();
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             }
             LogUtil.Log("Get Processes of domain but exception occurred, service rollback, " + ex, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, "");
-        } finally {
-            HibernateUtil.CloseLocalSession();
         }
         return null;
     }
@@ -161,21 +158,16 @@ public class NameSpacingService {
      * @param pid process global id
      * @return process instance
      */
+    @Transactional(rollbackFor = Exception.class)
     @SuppressWarnings("unchecked")
-    public static RenProcessEntity GetProcessByPid(String pid) {
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
+    public RenProcessEntity GetProcessByPid(String pid) {
         try {
-            RenProcessEntity rpe = session.get(RenProcessEntity.class, pid);
-            transaction.commit();
-            return rpe;
+            return renProcessEntityDAO.findByPid(pid);
         } catch (Exception ex) {
-            transaction.rollback();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             LogUtil.Log("Get Processes of pid but exception occurred, service rollback, " + ex, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, "");
-        } finally {
-            HibernateUtil.CloseLocalSession();
+            return null;
         }
-        return null;
     }
 
     /**
@@ -184,21 +176,16 @@ public class NameSpacingService {
      * @param pid process id
      * @return a list of BO in the specific process
      */
+    @Transactional(rollbackFor = Exception.class)
     @SuppressWarnings("unchecked")
-    public static ArrayList<Object> GetProcessBOList(String pid) {
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
+    public List<Object> GetProcessBOList(String pid) {
         try {
-            ArrayList<Object> qRet = (ArrayList<Object>) session.createQuery(String.format("SELECT boid, boName FROM RenBoEntity WHERE pid = '%s'", pid)).list();
-            transaction.commit();
-            return qRet;
+            return renBoEntityDAO.findBoIdAndBoNameByPid(pid);
         } catch (Exception ex) {
-            transaction.rollback();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             LogUtil.Log("Get BO in Process but exception occurred, service rollback, " + ex, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, "");
-        } finally {
-            HibernateUtil.CloseLocalSession();
+            return null;
         }
-        return null;
     }
 
     /**
@@ -208,21 +195,17 @@ public class NameSpacingService {
      * @param processName process name
      * @return boolean for process name existence
      */
+    @Transactional(rollbackFor = Exception.class)
     @SuppressWarnings("unchecked")
-    public static boolean ContainProcess(String renid, String processName) {
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
+    public boolean ContainProcess(String renid, String processName) {
         try {
-            ArrayList<RenProcessEntity> qRet = (ArrayList<RenProcessEntity>) session.createQuery(String.format("FROM RenProcessEntity WHERE creatorRenid = '%s' AND processName = '%s", renid, processName)).list();
-            transaction.commit();
+            List<RenProcessEntity> qRet = renProcessEntityDAO.findRenProcessEntitiesByCreatorRenidAndProcessName(renid, processName);
             return qRet.size() > 0;
         } catch (Exception ex) {
-            transaction.rollback();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             LogUtil.Log("Get BO in Process but exception occurred, service rollback, " + ex, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, "");
-        } finally {
-            HibernateUtil.CloseLocalSession();
+            return false;
         }
-        return false;
     }
 
     /**
@@ -231,20 +214,15 @@ public class NameSpacingService {
      * @param boid BO unique id
      * @return {@code RenBoEntity} instance
      */
-    public static RenBoEntity GetBO(String boid, String rtid) {
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
+    @Transactional(rollbackFor = Exception.class)
+    public RenBoEntity GetBO(String boid, String rtid) {
         try {
-            RenBoEntity rbe = session.get(RenBoEntity.class, boid);
-            transaction.commit();
-            return rbe;
+            return renBoEntityDAO.findByBoId(boid);
         } catch (Exception ex) {
-            transaction.rollback();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             LogUtil.Log("Get BO context but exception occurred, service rollback, " + ex, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, rtid);
-        } finally {
-            HibernateUtil.CloseLocalSession();
+            return null;
         }
-        return null;
     }
 
     /**
@@ -260,19 +238,18 @@ public class NameSpacingService {
      * @param binding          resource binding source, only useful when static XML binding
      * @return Runtime record package
      */
-    public static String SubmitProcess(String pid,
-                                       String from,
-                                       String renid,
-                                       String authoritySession,
-                                       Integer bindingType,
-                                       Integer launchType,
-                                       Integer failureType,
-                                       Integer authType,
-                                       String binding) {
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
+    @Transactional(rollbackFor = Exception.class)
+    public String SubmitProcess(String pid,
+                                String from,
+                                String renid,
+                                String authoritySession,
+                                Integer bindingType,
+                                Integer launchType,
+                                Integer failureType,
+                                Integer authType,
+                                String binding) {
         try {
-            RenProcessEntity rpe = session.get(RenProcessEntity.class, pid);
+            RenProcessEntity rpe = renProcessEntityDAO.findByPid(pid);
             rpe.setAuthtype(authType);
             String authSign = "";
             if (authType != 0) {
@@ -292,16 +269,14 @@ public class NameSpacingService {
             rrte.setFailureType(failureType);
             rrte.setResourceBinding(binding);
             rrte.setIsSucceed(0);
-            session.save(rrte);
-            transaction.commit();
+            renProcessEntityDAO.saveOrUpdate(rpe);
+            renRuntimerecordEntityDAO.saveOrUpdate(rrte);
             return String.format("%s,%s", rtid, authSign);
         } catch (Exception ex) {
-            transaction.rollback();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             LogUtil.Log(String.format("Submit process but exception occurred(pid: %s), service rollback, %s", pid, ex), NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, "");
-        } finally {
-            HibernateUtil.CloseLocalSession();
+            return null;
         }
-        return null;
     }
 
     /**
@@ -309,30 +284,15 @@ public class NameSpacingService {
      *
      * @param rtid process rtid.
      */
-    public static void StartProcess(String rtid) throws Exception {
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
+    public void StartProcess(String rtid) throws Exception {
         try {
-            RenRuntimerecordEntity rrte = session.get(RenRuntimerecordEntity.class, rtid);
-            rrte.setLaunchTimestamp(TimestampUtil.GetCurrentTimestamp());
-            String launcher = AuthDomainHelper.GetAuthNameByRTID(rtid);
-            rrte.setLaunchAuthorityId(launcher);
-            session.saveOrUpdate(rrte);
-            RenProcessEntity rpe = session.get(RenProcessEntity.class, rrte.getProcessId());
-            rpe.setLaunchCount(rpe.getLaunchCount() + 1);
-            rpe.setLastLaunchTimestamp(TimestampUtil.GetCurrentTimestamp());
-            session.saveOrUpdate(rpe);
-            transaction.commit();
-        } catch (Exception ex) {
-            transaction.rollback();
-            LogUtil.Log("Start process but exception occurred, service rollback, " + ex, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, rtid);
-        } finally {
-            HibernateUtil.CloseLocalSession();
-        }
-        // interaction with BO Engine
-        HashMap<String, String> args = new HashMap<>();
-        args.put("rtid", rtid);
-        try {
+            boolean cmtFlag = assistantService.startProcess(rtid);
+            if (!cmtFlag) {
+                throw new Exception("Error in starting the process");
+            }
+            // interaction with BO Engine
+            HashMap<String, String> args = new HashMap<>();
+            args.put("rtid", rtid);
             GlobalContext.Interaction.Send(LocationContext.URL_BOENGINE_START, args, rtid);
         } catch (Exception ex) {
             LogUtil.Log("Cannot interaction with BO Engine for RTID: " + rtid, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, rtid);
@@ -346,19 +306,15 @@ public class NameSpacingService {
      * @param rtid process rtid.
      * @return a map of status description in JSON
      */
-    public static String CheckFinish(String rtid) throws Exception {
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
+    @Transactional(rollbackFor = Exception.class)
+    public String CheckFinish(String rtid) {
         RenRuntimerecordEntity rrte;
         try {
-            rrte = session.get(RenRuntimerecordEntity.class, rtid);
-            transaction.commit();
+            rrte = renRuntimerecordEntityDAO.findByRtid(rtid);
         } catch (Exception ex) {
-            transaction.rollback();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             LogUtil.Log("CheckFinish but exception occurred, service rollback, " + ex, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, rtid);
             return null;
-        } finally {
-            HibernateUtil.CloseLocalSession();
         }
         if (rrte == null) {
             return null;
@@ -377,21 +333,16 @@ public class NameSpacingService {
      * @param rtid runtime record id
      * @return RTC instance
      */
+    @Transactional(rollbackFor = Exception.class)
     @SuppressWarnings("unchecked")
-    public static RenRuntimerecordEntity GetRuntimeRecord(String rtid) {
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
+    public RenRuntimerecordEntity GetRuntimeRecord(String rtid) {
         try {
-            RenRuntimerecordEntity rrte = session.get(RenRuntimerecordEntity.class, rtid);
-            transaction.commit();
-            return rrte;
+            return renRuntimerecordEntityDAO.findByRtid(rtid);
         } catch (Exception ex) {
-            transaction.rollback();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             LogUtil.Log("Get RTC but exception occurred, service rollback, " + ex, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, rtid);
-        } finally {
-            HibernateUtil.CloseLocalSession();
+            return null;
         }
-        return null;
     }
 
     /**
@@ -400,26 +351,22 @@ public class NameSpacingService {
      * @param activeOnly whether only get running record
      * @return a list of RTC
      */
+    @Transactional(rollbackFor = Exception.class)
     @SuppressWarnings("unchecked")
-    public static ArrayList<RenRuntimerecordEntity> GetAllRuntimeRecord(String activeOnly) {
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
+    public List<RenRuntimerecordEntity> GetAllRuntimeRecord(String activeOnly) {
         try {
-            ArrayList<RenRuntimerecordEntity> qRet;
+            List<RenRuntimerecordEntity> qRet;
             if (activeOnly.equalsIgnoreCase("true")) {
-                qRet = (ArrayList<RenRuntimerecordEntity>) session.createQuery("FROM RenRuntimerecordEntity WHERE isSucceed = 0").list();
+                qRet = renRuntimerecordEntityDAO.findRenRuntimerecordEntitiesByIsSucceed(0);
             } else {
-                qRet = (ArrayList<RenRuntimerecordEntity>) session.createQuery("FROM RenRuntimerecordEntity").list();
+                qRet = renRuntimerecordEntityDAO.findAll();
             }
-            transaction.commit();
             return qRet;
         } catch (Exception ex) {
-            transaction.rollback();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             LogUtil.Log("Get RTC but exception occurred, service rollback, " + ex, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, "");
-        } finally {
-            HibernateUtil.CloseLocalSession();
+            return null;
         }
-        return null;
     }
 
     /**
@@ -429,21 +376,19 @@ public class NameSpacingService {
      * @param activeOnly whether only get running record
      * @return a list of RTC
      */
+    @Transactional(rollbackFor = Exception.class)
     @SuppressWarnings("unchecked")
-    public static ArrayList<RenRuntimerecordEntity> GetRuntimeRecordByDomain(String domain, String activeOnly) {
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
+    public List<RenRuntimerecordEntity> GetRuntimeRecordByDomain(String domain, String activeOnly) {
         boolean cmtFlag = false;
         try {
-            ArrayList<RenRuntimerecordEntity> qRet;
+            List<RenRuntimerecordEntity> qRet;
             if (activeOnly.equalsIgnoreCase("true")) {
-                qRet = (ArrayList<RenRuntimerecordEntity>) session.createQuery(String.format("FROM RenRuntimerecordEntity WHERE isSucceed = 0 AND LOCATE('%s', launchAuthorityId) > 0", "@" + domain)).list();
+                qRet = renRuntimerecordEntityDAO.findRenRuntimerecordEntitiesByIsSucceedAndDomain(0, "@" + domain);
             } else {
-                qRet = (ArrayList<RenRuntimerecordEntity>) session.createQuery(String.format("FROM RenRuntimerecordEntity WHERE LOCATE('%s', launchAuthorityId) > 0", "@" + domain)).list();
+                qRet = renRuntimerecordEntityDAO.findRenRuntimerecordEntitiesByDomain("@" + domain);
             }
-            transaction.commit();
             cmtFlag = true;
-            ArrayList<RenRuntimerecordEntity> pureRet = new ArrayList<>();
+            List<RenRuntimerecordEntity> pureRet = new ArrayList<>();
             for (RenRuntimerecordEntity rre : qRet) {
                 if (AuthDomainHelper.GetDomainByAuthName(rre.getLaunchAuthorityId()).equals(domain)) {
                     pureRet.add(rre);
@@ -452,13 +397,11 @@ public class NameSpacingService {
             return pureRet;
         } catch (Exception ex) {
             if (!cmtFlag) {
-                transaction.rollback();
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             }
             LogUtil.Log("Get RTC but exception occurred, service rollback, " + ex, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, "");
-        } finally {
-            HibernateUtil.CloseLocalSession();
+            return null;
         }
-        return null;
     }
 
     /**
@@ -468,26 +411,22 @@ public class NameSpacingService {
      * @param activeOnly whether only get running record
      * @return a list of RTC
      */
+    @Transactional(rollbackFor = Exception.class)
     @SuppressWarnings("unchecked")
-    public static ArrayList<RenRuntimerecordEntity> GetRuntimeRecordByLauncher(String launcher, String activeOnly) {
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
+    public List<RenRuntimerecordEntity> GetRuntimeRecordByLauncher(String launcher, String activeOnly) {
         try {
-            ArrayList<RenRuntimerecordEntity> qRet;
+            List<RenRuntimerecordEntity> qRet;
             if (activeOnly.equalsIgnoreCase("true")) {
-                qRet = (ArrayList<RenRuntimerecordEntity>) session.createQuery(String.format("FROM RenRuntimerecordEntity WHERE isSucceed = 0 AND launchAuthorityId = '%s'", launcher)).list();
+                qRet = renRuntimerecordEntityDAO.findRenRuntimerecordEntitiesByIsSucceedAndLaunchAuthorityId(0, launcher);
             } else {
-                qRet = (ArrayList<RenRuntimerecordEntity>) session.createQuery(String.format("FROM RenRuntimerecordEntity WHERE launchAuthorityId = '%s'", launcher)).list();
+                qRet = renRuntimerecordEntityDAO.findRenRuntimerecordEntitiesByLaunchAuthorityId(launcher);
             }
-            transaction.commit();
             return qRet;
         } catch (Exception ex) {
-            transaction.rollback();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             LogUtil.Log("Get RTC but exception occurred, service rollback, " + ex, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, "");
-        } finally {
-            HibernateUtil.CloseLocalSession();
+            return null;
         }
-        return null;
     }
 
     /**
@@ -496,21 +435,16 @@ public class NameSpacingService {
      * @param rtid process runtime record id
      * @return a list of RTC
      */
+    @Transactional(rollbackFor = Exception.class)
     @SuppressWarnings("unchecked")
-    public static ArrayList<RenLogEntity> GetRuntimeLog(String rtid) {
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
+    public List<RenLogEntity> GetRuntimeLog(String rtid) {
         try {
-            ArrayList<RenLogEntity> qRet = (ArrayList<RenLogEntity>) session.createQuery(String.format("FROM RenLogEntity WHERE rtid = '%s'", rtid)).list();
-            transaction.commit();
-            return qRet;
+            return renLogEntityDAO.findRenLogEntitiesByRtid(rtid);
         } catch (Exception ex) {
-            transaction.rollback();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             LogUtil.Log("Get RTC Log but exception occurred, service rollback, " + ex, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, rtid);
-        } finally {
-            HibernateUtil.CloseLocalSession();
+            return null;
         }
-        return null;
     }
 
     /**
@@ -518,7 +452,7 @@ public class NameSpacingService {
      *
      * @param rtid process runtime record id
      */
-    public static Object TransshipGetSpanTree(String rtid) throws Exception {
+    public Object TransshipGetSpanTree(String rtid) throws Exception {
         HashMap<String, String> argMap = new HashMap<>();
         argMap.put("rtid", rtid);
         String ret = GlobalContext.Interaction.Send(LocationContext.URL_BOENGINE_SPANTREE, argMap, rtid);
@@ -531,7 +465,7 @@ public class NameSpacingService {
      *
      * @param args argument map to sent
      */
-    public static String TransshipCallback(Map<String, Object> args) throws Exception {
+    public String TransshipCallback(Map<String, Object> args) throws Exception {
         HashMap<String, String> argMap = new HashMap<>();
         for (Map.Entry<String, Object> kvp : args.entrySet()) {
             argMap.put(kvp.getKey(), (String) kvp.getValue());
@@ -547,7 +481,7 @@ public class NameSpacingService {
      * @param workerId   worker global id
      * @param payload    payload map in JSON encoded string
      */
-    public static Object TransshipWorkitem(String action, String workitemId, String workerId, String payload) throws Exception {
+    public Object TransshipWorkitem(String action, String workitemId, String workerId, String payload) throws Exception {
         HashMap<String, String> argMap = new HashMap<>();
         argMap.put("workitemId", workitemId);
         argMap.put("workerId", workerId);
@@ -567,7 +501,7 @@ public class NameSpacingService {
      * @param workerId worker global id
      * @param type     workqueue type
      */
-    public static Object TransshipWorkqueue(String action, String rtid, String workerId, String type) throws Exception {
+    public Object TransshipWorkqueue(String action, String rtid, String workerId, String type) throws Exception {
         HashMap<String, String> argMap = new HashMap<>();
         argMap.put("rtid", rtid);
         argMap.put("type", type);
@@ -582,7 +516,7 @@ public class NameSpacingService {
      *
      * @param rtid process rtid
      */
-    public static Object TransshipGetAll(String rtid) throws Exception {
+    public Object TransshipGetAll(String rtid) throws Exception {
         HashMap<String, String> argMap = new HashMap<>();
         argMap.put("rtid", rtid);
         String ret = GlobalContext.Interaction.Send(LocationContext.GATEWAY_RS_WORKITEM + "getAll", argMap, rtid);
@@ -595,7 +529,7 @@ public class NameSpacingService {
      *
      * @param domain domain name
      */
-    public static Object TransshipGetAllWorkitemsForDomain(String domain) throws Exception {
+    public Object TransshipGetAllWorkitemsForDomain(String domain) throws Exception {
         HashMap<String, String> argMap = new HashMap<>();
         argMap.put("domain", domain);
         String ret = GlobalContext.Interaction.Send(LocationContext.GATEWAY_RS_WORKITEM + "getAllForDomain", argMap, "");
@@ -608,7 +542,7 @@ public class NameSpacingService {
      *
      * @param workerId participant worker global id
      */
-    public static Object TransshipGetAllActiveForParticipant(String workerId) throws Exception {
+    public Object TransshipGetAllActiveForParticipant(String workerId) throws Exception {
         HashMap<String, String> argMap = new HashMap<>();
         argMap.put("workerId", workerId);
         String ret = GlobalContext.Interaction.Send(LocationContext.GATEWAY_RS_WORKITEM + "getAllForParticipant", argMap, "");
@@ -621,7 +555,7 @@ public class NameSpacingService {
      *
      * @param wid workitem id
      */
-    public static Object TransshipGetWorkitem(String wid) throws Exception {
+    public Object TransshipGetWorkitem(String wid) throws Exception {
         HashMap<String, String> argMap = new HashMap<>();
         argMap.put("wid", wid);
         String ret = GlobalContext.Interaction.Send(LocationContext.GATEWAY_RS_WORKITEM + "get", argMap, "");

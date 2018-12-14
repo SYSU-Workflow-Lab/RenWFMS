@@ -17,7 +17,6 @@ import org.sysu.renNameService.transaction.NameServiceTransaction;
 import org.sysu.renNameService.transaction.TransactionCreator;
 import org.sysu.renNameService.transaction.TransactionType;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +58,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/createProcess", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel CreateProcess(@RequestParam(value = "token", required = false) String token,
                                      @RequestParam(value = "renid", required = false) String renid,
                                      @RequestParam(value = "name", required = false) String name,
@@ -105,7 +103,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/uploadBO", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel UploadBO(@RequestParam(value = "token", required = false) String token,
                                 @RequestParam(value = "pid", required = false) String pid,
                                 @RequestParam(value = "name", required = false) String name,
@@ -149,7 +146,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/getProcessBOList", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetProcessBOList(@RequestParam(value = "token", required = false) String token,
                                         @RequestParam(value = "pid", required = false) String pid) {
         ReturnModel rnModel = new ReturnModel();
@@ -187,7 +183,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/getProcessByRenId", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetProcessByRenId(@RequestParam(value = "token", required = false) String token,
                                          @RequestParam(value = "renid", required = false) String renid) {
         ReturnModel rnModel = new ReturnModel();
@@ -225,7 +220,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/getProcessByDomain", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetProcessByDomain(@RequestParam(value = "token", required = false) String token,
                                           @RequestParam(value = "domain", required = false) String domain) {
         ReturnModel rnModel = new ReturnModel();
@@ -263,7 +257,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/getProcessByPid", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetProcessByPid(@RequestParam(value = "token", required = false) String token,
                                        @RequestParam(value = "pid", required = false) String pid) {
         ReturnModel rnModel = new ReturnModel();
@@ -302,7 +295,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/containProcess", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel ContainProcess(@RequestParam(value = "token", required = false) String token,
                                       @RequestParam(value = "renid", required = false) String renid,
                                       @RequestParam(value = "processName", required = false) String processName) {
@@ -344,7 +336,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/getBO", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetBO(@RequestParam(value = "token", required = false) String token,
                              @RequestParam(value = "boid", required = false) String boid,
                              @RequestParam(value = "rtid", required = false) String rtid) {
@@ -388,7 +379,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/submitProcess", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel SubmitProcess(@RequestParam(value = "token", required = false) String token,
                                      @RequestParam(value = "pid", required = false) String pid,
                                      @RequestParam(value = "from", required = false) String from,
@@ -447,7 +437,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/startProcess", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel StartProcess(@RequestParam(value = "token", required = false) String token,
                                     @RequestParam(value = "rtid", required = false) String rtid) {
         ReturnModel rnModel = new ReturnModel();
@@ -485,7 +474,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/checkFinish", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel CheckFinish(@RequestParam(value = "signature", required = false) String signature,
                                    @RequestParam(value = "rtid", required = false) String rtid) {
         ReturnModel rnModel = new ReturnModel();
@@ -522,7 +510,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/getRuntimeRecord", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetRuntimeRecord(@RequestParam(value = "token", required = false) String token,
                                         @RequestParam(value = "rtid", required = false) String rtid) {
         ReturnModel rnModel = new ReturnModel();
@@ -561,7 +548,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/getAllRuntimeRecord", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetAllRuntimeRecord(@RequestParam(value = "token", required = false) String token,
                                            @RequestParam(value = "activeOnly", required = false) String activeOnly) {
         ReturnModel rnModel = new ReturnModel();
@@ -600,7 +586,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/getRuntimeRecordByDomain", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetRuntimeRecordByDomain(@RequestParam(value = "token", required = false) String token,
                                                 @RequestParam(value = "domain", required = false) String domain,
                                                 @RequestParam(value = "activeOnly", required = false) String activeOnly) {
@@ -644,7 +629,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/getRuntimeRecordByLauncher", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetRuntimeRecordByLauncher(@RequestParam(value = "token", required = false) String token,
                                                   @RequestParam(value = "launcher", required = false) String launcher,
                                                   @RequestParam(value = "activeOnly", required = false) String activeOnly) {
@@ -688,7 +672,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/getRuntimeLogByRTID", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetRuntimeLogByRTID(@RequestParam(value = "token", required = false) String token,
                                            @RequestParam(value = "rtid", required = false) String rtid) {
         ReturnModel rnModel = new ReturnModel();
@@ -728,7 +711,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/getSpanTree", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel TransshipGetSpanTree(@RequestParam(value = "signature", required = false) String signature,
                                             @RequestParam(value = "rtid", required = false) String rtid) {
         ReturnModel rnModel = new ReturnModel();
@@ -770,7 +752,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/callback", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel TransshipCallback(@RequestParam(value = "signature", required = false) String signature,
                                          @RequestParam(value = "rtid", required = false) String rtid,
                                          @RequestParam(value = "bo", required = false) String bo,
@@ -827,7 +808,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/workitem/start", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel TransshipStartWorkitem(@RequestParam(value = "signature", required = false) String signature,
                                               @RequestParam(value = "workerId", required = false) String workerId,
                                               @RequestParam(value = "workitemId", required = false) String workitemId,
@@ -873,7 +853,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/workitem/accept", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel TransshipAcceptWorkitem(@RequestParam(value = "signature", required = false) String signature,
                                                @RequestParam(value = "workerId", required = false) String workerId,
                                                @RequestParam(value = "workitemId", required = false) String workitemId,
@@ -919,7 +898,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/workitem/acceptStart", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel TransshipAcceptAndStartWorkitem(@RequestParam(value = "signature", required = false) String signature,
                                                        @RequestParam(value = "workerId", required = false) String workerId,
                                                        @RequestParam(value = "workitemId", required = false) String workitemId,
@@ -965,7 +943,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/workitem/complete", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel TransshipCompleteWorkitem(@RequestParam(value = "signature", required = false) String signature,
                                                  @RequestParam(value = "workerId", required = false) String workerId,
                                                  @RequestParam(value = "workitemId", required = false) String workitemId,
@@ -1011,7 +988,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/workitem/suspend", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel TransshipSuspendWorkitem(@RequestParam(value = "signature", required = false) String signature,
                                                 @RequestParam(value = "workerId", required = false) String workerId,
                                                 @RequestParam(value = "workitemId", required = false) String workitemId,
@@ -1057,7 +1033,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/workitem/unsuspend", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel TransshipUnsuspendWorkitem(@RequestParam(value = "signature", required = false) String signature,
                                                   @RequestParam(value = "workerId", required = false) String workerId,
                                                   @RequestParam(value = "workitemId", required = false) String workitemId,
@@ -1103,7 +1078,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/workitem/skip", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel TransshipSkipWorkitem(@RequestParam(value = "signature", required = false) String signature,
                                              @RequestParam(value = "workerId", required = false) String workerId,
                                              @RequestParam(value = "workitemId", required = false) String workitemId,
@@ -1149,7 +1123,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/workitem/reallocate", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel TransshipReallocateWorkitem(@RequestParam(value = "signature", required = false) String signature,
                                                    @RequestParam(value = "workerId", required = false) String workerId,
                                                    @RequestParam(value = "workitemId", required = false) String workitemId,
@@ -1195,7 +1168,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/workitem/deallocate", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel TransshipDeallocateWorkitem(@RequestParam(value = "signature", required = false) String signature,
                                                    @RequestParam(value = "workerId", required = false) String workerId,
                                                    @RequestParam(value = "workitemId", required = false) String workitemId,
@@ -1241,7 +1213,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/queue/get", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel TransshipGetWorkQueue(@RequestParam(value = "signature", required = false) String signature,
                                              @RequestParam(value = "rtid", required = false) String rtid,
                                              @RequestParam(value = "workerId", required = false) String workerId,
@@ -1288,7 +1259,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/queue/getlist", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel TransshipGetWorkQueueList(@RequestParam(value = "signature", required = false) String signature,
                                                  @RequestParam(value = "rtid", required = false) String rtid,
                                                  @RequestParam(value = "workerIdList", required = false) String workerIdList,
@@ -1333,7 +1303,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/workitem/getAll", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel TransshipGetAllWorkitems(@RequestParam(value = "signature", required = false) String signature,
                                                 @RequestParam(value = "rtid", required = false) String rtid) {
         ReturnModel rnModel = new ReturnModel();
@@ -1371,7 +1340,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/workitem/getAllForDomain", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel TransshipGetAllWorkitemsForDomain(@RequestParam(value = "token", required = false) String token,
                                                          @RequestParam(value = "domain", required = false) String domain) {
         ReturnModel rnModel = new ReturnModel();
@@ -1411,7 +1379,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/workitem/getAllActiveForParticipant", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel TransshipGetAllActiveForParticipant(@RequestParam(value = "token", required = false) String token,
                                                            @RequestParam(value = "workerId", required = false) String workerId) {
         ReturnModel rnModel = new ReturnModel();
@@ -1449,7 +1416,6 @@ public class NameSpacingController {
      */
     @RequestMapping(value = "/workitem/get", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel TransshipGetWorkitem(@RequestParam(value = "token", required = false) String token,
                                             @RequestParam(value = "wid", required = false) String wid) {
         ReturnModel rnModel = new ReturnModel();

@@ -42,8 +42,9 @@ public class RenRolemapEntity {
         this.rtid = rtid;
     }
 
-    @Basic
-    @Column(name = "brole_name", nullable = false, length = -1)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "brole_name", nullable = false, columnDefinition = "Text")
     public String getBroleName() {
         return broleName;
     }

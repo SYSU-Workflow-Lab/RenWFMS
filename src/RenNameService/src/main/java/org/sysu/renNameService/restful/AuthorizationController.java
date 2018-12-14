@@ -13,7 +13,6 @@ import org.sysu.renCommon.dto.ReturnModel;
 import org.sysu.renCommon.dto.StatusCode;
 import org.sysu.renNameService.utility.SerializationUtil;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +41,6 @@ public class AuthorizationController {
      */
     @PostMapping(value = "/connect", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel Connect(@RequestParam(value="username", required = false)String username,
                                @RequestParam(value="password", required = false)String password) {
         ReturnModel rnModel = new ReturnModel();
@@ -71,7 +69,6 @@ public class AuthorizationController {
      */
     @PostMapping(value = "/disconnect", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel Disconnect(@RequestParam(value="token", required = false)String token) {
         ReturnModel rnModel = new ReturnModel();
         try {
@@ -98,7 +95,6 @@ public class AuthorizationController {
      */
     @PostMapping(value = "/check", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel Check(@RequestParam(value="token", required = false)String token) {
         ReturnModel rnModel = new ReturnModel();
         try {
@@ -129,7 +125,6 @@ public class AuthorizationController {
      */
     @PostMapping(value = "/domain/add", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel AddDomain(@RequestParam(value="token", required = false)String token,
                                  @RequestParam(value="name", required = false)String name,
                                  @RequestParam(value="password", required = false)String password,
@@ -170,7 +165,6 @@ public class AuthorizationController {
      */
     @PostMapping(value = "/domain/remove", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel RemoveDomain(@RequestParam(value="token", required = false)String token,
                                     @RequestParam(value="name", required = false)String name) {
         ReturnModel rnModel = new ReturnModel();
@@ -207,7 +201,6 @@ public class AuthorizationController {
      */
     @PostMapping(value = "/domain/update", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel UpdateDomain(@RequestParam(value="token", required = false)String token,
                                     @RequestParam(value="name", required = false)String name,
                                     @RequestParam(value="level", required = false)String level,
@@ -266,7 +259,6 @@ public class AuthorizationController {
      */
     @PostMapping(value = "/domain/contain", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel ContainDomain(@RequestParam(value="token", required = false)String token,
                                      @RequestParam(value="name", required = false)String name) {
         ReturnModel rnModel = new ReturnModel();
@@ -300,7 +292,6 @@ public class AuthorizationController {
      */
     @PostMapping(value = "/domain/get", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetDomain(@RequestParam(value="token", required = false)String token,
                                  @RequestParam(value="name", required = false)String name) {
         ReturnModel rnModel = new ReturnModel();
@@ -333,7 +324,6 @@ public class AuthorizationController {
      */
     @PostMapping(value = "/domain/getall", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetAllDomain(@RequestParam(value="token", required = false)String token) {
         ReturnModel rnModel = new ReturnModel();
         try {
@@ -368,7 +358,6 @@ public class AuthorizationController {
      */
     @PostMapping(value = "/user/add", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel AddAuthorization(@RequestParam(value="token", required = false)String token,
                                         @RequestParam(value="username", required = false)String username,
                                         @RequestParam(value="password", required = false)String password,
@@ -413,7 +402,6 @@ public class AuthorizationController {
      */
     @PostMapping(value = "/user/remove", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel RemoveAuthorization(@RequestParam(value="token", required = false)String token,
                                            @RequestParam(value="username", required = false)String username,
                                            @RequestParam(value="domain", required = false)String domain) {
@@ -455,7 +443,6 @@ public class AuthorizationController {
      */
     @PostMapping(value = "/user/update", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel UpdateAuthorization(@RequestParam(value="token", required = false)String token,
                                            @RequestParam(value="username", required = false)String username,
                                            @RequestParam(value="domain", required = false)String domain,
@@ -521,7 +508,6 @@ public class AuthorizationController {
      */
     @PostMapping(value = "/user/contain", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel ContainAuthorization(@RequestParam(value="token", required = false)String token,
                                             @RequestParam(value="username", required = false)String username,
                                             @RequestParam(value="domain", required = false)String domain) {
@@ -559,7 +545,6 @@ public class AuthorizationController {
      */
     @PostMapping(value = "/user/get", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetAuthorization(@RequestParam(value="token", required = false)String token,
                                         @RequestParam(value="username", required = false)String username,
                                         @RequestParam(value="domain", required = false)String domain) {
@@ -596,7 +581,6 @@ public class AuthorizationController {
      */
     @PostMapping(value = "/user/getall", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetAllAuthorization(@RequestParam(value="token", required = false)String token,
                                            @RequestParam(value="domain", required = false)String domain) {
         ReturnModel rnModel = new ReturnModel();

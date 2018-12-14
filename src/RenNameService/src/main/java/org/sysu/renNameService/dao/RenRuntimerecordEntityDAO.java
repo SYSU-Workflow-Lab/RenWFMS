@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import org.sysu.renNameService.entity.RenRuntimerecordEntity;
 import org.sysu.renNameService.repository.RenRuntimerecordEntityRepository;
 
+import java.util.List;
+
 /**
  * Created by Skye on 2018/12/5.
  */
@@ -26,6 +28,31 @@ public class RenRuntimerecordEntityDAO {
 
     @CachePut(key = "#p0.rtid")
     public RenRuntimerecordEntity saveOrUpdate(RenRuntimerecordEntity renRuntimerecordEntity) {
-        return renRuntimerecordEntityRepository.save(renRuntimerecordEntity);
+        return renRuntimerecordEntityRepository.saveAndFlush(renRuntimerecordEntity);
     }
+
+    public List<RenRuntimerecordEntity> findAll() {
+        return renRuntimerecordEntityRepository.findAll();
+    }
+
+    public List<RenRuntimerecordEntity> findRenRuntimerecordEntitiesByIsSucceed(int isSucceed) {
+        return renRuntimerecordEntityRepository.findRenRuntimerecordEntitiesByIsSucceed(isSucceed);
+    }
+
+    public List<RenRuntimerecordEntity> findRenRuntimerecordEntitiesByIsSucceedAndDomain(int isSucceed, String domain) {
+        return renRuntimerecordEntityRepository.findRenRuntimerecordEntitiesByIsSucceedAndDomain(isSucceed, domain);
+    }
+
+    public List<RenRuntimerecordEntity> findRenRuntimerecordEntitiesByDomain(String domain) {
+        return renRuntimerecordEntityRepository.findRenRuntimerecordEntitiesByDomain(domain);
+    }
+
+    public List<RenRuntimerecordEntity> findRenRuntimerecordEntitiesByIsSucceedAndLaunchAuthorityId(int isSucceed, String launcher) {
+        return renRuntimerecordEntityRepository.findRenRuntimerecordEntitiesByIsSucceedAndLaunchAuthorityId(isSucceed, launcher);
+    }
+
+    public List<RenRuntimerecordEntity> findRenRuntimerecordEntitiesByLaunchAuthorityId(String launcher) {
+        return renRuntimerecordEntityRepository.findRenRuntimerecordEntitiesByLaunchAuthorityId(launcher);
+    }
+
 }

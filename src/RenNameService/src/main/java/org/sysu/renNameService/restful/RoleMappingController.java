@@ -13,7 +13,6 @@ import org.sysu.renNameService.transaction.NameServiceTransaction;
 import org.sysu.renNameService.transaction.TransactionCreator;
 import org.sysu.renNameService.transaction.TransactionType;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +46,6 @@ public class RoleMappingController {
      */
     @RequestMapping(value = "/getWorkerByBRole", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetWorkerByBusinessRole(@RequestParam(value="token", required = false)String token,
                                                @RequestParam(value="rtid", required = false)String rtid,
                                                @RequestParam(value="brole", required = false)String brole) {
@@ -87,7 +85,6 @@ public class RoleMappingController {
      */
     @RequestMapping(value = "/getBRoleByWorker", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetBusinessRoleByGlobalId(@RequestParam(value="token", required = false)String token,
                                                  @RequestParam(value="rtid", required = false)String rtid,
                                                  @RequestParam(value="gid", required = false)String gid) {
@@ -131,7 +128,6 @@ public class RoleMappingController {
     @SuppressWarnings("ConstantConditions")
     @RequestMapping(value = "/register", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel RegisterRoleMapService(@RequestParam(value="token", required = false)String token,
                                               @RequestParam(value="rtid", required = false)String rtid,
                                               @RequestParam(value="organgid", required = false)String organGid,
@@ -176,7 +172,6 @@ public class RoleMappingController {
      */
     @RequestMapping(value = "/fin", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel FinishRoleMapService(@RequestParam(value="token", required = false)String token,
                                             @RequestParam(value="rtid", required = false)String rtid) {
         ReturnModel rnModel = new ReturnModel();
@@ -212,7 +207,6 @@ public class RoleMappingController {
      */
     @RequestMapping(value = "/getInvolved", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetInvolvedResource(@RequestParam(value="token", required = false)String token,
                                            @RequestParam(value="rtid", required = false)String rtid) {
         ReturnModel rnModel = new ReturnModel();
@@ -250,7 +244,6 @@ public class RoleMappingController {
      */
     @RequestMapping(value = "/loadParticipant", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel LoadParticipant(@RequestParam(value="token", required = false)String token,
                                        @RequestParam(value="renid", required = false)String renid,
                                        @RequestParam(value="rtid", required = false)String rtid) {
@@ -290,7 +283,6 @@ public class RoleMappingController {
      */
     @RequestMapping(value = "/unloadParticipant", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel UnLoadParticipant(@RequestParam(value="token", required = false)String token,
                                          @RequestParam(value="rtid", required = false)String rtid) {
         ReturnModel rnModel = new ReturnModel();
@@ -327,7 +319,6 @@ public class RoleMappingController {
      */
     @RequestMapping(value = "/getAllResourceFromCOrgan", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetAllResourceFromCOrgan(@RequestParam(value="token", required = false)String token,
                                                 @RequestParam(value="renid", required = false)String renid) {
         ReturnModel rnModel = new ReturnModel();
@@ -364,7 +355,6 @@ public class RoleMappingController {
      */
     @RequestMapping(value = "/getAllConnectionFromCOrgan", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetAllConnectionFromCOrgan(@RequestParam(value="token", required = false)String token,
                                                   @RequestParam(value="renid", required = false)String renid) {
         ReturnModel rnModel = new ReturnModel();
@@ -400,7 +390,6 @@ public class RoleMappingController {
      */
     @RequestMapping(value = "/getDataVersionAndGidFromCOrgan", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetDataVersionAndGidFromCOrgan(@RequestParam(value="token", required = false)String token,
                                                 @RequestParam(value="renid", required = false)String renid) {
         ReturnModel rnModel = new ReturnModel();
