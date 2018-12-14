@@ -39,8 +39,9 @@ public class RenProcessEntity {
         this.pid = pid;
     }
 
-    @Basic
-    @Column(name = "process_name", nullable = false, length = -1)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "process_name", nullable = false, columnDefinition = "Text")
     public String getProcessName() {
         return processName;
     }
@@ -59,8 +60,9 @@ public class RenProcessEntity {
         this.mainBo = mainBo;
     }
 
-    @Basic
-    @Column(name = "creator_renid", nullable = false, length = -1)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "creator_renid", nullable = false, columnDefinition = "Text")
     public String getCreatorRenid() {
         return creatorRenid;
     }
@@ -70,7 +72,7 @@ public class RenProcessEntity {
     }
 
     @Basic
-    @Column(name = "create_timestamp", nullable = true)
+    @Column(name = "create_timestamp")
     public Timestamp getCreateTimestamp() {
         return createTimestamp;
     }
@@ -100,7 +102,7 @@ public class RenProcessEntity {
     }
 
     @Basic
-    @Column(name = "last_launch_timestamp", nullable = true)
+    @Column(name = "last_launch_timestamp")
     public Timestamp getLastLaunchTimestamp() {
         return lastLaunchTimestamp;
     }
@@ -139,8 +141,9 @@ public class RenProcessEntity {
         this.authtype = authtype;
     }
 
-    @Basic
-    @Column(name = "selfsignature", nullable = true, length = -1)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "selfsignature", columnDefinition = "Text")
     public String getSelfsignature() {
         return selfsignature;
     }

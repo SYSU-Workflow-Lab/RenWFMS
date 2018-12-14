@@ -13,7 +13,6 @@ import org.sysu.renNameService.transaction.NameServiceTransaction;
 import org.sysu.renNameService.transaction.TransactionCreator;
 import org.sysu.renNameService.transaction.TransactionType;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +25,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/rolemap")
 public class RoleMappingController {
+
+    @Autowired
+    private TransactionCreator transactionCreator;
 
     /**
      * Transaction scheduler.
@@ -44,7 +46,6 @@ public class RoleMappingController {
      */
     @RequestMapping(value = "/getWorkerByBRole", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetWorkerByBusinessRole(@RequestParam(value="token", required = false)String token,
                                                @RequestParam(value="rtid", required = false)String rtid,
                                                @RequestParam(value="brole", required = false)String brole) {
@@ -66,7 +67,7 @@ public class RoleMappingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("rtid", rtid);
             args.put("brole", brole);
-            NameServiceTransaction t = TransactionCreator.Create(TransactionType.BusinessRoleMapping, "getWorkerByBRole", args);
+            NameServiceTransaction t = transactionCreator.Create(TransactionType.BusinessRoleMapping, "getWorkerByBRole", args);
             String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
@@ -84,7 +85,6 @@ public class RoleMappingController {
      */
     @RequestMapping(value = "/getBRoleByWorker", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetBusinessRoleByGlobalId(@RequestParam(value="token", required = false)String token,
                                                  @RequestParam(value="rtid", required = false)String rtid,
                                                  @RequestParam(value="gid", required = false)String gid) {
@@ -106,7 +106,7 @@ public class RoleMappingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("rtid", rtid);
             args.put("gid", gid);
-            NameServiceTransaction t = TransactionCreator.Create(TransactionType.BusinessRoleMapping, "getBRoleByWorker", args);
+            NameServiceTransaction t = transactionCreator.Create(TransactionType.BusinessRoleMapping, "getBRoleByWorker", args);
             String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
@@ -128,7 +128,6 @@ public class RoleMappingController {
     @SuppressWarnings("ConstantConditions")
     @RequestMapping(value = "/register", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel RegisterRoleMapService(@RequestParam(value="token", required = false)String token,
                                               @RequestParam(value="rtid", required = false)String rtid,
                                               @RequestParam(value="organgid", required = false)String organGid,
@@ -156,7 +155,7 @@ public class RoleMappingController {
             args.put("organGid", organGid);
             args.put("dataVersion", dataVersion);
             args.put("map", map);
-            NameServiceTransaction t = TransactionCreator.Create(TransactionType.BusinessRoleMapping, "register", args);
+            NameServiceTransaction t = transactionCreator.Create(TransactionType.BusinessRoleMapping, "register", args);
             String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
@@ -173,7 +172,6 @@ public class RoleMappingController {
      */
     @RequestMapping(value = "/fin", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel FinishRoleMapService(@RequestParam(value="token", required = false)String token,
                                             @RequestParam(value="rtid", required = false)String rtid) {
         ReturnModel rnModel = new ReturnModel();
@@ -192,7 +190,7 @@ public class RoleMappingController {
             // logic
             HashMap<String, String> args = new HashMap<>();
             args.put("rtid", rtid);
-            NameServiceTransaction t = TransactionCreator.Create(TransactionType.BusinessRoleMapping, "fin", args);
+            NameServiceTransaction t = transactionCreator.Create(TransactionType.BusinessRoleMapping, "fin", args);
             String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
@@ -209,7 +207,6 @@ public class RoleMappingController {
      */
     @RequestMapping(value = "/getInvolved", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetInvolvedResource(@RequestParam(value="token", required = false)String token,
                                            @RequestParam(value="rtid", required = false)String rtid) {
         ReturnModel rnModel = new ReturnModel();
@@ -228,7 +225,7 @@ public class RoleMappingController {
             // logic
             HashMap<String, String> args = new HashMap<>();
             args.put("rtid", rtid);
-            NameServiceTransaction t = TransactionCreator.Create(TransactionType.BusinessRoleMapping, "getInvolved", args);
+            NameServiceTransaction t = transactionCreator.Create(TransactionType.BusinessRoleMapping, "getInvolved", args);
             String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
@@ -247,7 +244,6 @@ public class RoleMappingController {
      */
     @RequestMapping(value = "/loadParticipant", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel LoadParticipant(@RequestParam(value="token", required = false)String token,
                                        @RequestParam(value="renid", required = false)String renid,
                                        @RequestParam(value="rtid", required = false)String rtid) {
@@ -269,7 +265,7 @@ public class RoleMappingController {
             HashMap<String, String> args = new HashMap<>();
             args.put("renid", renid);
             args.put("rtid", rtid);
-            NameServiceTransaction t = TransactionCreator.Create(TransactionType.BusinessRoleMapping, "loadParticipant", args);
+            NameServiceTransaction t = transactionCreator.Create(TransactionType.BusinessRoleMapping, "loadParticipant", args);
             String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
@@ -287,7 +283,6 @@ public class RoleMappingController {
      */
     @RequestMapping(value = "/unloadParticipant", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel UnLoadParticipant(@RequestParam(value="token", required = false)String token,
                                          @RequestParam(value="rtid", required = false)String rtid) {
         ReturnModel rnModel = new ReturnModel();
@@ -306,7 +301,7 @@ public class RoleMappingController {
             // logic
             HashMap<String, String> args = new HashMap<>();
             args.put("rtid", rtid);
-            NameServiceTransaction t = TransactionCreator.Create(TransactionType.BusinessRoleMapping, "unloadParticipant", args);
+            NameServiceTransaction t = transactionCreator.Create(TransactionType.BusinessRoleMapping, "unloadParticipant", args);
             String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
@@ -324,7 +319,6 @@ public class RoleMappingController {
      */
     @RequestMapping(value = "/getAllResourceFromCOrgan", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetAllResourceFromCOrgan(@RequestParam(value="token", required = false)String token,
                                                 @RequestParam(value="renid", required = false)String renid) {
         ReturnModel rnModel = new ReturnModel();
@@ -343,7 +337,7 @@ public class RoleMappingController {
             // logic
             HashMap<String, String> args = new HashMap<>();
             args.put("renid", renid);
-            NameServiceTransaction t = TransactionCreator.Create(TransactionType.BusinessRoleMapping, "getAllResourceFromCOrgan", args);
+            NameServiceTransaction t = transactionCreator.Create(TransactionType.BusinessRoleMapping, "getAllResourceFromCOrgan", args);
             String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
@@ -361,7 +355,6 @@ public class RoleMappingController {
      */
     @RequestMapping(value = "/getAllConnectionFromCOrgan", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetAllConnectionFromCOrgan(@RequestParam(value="token", required = false)String token,
                                                   @RequestParam(value="renid", required = false)String renid) {
         ReturnModel rnModel = new ReturnModel();
@@ -380,7 +373,7 @@ public class RoleMappingController {
             // logic
             HashMap<String, String> args = new HashMap<>();
             args.put("renid", renid);
-            NameServiceTransaction t = TransactionCreator.Create(TransactionType.BusinessRoleMapping, "getAllConnectionFromCOrgan", args);
+            NameServiceTransaction t = transactionCreator.Create(TransactionType.BusinessRoleMapping, "getAllConnectionFromCOrgan", args);
             String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
@@ -397,7 +390,6 @@ public class RoleMappingController {
      */
     @RequestMapping(value = "/getDataVersionAndGidFromCOrgan", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetDataVersionAndGidFromCOrgan(@RequestParam(value="token", required = false)String token,
                                                 @RequestParam(value="renid", required = false)String renid) {
         ReturnModel rnModel = new ReturnModel();
@@ -416,7 +408,7 @@ public class RoleMappingController {
             // logic
             HashMap<String, String> args = new HashMap<>();
             args.put("renid", renid);
-            NameServiceTransaction t = TransactionCreator.Create(TransactionType.BusinessRoleMapping, "getDataVersionAndGidFromCOrgan", args);
+            NameServiceTransaction t = transactionCreator.Create(TransactionType.BusinessRoleMapping, "getDataVersionAndGidFromCOrgan", args);
             String jsonifyResult = (String) this.scheduler.Schedule(t);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);

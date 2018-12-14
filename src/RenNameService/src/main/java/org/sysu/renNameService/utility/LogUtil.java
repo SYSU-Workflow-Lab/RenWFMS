@@ -6,6 +6,7 @@ package org.sysu.renNameService.utility;
 import org.hibernate.Session;
 import org.sysu.renCommon.utility.TimestampUtil;
 import org.sysu.renNameService.GlobalContext;
+import org.sysu.renNameService.dao.RenLogEntityDAO;
 import org.sysu.renNameService.entity.RenLogEntity;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -17,6 +18,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * Usage : Static methods for name service logging.
  */
 public final class LogUtil {
+
+    private static RenLogEntityDAO renLogEntityDAO = (RenLogEntityDAO) SpringContextUtil.getBean("renLogEntityDAO");
+
     /**
      * Show a structure information message.
      * @param msg message text
@@ -99,7 +103,6 @@ public final class LogUtil {
             LogUtil.readWriteLock.writeLock().unlock();
             return;
         }
-        Session session = HibernateUtil.GetLocalSession();
         try {
             LogMessagePackage lmp;
             while ((lmp = LogUtil.logBuffer.poll()) != null) {
@@ -110,15 +113,13 @@ public final class LogUtil {
                 rnle.setMessage(lmp.Message);
                 rnle.setTimestamp(lmp.Timestamp);
                 rnle.setRtid(lmp.Rtid);
-                session.save(rnle);
+                LogUtil.renLogEntityDAO.saveOrUpdate(rnle);
             }
-            session.flush();
         }
         catch (Exception ex) {
             LogUtil.Echo("Flush log exception, " + ex, LogUtil.class.getName(), LogLevelType.ERROR);
         }
         finally {
-            HibernateUtil.CloseLocalSession();
             LogUtil.readWriteLock.writeLock().unlock();
         }
     }

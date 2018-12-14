@@ -24,8 +24,9 @@ public class RenBoEntity {
         this.boid = boid;
     }
 
-    @Basic
-    @Column(name = "bo_name", nullable = false, length = -1)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "bo_name", nullable = false, columnDefinition = "Text")
     public String getBoName() {
         return boName;
     }
@@ -54,8 +55,9 @@ public class RenBoEntity {
         this.state = state;
     }
 
-    @Basic
-    @Column(name = "bo_content", nullable = true, length = -1)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "bo_content", columnDefinition = "Text")
     public String getBoContent() {
         return boContent;
     }
@@ -74,8 +76,9 @@ public class RenBoEntity {
         this.serialized = serialized;
     }
 
-    @Basic
-    @Column(name = "broles", nullable = true, length = -1)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "broles", columnDefinition = "Text")
     public String getBroles() {
         return broles;
     }

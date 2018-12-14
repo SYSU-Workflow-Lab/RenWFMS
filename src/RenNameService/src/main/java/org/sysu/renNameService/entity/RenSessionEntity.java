@@ -33,8 +33,9 @@ public class RenSessionEntity {
         this.token = token;
     }
 
-    @Basic
-    @Column(name = "username", nullable = false, length = -1)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "username", nullable = false, columnDefinition = "Text")
     public String getUsername() {
         return username;
     }
@@ -64,7 +65,7 @@ public class RenSessionEntity {
     }
 
     @Basic
-    @Column(name = "until_timestamp", nullable = true)
+    @Column(name = "until_timestamp")
     public Timestamp getUntilTimestamp() {
         return untilTimestamp;
     }
@@ -74,7 +75,7 @@ public class RenSessionEntity {
     }
 
     @Basic
-    @Column(name = "destroy_timestamp", nullable = true)
+    @Column(name = "destroy_timestamp")
     public Timestamp getDestroyTimestamp() {
         return destroyTimestamp;
     }

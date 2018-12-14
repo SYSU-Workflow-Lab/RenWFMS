@@ -37,7 +37,7 @@ public class RenNsTransactionEntity {
     }
 
     @Basic
-    @Column(name = "type", nullable = true)
+    @Column(name = "type")
     public Integer getType() {
         return type;
     }
@@ -47,7 +47,7 @@ public class RenNsTransactionEntity {
     }
 
     @Basic
-    @Column(name = "rtid", nullable = true, length = 64)
+    @Column(name = "rtid", length = 64)
     public String getRtid() {
         return rtid;
     }
@@ -66,8 +66,9 @@ public class RenNsTransactionEntity {
         this.priority = priority;
     }
 
-    @Basic
-    @Column(name = "context", nullable = true, length = -1)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "context", columnDefinition = "Text")
     public String getContext() {
         return context;
     }
@@ -77,7 +78,7 @@ public class RenNsTransactionEntity {
     }
 
     @Basic
-    @Column(name = "accept_timestamp", nullable = true)
+    @Column(name = "accept_timestamp")
     public Timestamp getAcceptTimestamp() {
         return acceptTimestamp;
     }
@@ -87,7 +88,7 @@ public class RenNsTransactionEntity {
     }
 
     @Basic
-    @Column(name = "finish_timestamp", nullable = true)
+    @Column(name = "finish_timestamp")
     public Timestamp getFinishTimestamp() {
         return finishTimestamp;
     }
@@ -97,7 +98,7 @@ public class RenNsTransactionEntity {
     }
 
     @Basic
-    @Column(name = "request_invoker", nullable = true, length = 64)
+    @Column(name = "request_invoker", length = 64)
     public String getRequestInvoker() {
         return requestInvoker;
     }
@@ -107,7 +108,7 @@ public class RenNsTransactionEntity {
     }
 
     @Basic
-    @Column(name = "scheduled_timestamp", nullable = true)
+    @Column(name = "scheduled_timestamp")
     public Timestamp getScheduledTimestamp() {
         return scheduledTimestamp;
     }

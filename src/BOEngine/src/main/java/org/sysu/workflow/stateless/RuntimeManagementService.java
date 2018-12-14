@@ -98,7 +98,9 @@ public final class RuntimeManagementService {
             String[] boidItems = boidList.split(",");
             for (String boid : boidItems) {
                 RenBoEntity rbe = session.get(RenBoEntity.class, boid);
-                assert rbe != null;
+                if (rbe == null) {
+                    throw new NullPointerException("RenBoEntity is not found");
+                }
                 SCXML scxml = RuntimeManagementService.ParseStringToSCXML(rbe.getBoContent());
                 if (scxml == null) {
                     continue;
@@ -128,6 +130,7 @@ public final class RuntimeManagementService {
             return retSet;
         } catch (Exception ex) {
             transaction.rollback();
+            ex.printStackTrace();
             LogUtil.Log(String.format("When serialize BOList(%s), exception occurred, %s, service rollback", boidList, ex),
                     RuntimeManagementService.class.getName(), LogLevelType.ERROR, boidList);
         } finally {

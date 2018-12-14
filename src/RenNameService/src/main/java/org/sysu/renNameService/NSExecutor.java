@@ -4,11 +4,9 @@
  */
 package org.sysu.renNameService;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.sysu.renNameService.entity.*;
-import org.sysu.renNameService.nameSpacing.NameSpacingService;
-import org.sysu.renNameService.roleMapping.RoleMappingService;
+import org.sysu.renNameService.namespacing.NameSpacingService;
+import org.sysu.renNameService.rolemapping.RoleMappingService;
 import org.sysu.renNameService.transaction.NameServiceTransaction;
 import org.sysu.renNameService.transaction.TransactionType;
 import org.sysu.renNameService.utility.LogUtil;
@@ -28,6 +26,8 @@ public class NSExecutor extends Observable {
 
     private RoleMappingService roleMappingService;
 
+    private NameSpacingService nameSpacingService;
+
     /**
      * Create a new name service transaction executor.
      *
@@ -36,6 +36,7 @@ public class NSExecutor extends Observable {
     NSExecutor(Observer executorObserver) {
         this.addObserver(executorObserver);
         roleMappingService = (RoleMappingService) SpringContextUtil.getBean("roleMappingService");
+        nameSpacingService = (NameSpacingService) SpringContextUtil.getBean("nameSpacingService");
     }
 
     /**
@@ -118,88 +119,88 @@ public class NSExecutor extends Observable {
                     String nsAct = (String) nst.getParameterDictionary().get(GlobalContext.TRANSACTION_ACTION_KEY);
                     switch (nsAct) {
                         case "createProcess":
-                            retStr = NameSpacingService.CreateProcess((String) args.get("renid"), (String) args.get("name"), (String) args.get("mainbo"));
+                            retStr = nameSpacingService.CreateProcess((String) args.get("renid"), (String) args.get("name"), (String) args.get("mainbo"));
                             break;
                         case "uploadBO":
-                            retStr = SerializationUtil.JsonSerialization(NameSpacingService.UploadBOContent((String) args.get("pid"), (String) args.get("name"), (String) args.get("content")), "");
+                            retStr = SerializationUtil.JsonSerialization(nameSpacingService.UploadBOContent((String) args.get("pid"), (String) args.get("name"), (String) args.get("content")), "");
                             break;
                         case "getProcessByRenId":
-                            ArrayList<RenProcessEntity> processByRenList = NameSpacingService.GetProcessByRenId((String) args.get("renid"));
+                            List<RenProcessEntity> processByRenList = nameSpacingService.GetProcessByRenId((String) args.get("renid"));
                             retStr = SerializationUtil.JsonSerialization(processByRenList, "");
                             break;
                         case "getProcessByDomain":
-                            ArrayList<RenProcessEntity> processByDomainList = NameSpacingService.GetProcessByDomain((String) args.get("domain"));
+                            List<RenProcessEntity> processByDomainList = nameSpacingService.GetProcessByDomain((String) args.get("domain"));
                             retStr = SerializationUtil.JsonSerialization(processByDomainList, "");
                             break;
                         case "getProcessByPid":
-                            RenProcessEntity processByPid = NameSpacingService.GetProcessByPid((String) args.get("pid"));
+                            RenProcessEntity processByPid = nameSpacingService.GetProcessByPid((String) args.get("pid"));
                             retStr = SerializationUtil.JsonSerialization(processByPid, "");
                             break;
                         case "getProcessBOList":
-                            ArrayList<Object> processBOList = NameSpacingService.GetProcessBOList((String) args.get("pid"));
+                            List<Object> processBOList = nameSpacingService.GetProcessBOList((String) args.get("pid"));
                             retStr = SerializationUtil.JsonSerialization(processBOList, "");
                             break;
                         case "getRuntimeRecord":
-                            RenRuntimerecordEntity RTC = NameSpacingService.GetRuntimeRecord((String) args.get("rtid"));
+                            RenRuntimerecordEntity RTC = nameSpacingService.GetRuntimeRecord((String) args.get("rtid"));
                             retStr = SerializationUtil.JsonSerialization(RTC, "");
                             break;
                         case "getAllRuntimeRecord":
-                            ArrayList<RenRuntimerecordEntity> allRTCList = NameSpacingService.GetAllRuntimeRecord((String) args.get("activeOnly"));
+                            List<RenRuntimerecordEntity> allRTCList = nameSpacingService.GetAllRuntimeRecord((String) args.get("activeOnly"));
                             retStr = SerializationUtil.JsonSerialization(allRTCList, "");
                             break;
                         case "getRuntimeRecordByDomain":
-                            ArrayList<RenRuntimerecordEntity> domainRTCList = NameSpacingService.GetRuntimeRecordByDomain((String) args.get("domain"), (String) args.get("activeOnly"));
+                            List<RenRuntimerecordEntity> domainRTCList = nameSpacingService.GetRuntimeRecordByDomain((String) args.get("domain"), (String) args.get("activeOnly"));
                             retStr = SerializationUtil.JsonSerialization(domainRTCList, "");
                             break;
                         case "getRuntimeRecordByLauncher":
-                            ArrayList<RenRuntimerecordEntity> launcherRTCList = NameSpacingService.GetRuntimeRecordByLauncher((String) args.get("launcher"), (String) args.get("activeOnly"));
+                            List<RenRuntimerecordEntity> launcherRTCList = nameSpacingService.GetRuntimeRecordByLauncher((String) args.get("launcher"), (String) args.get("activeOnly"));
                             retStr = SerializationUtil.JsonSerialization(launcherRTCList, "");
                             break;
                         case "getRuntimeLogByRTID":
-                            ArrayList<RenLogEntity> RTCLogList = NameSpacingService.GetRuntimeLog((String) args.get("rtid"));
+                            List<RenLogEntity> RTCLogList = nameSpacingService.GetRuntimeLog((String) args.get("rtid"));
                             retStr = SerializationUtil.JsonSerialization(RTCLogList, "");
                             break;
                         case "containProcess":
-                            boolean containProcessFlag = NameSpacingService.ContainProcess((String) args.get("renid"), (String) args.get("processName"));
+                            boolean containProcessFlag = nameSpacingService.ContainProcess((String) args.get("renid"), (String) args.get("processName"));
                             retStr = SerializationUtil.JsonSerialization(containProcessFlag, "");
                             break;
                         case "getBO":
-                            RenBoEntity getBoEntity = NameSpacingService.GetBO((String) args.get("boid"), (String) args.get("rtid"));
+                            RenBoEntity getBoEntity = nameSpacingService.GetBO((String) args.get("boid"), (String) args.get("rtid"));
                             retStr = SerializationUtil.JsonSerialization(getBoEntity, "");
                             break;
                         case "submitProcess":
-                            retStr = NameSpacingService.SubmitProcess((String) args.get("pid"), (String) args.get("from"), (String) args.get("renid"), (String) args.get("authoritySession"), Integer.parseInt((String) args.get("bindingType")), Integer.parseInt((String) args.get("launchType")), Integer.parseInt((String) args.get("failureType")), Integer.parseInt((String) args.get("authType")), (String) args.get("binding"));
+                            retStr = nameSpacingService.SubmitProcess((String) args.get("pid"), (String) args.get("from"), (String) args.get("renid"), (String) args.get("authoritySession"), Integer.parseInt((String) args.get("bindingType")), Integer.parseInt((String) args.get("launchType")), Integer.parseInt((String) args.get("failureType")), Integer.parseInt((String) args.get("authType")), (String) args.get("binding"));
                             break;
                         case "startProcess":
-                            NameSpacingService.StartProcess((String) args.get("rtid"));
+                            nameSpacingService.StartProcess((String) args.get("rtid"));
                             retStr = "OK";
                             break;
                         case "checkFinish":
-                            retStr = NameSpacingService.CheckFinish((String) args.get("rtid"));
+                            retStr = nameSpacingService.CheckFinish((String) args.get("rtid"));
                             break;
                         case "transshipGetSpanTree":
-                            retStr = (String) NameSpacingService.TransshipGetSpanTree((String) args.get("rtid"));
+                            retStr = (String) nameSpacingService.TransshipGetSpanTree((String) args.get("rtid"));
                             break;
                         case "transshipCallback":
-                            retStr = NameSpacingService.TransshipCallback(args);
+                            retStr = nameSpacingService.TransshipCallback(args);
                             break;
                         case "transshipWorkitem":
-                            retStr = (String) NameSpacingService.TransshipWorkitem((String) args.get("action"), (String) args.get("workitemId"), (String) args.get("workerId"), (String) args.get("payload"));
+                            retStr = (String) nameSpacingService.TransshipWorkitem((String) args.get("action"), (String) args.get("workitemId"), (String) args.get("workerId"), (String) args.get("payload"));
                             break;
                         case "transshipWorkqueue":
-                            retStr = (String) NameSpacingService.TransshipWorkqueue((String) args.get("action"), (String) args.get("rtid"), (String) args.get("workerId"), (String) args.get("type"));
+                            retStr = (String) nameSpacingService.TransshipWorkqueue((String) args.get("action"), (String) args.get("rtid"), (String) args.get("workerId"), (String) args.get("type"));
                             break;
                         case "transshipGetAll":
-                            retStr = (String) NameSpacingService.TransshipGetAll((String) args.get("rtid"));
+                            retStr = (String) nameSpacingService.TransshipGetAll((String) args.get("rtid"));
                             break;
                         case "transshipGetAllWorkitemsForDomain":
-                            retStr = (String) NameSpacingService.TransshipGetAllWorkitemsForDomain((String) args.get("domain"));
+                            retStr = (String) nameSpacingService.TransshipGetAllWorkitemsForDomain((String) args.get("domain"));
                             break;
                         case "transshipGetAllActiveForParticipant":
-                            retStr = (String) NameSpacingService.TransshipGetAllActiveForParticipant((String) args.get("workerId"));
+                            retStr = (String) nameSpacingService.TransshipGetAllActiveForParticipant((String) args.get("workerId"));
                             break;
                         case "transshipGetWorkitem":
-                            retStr = (String) NameSpacingService.TransshipGetWorkitem((String) args.get("wid"));
+                            retStr = (String) nameSpacingService.TransshipGetWorkitem((String) args.get("wid"));
                             break;
                     }
                     // prepare execution result

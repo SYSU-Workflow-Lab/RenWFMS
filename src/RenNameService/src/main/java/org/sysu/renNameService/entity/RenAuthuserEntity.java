@@ -25,7 +25,7 @@ public class RenAuthuserEntity {
     private String gid;
 
     @Id
-    @Column(name = "username", nullable = false, length = 255)
+    @Column(name = "username", nullable = false)
     public String getUsername() {
         return username;
     }
@@ -35,7 +35,7 @@ public class RenAuthuserEntity {
     }
 
     @Id
-    @Column(name = "domain", nullable = false, length = 255)
+    @Column(name = "domain", nullable = false)
     public String getDomain() {
         return domain;
     }
@@ -55,7 +55,7 @@ public class RenAuthuserEntity {
     }
 
     @Basic
-    @Column(name = "password", nullable = false, length = 255)
+    @Column(name = "password", nullable = false)
     public String getPassword() {
         return password;
     }
@@ -75,7 +75,7 @@ public class RenAuthuserEntity {
     }
 
     @Basic
-    @Column(name = "createtimestamp", nullable = true)
+    @Column(name = "createtimestamp")
     public Timestamp getCreatetimestamp() {
         return createtimestamp;
     }
@@ -85,7 +85,7 @@ public class RenAuthuserEntity {
     }
 
     @Basic
-    @Column(name = "lastlogin", nullable = true)
+    @Column(name = "lastlogin")
     public Timestamp getLastlogin() {
         return lastlogin;
     }
@@ -95,7 +95,7 @@ public class RenAuthuserEntity {
     }
 
     @Basic
-    @Column(name = "gid", nullable = true, length = 255)
+    @Column(name = "gid")
     public String getGid() {
         return gid;
     }

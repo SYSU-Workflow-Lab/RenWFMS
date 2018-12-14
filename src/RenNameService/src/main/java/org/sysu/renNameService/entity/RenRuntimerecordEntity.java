@@ -45,7 +45,7 @@ public class RenRuntimerecordEntity {
     }
 
     @Basic
-    @Column(name = "process_id", nullable = true, length = 64)
+    @Column(name = "process_id", length = 64)
     public String getProcessId() {
         return processId;
     }
@@ -54,8 +54,9 @@ public class RenRuntimerecordEntity {
         this.processId = processId;
     }
 
-    @Basic
-    @Column(name = "process_name", nullable = true, length = -1)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "process_name", columnDefinition = "Text")
     public String getProcessName() {
         return processName;
     }
@@ -65,7 +66,7 @@ public class RenRuntimerecordEntity {
     }
 
     @Basic
-    @Column(name = "session_id", nullable = true, length = 64)
+    @Column(name = "session_id", length = 64)
     public String getSessionId() {
         return sessionId;
     }
@@ -75,7 +76,7 @@ public class RenRuntimerecordEntity {
     }
 
     @Basic
-    @Column(name = "launch_authority_id", nullable = true, length = 64)
+    @Column(name = "launch_authority_id", length = 64)
     public String getLaunchAuthorityId() {
         return launchAuthorityId;
     }
@@ -85,7 +86,7 @@ public class RenRuntimerecordEntity {
     }
 
     @Basic
-    @Column(name = "launch_timestamp", nullable = true)
+    @Column(name = "launch_timestamp")
     public Timestamp getLaunchTimestamp() {
         return launchTimestamp;
     }
@@ -94,8 +95,9 @@ public class RenRuntimerecordEntity {
         this.launchTimestamp = launchTimestamp;
     }
 
-    @Basic
-    @Column(name = "launch_from", nullable = true, length = -1)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "launch_from", columnDefinition = "Text")
     public String getLaunchFrom() {
         return launchFrom;
     }
@@ -115,7 +117,7 @@ public class RenRuntimerecordEntity {
     }
 
     @Basic
-    @Column(name = "tag", nullable = true, length = -1)
+    @Column(name = "tag", length = -1)
     public String getTag() {
         return tag;
     }
@@ -125,7 +127,7 @@ public class RenRuntimerecordEntity {
     }
 
     @Basic
-    @Column(name = "interpreter_id", nullable = true, length = 64)
+    @Column(name = "interpreter_id", length = 64)
     public String getInterpreterId() {
         return interpreterId;
     }
@@ -135,7 +137,7 @@ public class RenRuntimerecordEntity {
     }
 
     @Basic
-    @Column(name = "resourcing_id", nullable = true, length = 64)
+    @Column(name = "resourcing_id", length = 64)
     public String getResourcingId() {
         return resourcingId;
     }
@@ -144,8 +146,9 @@ public class RenRuntimerecordEntity {
         this.resourcingId = resourcingId;
     }
 
-    @Basic
-    @Column(name = "resource_binding", nullable = true, length = -1)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "resource_binding", columnDefinition = "Text")
     public String getResourceBinding() {
         return resourceBinding;
     }
@@ -155,7 +158,7 @@ public class RenRuntimerecordEntity {
     }
 
     @Basic
-    @Column(name = "resource_binding_type", nullable = true)
+    @Column(name = "resource_binding_type")
     public Integer getResourceBindingType() {
         return resourceBindingType;
     }
@@ -165,7 +168,7 @@ public class RenRuntimerecordEntity {
     }
 
     @Basic
-    @Column(name = "failure_type", nullable = true)
+    @Column(name = "failure_type")
     public Integer getFailureType() {
         return failureType;
     }
@@ -174,8 +177,9 @@ public class RenRuntimerecordEntity {
         this.failureType = failureType;
     }
 
-    @Basic
-    @Column(name = "participant_cache", nullable = true, length = -1)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "participant_cache", columnDefinition = "Text")
     public String getParticipantCache() {
         return participantCache;
     }
@@ -185,7 +189,7 @@ public class RenRuntimerecordEntity {
     }
 
     @Basic
-    @Column(name = "finish_timestamp", nullable = true)
+    @Column(name = "finish_timestamp")
     public Timestamp getFinishTimestamp() {
         return finishTimestamp;
     }
