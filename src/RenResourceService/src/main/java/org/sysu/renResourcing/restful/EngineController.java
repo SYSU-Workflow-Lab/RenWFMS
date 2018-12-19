@@ -4,6 +4,7 @@
  */
 package org.sysu.renResourcing.restful;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.sysu.renCommon.dto.ReturnModel;
@@ -22,6 +23,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/internal")
 public class EngineController {
+
+    /**
+     * @see org.sysu.renResourcing.interfaceService.InterfaceA
+     */
+    @Autowired
+    private InterfaceA interfaceA;
+
     /**
      * Submit a task resourcing request from BOEngine.
      * @param rtid process runtime record id (required)
@@ -52,7 +60,7 @@ public class EngineController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // logic
-            String jsonifyResult = InterfaceA.EngineSubmitTask(rtid, boname, nodeId, taskname, args);
+            String jsonifyResult = interfaceA.EngineSubmitTask(rtid, boname, nodeId, taskname, args);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -81,7 +89,7 @@ public class EngineController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // logic
-            String jsonifyResult = InterfaceA.EngineFinishProcess(rtid, successFlag);
+            String jsonifyResult = interfaceA.EngineFinishProcess(rtid, successFlag);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {

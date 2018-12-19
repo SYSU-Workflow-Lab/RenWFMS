@@ -4,6 +4,8 @@
  */
 package org.sysu.renResourcing.interfaceService;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renResourcing.GlobalContext;
 import org.sysu.renCommon.enums.InitializationByType;
@@ -24,14 +26,19 @@ import java.util.*;
  *         User sub-systems use this interface for manage work queues.
  *         Usually methods in the interface will return result immediately.
  */
+
+@Service
 public class InterfaceW {
+
+    @Autowired
+    private InterfaceB interfaceB;
 
     /**
      * Accept offer a workitem.
      * @param ctx rs context
      * @return true for a successful workitem accept
      */
-    public static boolean AcceptOffer(ResourcingContext ctx) {
+    public boolean AcceptOffer(ResourcingContext ctx) {
         String workitemId = (String) ctx.getArgs().get("workitemId");
         String workerId = (String) ctx.getArgs().get("workerId");
         String payload = (String) ctx.getArgs().get("payload");
@@ -56,7 +63,7 @@ public class InterfaceW {
             }
             return false;
         }
-        return InterfaceB.AcceptOfferedWorkitem(participant, workitem, payload, InitializationByType.USER_INITIATED);
+        return interfaceB.AcceptOfferedWorkitem(participant, workitem, payload, InitializationByType.USER_INITIATED);
     }
 
     /**
@@ -64,7 +71,7 @@ public class InterfaceW {
      * @param ctx rs context
      * @return true for a successful workitem deallocate
      */
-    public static boolean Deallocate(ResourcingContext ctx) {
+    public boolean Deallocate(ResourcingContext ctx) {
         String workitemId = (String) ctx.getArgs().get("workitemId");
         String workerId = (String) ctx.getArgs().get("workerId");
         String payload = (String) ctx.getArgs().get("payload");
@@ -89,7 +96,7 @@ public class InterfaceW {
             }
             return false;
         }
-        return InterfaceB.DeallocateWorkitem(participant, workitem, payload);
+        return interfaceB.DeallocateWorkitem(participant, workitem, payload);
     }
 
     /**
@@ -97,7 +104,7 @@ public class InterfaceW {
      * @param ctx rs context
      * @return true for a successful workitem start
      */
-    public static boolean Start(ResourcingContext ctx) {
+    public boolean Start(ResourcingContext ctx) {
         String workitemId = (String) ctx.getArgs().get("workitemId");
         String workerId = (String) ctx.getArgs().get("workerId");
         String payload = (String) ctx.getArgs().get("payload");
@@ -122,7 +129,7 @@ public class InterfaceW {
             }
             return false;
         }
-        return InterfaceB.StartWorkitem(participant, workitem, payload);
+        return interfaceB.StartWorkitem(participant, workitem, payload);
     }
 
     /**
@@ -130,7 +137,7 @@ public class InterfaceW {
      * @param ctx rs context
      * @return true for a successful workitem reallocate
      */
-    public static boolean Reallocate(ResourcingContext ctx) {
+    public boolean Reallocate(ResourcingContext ctx) {
         String workitemId = (String) ctx.getArgs().get("workitemId");
         String workerId = (String) ctx.getArgs().get("workerId");
         String payload = (String) ctx.getArgs().get("payload");
@@ -155,7 +162,7 @@ public class InterfaceW {
             }
             return false;
         }
-        return InterfaceB.ReallocateWorkitem(participant, workitem, payload);
+        return interfaceB.ReallocateWorkitem(participant, workitem, payload);
     }
 
     /**
@@ -163,7 +170,7 @@ public class InterfaceW {
      * @param ctx rs context
      * @return true for a successful workitem accept and start
      */
-    public static boolean AcceptAndStart(ResourcingContext ctx) {
+    public boolean AcceptAndStart(ResourcingContext ctx) {
         String workitemId = (String) ctx.getArgs().get("workitemId");
         String workerId = (String) ctx.getArgs().get("workerId");
         String payload = (String) ctx.getArgs().get("payload");
@@ -188,7 +195,7 @@ public class InterfaceW {
             }
             return false;
         }
-        return InterfaceB.AcceptOfferedWorkitem(participant, workitem, payload, InitializationByType.SYSTEM_INITIATED);
+        return interfaceB.AcceptOfferedWorkitem(participant, workitem, payload, InitializationByType.SYSTEM_INITIATED);
     }
 
     /**
@@ -196,7 +203,7 @@ public class InterfaceW {
      * @param ctx rs context
      * @return true for a successful workitem skip
      */
-    public static boolean Skip(ResourcingContext ctx) {
+    public boolean Skip(ResourcingContext ctx) {
         String workitemId = (String) ctx.getArgs().get("workitemId");
         String workerId = (String) ctx.getArgs().get("workerId");
         String payload = (String) ctx.getArgs().get("payload");
@@ -221,7 +228,7 @@ public class InterfaceW {
             }
             return false;
         }
-        return InterfaceB.SkipWorkitem(participant, workitem, payload);
+        return interfaceB.SkipWorkitem(participant, workitem, payload);
     }
 
     /**
@@ -229,7 +236,7 @@ public class InterfaceW {
      * @param ctx rs context
      * @return true for a successful workitem suspend
      */
-    public static boolean Suspend(ResourcingContext ctx) {
+    public boolean Suspend(ResourcingContext ctx) {
         String workitemId = (String) ctx.getArgs().get("workitemId");
         String workerId = (String) ctx.getArgs().get("workerId");
         String payload = (String) ctx.getArgs().get("payload");
@@ -254,7 +261,7 @@ public class InterfaceW {
             }
             return false;
         }
-        return InterfaceB.SuspendWorkitem(participant, workitem, payload);
+        return interfaceB.SuspendWorkitem(participant, workitem, payload);
     }
 
     /**
@@ -262,7 +269,7 @@ public class InterfaceW {
      * @param ctx rs context
      * @return true for a successful workitem unsuspend
      */
-    public static boolean Unsuspend(ResourcingContext ctx) {
+    public boolean Unsuspend(ResourcingContext ctx) {
         String workitemId = (String) ctx.getArgs().get("workitemId");
         String workerId = (String) ctx.getArgs().get("workerId");
         String payload = (String) ctx.getArgs().get("payload");
@@ -287,7 +294,7 @@ public class InterfaceW {
             }
             return false;
         }
-        return InterfaceB.UnsuspendWorkitem(participant, workitem, payload);
+        return interfaceB.UnsuspendWorkitem(participant, workitem, payload);
     }
 
     /**
@@ -295,7 +302,7 @@ public class InterfaceW {
      * @param ctx rs context
      * @return true for a successful workitem complete
      */
-    public static boolean Complete(ResourcingContext ctx) {
+    public boolean Complete(ResourcingContext ctx) {
         String workitemId = (String) ctx.getArgs().get("workitemId");
         String workerId = (String) ctx.getArgs().get("workerId");
         String payload = (String) ctx.getArgs().get("payload");
@@ -320,7 +327,7 @@ public class InterfaceW {
             }
             return false;
         }
-        return InterfaceB.CompleteWorkitem(participant, workitem, payload);
+        return interfaceB.CompleteWorkitem(participant, workitem, payload);
     }
 
     /**
@@ -328,7 +335,7 @@ public class InterfaceW {
      * @param ctx rs context
      * @return a dictionary of (WorkQueueType, ListOfWorkitemDescriptors)
      */
-    public static Map<String, Set<WorkitemContext>> GetWorkQueues(ResourcingContext ctx) {
+    public Map<String, Set<WorkitemContext>> GetWorkQueues(ResourcingContext ctx) {
         String domain = (String) ctx.getArgs().get("domain");
         String workerId = (String) ctx.getArgs().get("workerId");
         WorkQueueContainer container = WorkQueueContainer.GetContext(workerId);
@@ -373,7 +380,7 @@ public class InterfaceW {
      * @param ctx rs context
      * @return workitem descriptors string in list
      */
-    public static Set GetWorkQueue(ResourcingContext ctx) {
+    public Set GetWorkQueue(ResourcingContext ctx) {
         String rtid = (String) ctx.getArgs().get("rtid");
         String workerId = (String) ctx.getArgs().get("workerId");
         String queueTypeName = ((String) ctx.getArgs().get("type"));
@@ -404,7 +411,7 @@ public class InterfaceW {
      * @param ctx rs context
      * @return workitem descriptors string in map (workerId, list of workitem descriptor)
      */
-    public static Map GetWorkQueueList(ResourcingContext ctx) {
+    public Map GetWorkQueueList(ResourcingContext ctx) {
         String workerIdList = (String) ctx.getArgs().get("workerIdList");
         String[] workerIds = workerIdList.split(",");
         HashMap<String, HashSet> retMap = new HashMap<>();
@@ -432,7 +439,7 @@ public class InterfaceW {
      * @param ctx rs context
      * @return List of Map of workitem data to return
      */
-    public static ArrayList<HashMap<String, String>> GetAllActiveWorkitemsInUserFriendly(ResourcingContext ctx) {
+    public ArrayList<HashMap<String, String>> GetAllActiveWorkitemsInUserFriendly(ResourcingContext ctx) {
         String rtid = (String) ctx.getArgs().get("rtid");
         ArrayList<WorkitemContext> workitemList = WorkitemContext.GetContextRTID(rtid);
         if (workitemList == null) {
@@ -448,7 +455,7 @@ public class InterfaceW {
      * @param ctx rs context
      * @return List of Map of workitem data to return
      */
-    public static ArrayList<HashMap<String, String>> GetAllWorkitemsInUserFriendlyForDomain(ResourcingContext ctx) {
+    public ArrayList<HashMap<String, String>> GetAllWorkitemsInUserFriendlyForDomain(ResourcingContext ctx) {
         String domain = (String) ctx.getArgs().get("domain");
         ArrayList<WorkitemContext> workitemList = WorkitemContext.GetContextInDomain(domain);
         if (workitemList == null) {
@@ -464,7 +471,7 @@ public class InterfaceW {
      * @param ctx rs context
      * @return List of Map of workitem data to return
      */
-    public static ArrayList<HashMap<String, String>> GetAllWorkitemsInUserFriendlyForParticipant(ResourcingContext ctx) {
+    public ArrayList<HashMap<String, String>> GetAllWorkitemsInUserFriendlyForParticipant(ResourcingContext ctx) {
         String workerId = (String) ctx.getArgs().get("workerId");
         WorkQueueContainer container = WorkQueueContainer.GetContext(workerId);
         Set<WorkitemContext> worklistedCtxList = container.GetWorklistedQueue().GetQueueAsSet();
@@ -477,7 +484,7 @@ public class InterfaceW {
      * @param ctx rs context
      * @return List of Map of workitem data to return
      */
-    public static HashMap<String, String> GetWorkitemInFriendly(ResourcingContext ctx) {
+    public HashMap<String, String> GetWorkitemInFriendly(ResourcingContext ctx) {
         String wid = (String) ctx.getArgs().get("wid");
         WorkitemContext workitem = WorkitemContext.GetContext(wid, "");
         if (workitem == null) {
@@ -493,7 +500,7 @@ public class InterfaceW {
      * @param ctx rs context
      * @return worker gid in a list
      */
-    public static String GetNotEmptyQueueWorkers(ResourcingContext ctx) {
+    public String GetNotEmptyQueueWorkers(ResourcingContext ctx) {
         String domain = (String) ctx.getArgs().get("domain");
         WorkQueueContainer adminContainer = WorkQueueContainer.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + domain);
         Set<WorkitemContext> worklisted = adminContainer.GetQueue(WorkQueueType.WORKLISTED).GetQueueAsSet();
@@ -509,7 +516,7 @@ public class InterfaceW {
      * @param ctx rs context
      * @return worker gid in a list
      */
-    public static String GetNotEmptyOfferedQueueWorkers(ResourcingContext ctx) {
+    public String GetNotEmptyOfferedQueueWorkers(ResourcingContext ctx) {
         String domain = (String) ctx.getArgs().get("domain");
         WorkQueueContainer adminContainer = WorkQueueContainer.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + domain);
         Set<WorkitemContext> worklisted = adminContainer.GetQueue(WorkQueueType.WORKLISTED).GetQueueAsSet();
@@ -527,7 +534,7 @@ public class InterfaceW {
      * @param ctx rs context
      * @return worker gid in a list
      */
-    public static String GetNotEmptyAllocatedQueueWorkers(ResourcingContext ctx) {
+    public String GetNotEmptyAllocatedQueueWorkers(ResourcingContext ctx) {
         String domain = (String) ctx.getArgs().get("domain");
         WorkQueueContainer adminContainer = WorkQueueContainer.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + domain);
         Set<WorkitemContext> worklisted = adminContainer.GetQueue(WorkQueueType.WORKLISTED).GetQueueAsSet();
@@ -545,7 +552,7 @@ public class InterfaceW {
      * @param ctx rs context
      * @return worker gid in a list
      */
-    public static String GetNotEmptyOfferedAllocatedQueueWorkers(ResourcingContext ctx) {
+    public String GetNotEmptyOfferedAllocatedQueueWorkers(ResourcingContext ctx) {
         String domain = (String) ctx.getArgs().get("domain");
         WorkQueueContainer adminContainer = WorkQueueContainer.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + domain);
         Set<WorkitemContext> worklisted = adminContainer.GetQueue(WorkQueueType.WORKLISTED).GetQueueAsSet();

@@ -4,6 +4,7 @@
  */
 package org.sysu.renResourcing;
 
+import org.springframework.stereotype.Component;
 import org.sysu.renCommon.context.ObservableMessage;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renResourcing.consistency.ContextCachePool;
@@ -24,11 +25,9 @@ import java.util.concurrent.locks.ReentrantLock;
  *         all be encapsulated as a {@code ResourcingContext}, and a {@code RTracker}
  *         will be created for controlling its lifecycle.
  */
+
+@Component
 public class RScheduler implements Observer {
-    /**
-     * Global static instance.
-     */
-    private static RScheduler syncObject = new RScheduler();
 
     /**
      * Container list of active trackers.
@@ -155,15 +154,6 @@ public class RScheduler implements Observer {
     }
 
     /**
-     * Get the global unique instance of Scheduler.
-     *
-     * @return RScheduler object.
-     */
-    public static RScheduler GetInstance() {
-        return RScheduler.syncObject;
-    }
-
-    /**
      * This method is called whenever the observed object is changed. An
      * application calls an <tt>Observable</tt> object's
      * <code>notifyObservers</code> method to have all the object's
@@ -211,10 +201,4 @@ public class RScheduler implements Observer {
             this.HandlePendingQueue();
         }
     }
-
-    /**
-     * Create a new scheduler.
-     * Private accessibility for preventing construct outside.
-     */
-    private RScheduler() { }
 }

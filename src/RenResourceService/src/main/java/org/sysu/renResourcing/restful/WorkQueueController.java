@@ -4,6 +4,7 @@
  */
 package org.sysu.renResourcing.restful;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.sysu.renCommon.dto.ReturnModel;
 import org.sysu.renCommon.dto.StatusCode;
@@ -24,6 +25,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/queue")
 public class WorkQueueController {
+
+    /**
+     * Main scheduler reference.
+     */
+    @Autowired
+    private RScheduler rScheduler;
 
     /**
      * Get a specific work queue of a worker.
@@ -54,7 +61,7 @@ public class WorkQueueController {
             args.put("rtid", rtid);
             args.put("workerId", workerId);
             ResourcingContext rCtx = ResourcingContext.GetContext(null, rtid, RServiceType.GetQueue, args);
-            String jsonifyResult = RScheduler.GetInstance().ScheduleSync(rCtx);
+            String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -92,7 +99,7 @@ public class WorkQueueController {
             args.put("type", type);
             args.put("workerIdList", workerIdList);
             ResourcingContext rCtx = ResourcingContext.GetContext(null, rtid, RServiceType.GetQueueList, args);
-            String jsonifyResult = RScheduler.GetInstance().ScheduleSync(rCtx);
+            String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {

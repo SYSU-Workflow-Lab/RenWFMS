@@ -333,7 +333,8 @@ public class WorkitemContext implements Serializable, RCacheablesContext {
             wCtx.argsDict = (HashMap<String, String>) args;
             wCtx.taskContext = taskContext;
             // handle callback and hook
-            InterfaceA.HandleCallbackAndHook(WorkitemStatusType.Enabled, wCtx, taskContext, null);
+            InterfaceA interfaceA = (InterfaceA) SpringContextUtil.getBean("interfaceA");
+            interfaceA.HandleCallbackAndHook(WorkitemStatusType.Enabled, wCtx, taskContext, null);
             return wCtx;
         } catch (Exception ex) {
             if (!cmtFlag) {

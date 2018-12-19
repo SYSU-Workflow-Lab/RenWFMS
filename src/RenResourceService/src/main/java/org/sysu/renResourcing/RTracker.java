@@ -12,6 +12,7 @@ import org.sysu.renResourcing.interfaceService.InterfaceB;
 import org.sysu.renResourcing.interfaceService.InterfaceW;
 import org.sysu.renResourcing.utility.LogUtil;
 import org.sysu.renCommon.utility.SerializationUtil;
+import org.sysu.renResourcing.utility.SpringContextUtil;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -26,12 +27,35 @@ import java.util.Observer;
  */
 public class RTracker extends Observable implements Observer, Runnable {
 
+
+    /**
+     * Tracker binding context.
+     */
+    private ResourcingContext context;
+
+    /**
+     * Current tracker phase.
+     */
+    private TrackerPhase phase;
+
+    /**
+     * @see org.sysu.renResourcing.interfaceService.InterfaceB
+     */
+    private InterfaceB interfaceB;
+
+    /**
+     * @see org.sysu.renResourcing.interfaceService.InterfaceW
+     */
+    private InterfaceW interfaceW;
+
     /**
      * Create a new tracker.
      */
     RTracker(ResourcingContext context) {
         this.context = context;
         this.phase = TrackerPhase.Ready;
+        this.interfaceB = (InterfaceB) SpringContextUtil.getBean("interfaceB");
+        this.interfaceW = (InterfaceW) SpringContextUtil.getBean("interfaceW");
     }
 
     /**
@@ -107,67 +131,57 @@ public class RTracker extends Observable implements Observer, Runnable {
         Object execResult = "";
         switch (this.context.getService()) {
             case SubmitResourcingTask:
-                InterfaceB.PerformEngineSubmitTask(this.context);
+                interfaceB.PerformEngineSubmitTask(this.context);
                 break;
             case FinishProcess:
-                InterfaceB.PerformEngineFinishProcess(this.context);
+                interfaceB.PerformEngineFinishProcess(this.context);
                 break;
             case AcceptWorkitem:
-                execResult = InterfaceW.AcceptOffer(this.context);
+                execResult = interfaceW.AcceptOffer(this.context);
                 break;
             case StartWorkitem:
-                execResult = InterfaceW.Start(this.context);
+                execResult = interfaceW.Start(this.context);
                 break;
             case AcceptAndStartWorkitem:
-                execResult = InterfaceW.AcceptAndStart(this.context);
+                execResult = interfaceW.AcceptAndStart(this.context);
                 break;
             case CompleteWorkitem:
-                execResult = InterfaceW.Complete(this.context);
+                execResult = interfaceW.Complete(this.context);
                 break;
             case SuspendWorkitem:
-                execResult = InterfaceW.Suspend(this.context);
+                execResult = interfaceW.Suspend(this.context);
                 break;
             case UnsuspendWorkitem:
-                execResult = InterfaceW.Unsuspend(this.context);
+                execResult = interfaceW.Unsuspend(this.context);
                 break;
             case SkipWorkitem:
-                execResult = InterfaceW.Skip(this.context);
+                execResult = interfaceW.Skip(this.context);
                 break;
             case ReallocateWorkitem:
-                execResult = InterfaceW.Reallocate(this.context);
+                execResult = interfaceW.Reallocate(this.context);
                 break;
             case DeallocateWorkitem:
-                execResult = InterfaceW.Deallocate(this.context);
+                execResult = interfaceW.Deallocate(this.context);
                 break;
             case GetQueue:
-                execResult = InterfaceW.GetWorkQueue(this.context);
+                execResult = interfaceW.GetWorkQueue(this.context);
                 break;
             case GetQueueList:
-                execResult = InterfaceW.GetWorkQueueList(this.context);
+                execResult = interfaceW.GetWorkQueueList(this.context);
                 break;
             case GetAllWorkitemsByRTID:
-                execResult = InterfaceW.GetAllActiveWorkitemsInUserFriendly(this.context);
+                execResult = interfaceW.GetAllActiveWorkitemsInUserFriendly(this.context);
                 break;
             case GetAllWorkitemsByDomain:
-                execResult = InterfaceW.GetAllWorkitemsInUserFriendlyForDomain(this.context);
+                execResult = interfaceW.GetAllWorkitemsInUserFriendlyForDomain(this.context);
                 break;
             case GetAllWorkitemsByParticipant:
-                execResult = InterfaceW.GetAllWorkitemsInUserFriendlyForParticipant(this.context);
+                execResult = interfaceW.GetAllWorkitemsInUserFriendlyForParticipant(this.context);
                 break;
             case GetByWid:
-                execResult = InterfaceW.GetWorkitemInFriendly(this.context);
+                execResult = interfaceW.GetWorkitemInFriendly(this.context);
                 break;
         }
         this.context.setExecutionResult(SerializationUtil.JsonSerialization(execResult));
     }
-
-    /**
-     * Tracker binding context.
-     */
-    private ResourcingContext context;
-
-    /**
-     * Current tracker phase.
-     */
-    private TrackerPhase phase;
 }

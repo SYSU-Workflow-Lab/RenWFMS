@@ -154,7 +154,7 @@ namespace ArticleCrowdSourcingDemo
                     selected = tuple.Item1;
                 }
             }
-            DBUtil.CommitToDB($"insert into ren_solution(supervisor, ordinal, solution) values (\"{supervisor}\", \"{ordinal}\", \"{selected}\")");
+            DBUtil.CommitToDB($"insert into ren_solution(rtid, supervisor, ordinal, solution) values (\"{rtid}\", \"{supervisor}\", \"{ordinal}\", \"{selected}\")");
             if (supervisor == String.Empty)
             {
                 DBUtil.CommitToDB($"update ren_request set solution = \"{selected}\", status = \"{SolvePhase.Solved.ToString()}\" where rtid = \"{rtid}\"");
@@ -164,7 +164,7 @@ namespace ArticleCrowdSourcingDemo
 
         public static void DoMerge(string rtid, string currentNodeId, string currentSupervisor, string currentOrdinal, string workitemId)
         {
-            var solutions = DBUtil.CommitToDB($"select * from ren_solution where supervisor = \"{currentNodeId}\"").Tables[0];
+            var solutions = DBUtil.CommitToDB($"select * from ren_solution where rtid = \"{rtid}\" and supervisor = \"{currentNodeId}\"").Tables[0];
             var list = (from object row
                         in solutions.Rows
                         select row as DataRow
@@ -172,8 +172,8 @@ namespace ArticleCrowdSourcingDemo
                         select new Tuple<int, string>(Convert.ToInt32(rowItem["ordinal"].ToString()), rowItem["solution"].ToString())).ToList();
             list.Sort((tuple, tuple1) => tuple.Item1.CompareTo(tuple1.Item1));
             var merged = list.Aggregate(string.Empty, (s, tuple) => s + tuple.Item2);
-            DBUtil.CommitToDB("insert into ren_solution(supervisor, ordinal, solution) values " +
-                              $"(\"{currentSupervisor}\", \"{currentOrdinal}\", \"{merged}\")");
+            DBUtil.CommitToDB("insert into ren_solution(rtid, supervisor, ordinal, solution) values " +
+                              $"(\"{rtid}\", \"{currentSupervisor}\", \"{currentOrdinal}\", \"{merged}\")");
             if (currentSupervisor == String.Empty)
             {
                 DBUtil.CommitToDB($"update ren_request set solution = \"{merged}\", status = \"{SolvePhase.Solved.ToString()}\" where rtid = \"{rtid}\"");

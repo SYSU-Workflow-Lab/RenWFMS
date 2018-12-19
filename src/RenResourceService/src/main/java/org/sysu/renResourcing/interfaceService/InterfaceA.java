@@ -4,11 +4,10 @@
  */
 package org.sysu.renResourcing.interfaceService;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renCommon.enums.RServiceType;
-import org.sysu.renCommon.enums.WorkitemDistributionType;
 import org.sysu.renCommon.enums.WorkitemStatusType;
 import org.sysu.renCommon.interactionRouter.LocationContext;
 import org.sysu.renCommon.utility.HttpClientUtil;
@@ -18,8 +17,6 @@ import org.sysu.renResourcing.RScheduler;
 import org.sysu.renResourcing.context.ResourcingContext;
 import org.sysu.renResourcing.context.TaskContext;
 import org.sysu.renResourcing.context.WorkitemContext;
-import org.sysu.renResourcing.context.steady.RenRuntimerecordEntity;
-import org.sysu.renResourcing.utility.HibernateUtil;
 import org.sysu.renResourcing.utility.LogUtil;
 
 import java.util.HashMap;
@@ -33,7 +30,15 @@ import java.util.List;
  *         Interface A is responsible for process load and unload, launching, and other
  *         service requests passing from NameService or BOEngine.
  */
+
+@Service
 public class InterfaceA {
+
+    /**
+     * Main scheduler reference.
+     */
+    @Autowired
+    private RScheduler mainScheduler;
 
     /**
      * Handle resourcing submission request from BO Engine.
@@ -45,14 +50,8 @@ public class InterfaceA {
      * @param arguments        arguments list in JSON string
      * @return response package
      */
-    public static String EngineSubmitTask(String rtid, String boName, String nodeId, String polymorphismName, String arguments) {
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
-        boolean cmtFlag = false;
+    public String EngineSubmitTask(String rtid, String boName, String nodeId, String polymorphismName, String arguments) {
         try {
-            RenRuntimerecordEntity rre = session.get(RenRuntimerecordEntity.class, rtid);
-            transaction.commit();
-            cmtFlag = true;
             TaskContext taskContext = TaskContext.GetContext(rtid, boName, polymorphismName);
             Hashtable<String, Object> args = new Hashtable<>();
             HashMap argMap = SerializationUtil.JsonDeserialization(arguments, HashMap.class);
@@ -60,17 +59,12 @@ public class InterfaceA {
             args.put("nodeId", nodeId);
             args.put("taskArgumentsVector", argMap);
             ResourcingContext ctx = ResourcingContext.GetContext(null, rtid, RServiceType.SubmitResourcingTask, args);
-            InterfaceA.mainScheduler.Schedule(ctx);
+            this.mainScheduler.Schedule(ctx);
             return GlobalContext.RESPONSE_SUCCESS;
         } catch (Exception ex) {
-            if (!cmtFlag) {
-                transaction.rollback();
-            }
             LogUtil.Log("Exception in EngineSubmitTask, " + ex, InterfaceA.class.getName(),
                     LogLevelType.ERROR, rtid);
             throw ex;  // rethrow to cause exception response
-        } finally {
-            HibernateUtil.CloseLocalSession();
         }
     }
 
@@ -81,12 +75,12 @@ public class InterfaceA {
      * @param successFlag process finish status
      * @return response package
      */
-    public static String EngineFinishProcess(String rtid, String successFlag) {
+    public String EngineFinishProcess(String rtid, String successFlag) {
         Hashtable<String, Object> args = new Hashtable<>();
         args.put("rtid", rtid);
         args.put("successFlag", successFlag == null ? "1" : successFlag);
         ResourcingContext ctx = ResourcingContext.GetContext(null, rtid, RServiceType.FinishProcess, args);
-        InterfaceA.mainScheduler.Schedule(ctx);
+        this.mainScheduler.Schedule(ctx);
         return GlobalContext.RESPONSE_SUCCESS;
     }
 
@@ -98,7 +92,7 @@ public class InterfaceA {
      * @param task        task context
      * @param payloadJSON payload in JSON encoded string
      */
-    public static void HandleCallbackAndHook(WorkitemStatusType statusType, WorkitemContext workitem, TaskContext task, String payloadJSON) throws Exception {
+    public void HandleCallbackAndHook(WorkitemStatusType statusType, WorkitemContext workitem, TaskContext task, String payloadJSON) throws Exception {
         String rtid = workitem.getEntity().getRtid();
         String bo = workitem.getEntity().getCallbackNodeId();
         // events
@@ -137,9 +131,4 @@ public class InterfaceA {
             }
         }
     }
-
-    /**
-     * Main scheduler reference.
-     */
-    private static RScheduler mainScheduler = RScheduler.GetInstance();
 }

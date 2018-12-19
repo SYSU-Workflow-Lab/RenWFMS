@@ -6,12 +6,9 @@ package org.sysu.renNameService;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.annotation.Bean;
-import org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
@@ -19,7 +16,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @SpringBootApplication
 @EnableTransactionManagement
-@EntityScan(basePackages = "org.sysu.renNameService.entity")
 @EnableCaching
 public class RenNameServiceApplication implements EmbeddedServletContainerCustomizer {
 
@@ -32,8 +28,4 @@ public class RenNameServiceApplication implements EmbeddedServletContainerCustom
         configurableEmbeddedServletContainer.setPort(10234);
     }
 
-    @Bean
-    public HibernateJpaSessionFactoryBean sessionFactory() {
-        return new HibernateJpaSessionFactoryBean();
-    }
 }

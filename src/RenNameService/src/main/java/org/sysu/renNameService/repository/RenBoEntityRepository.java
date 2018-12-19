@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface RenBoEntityRepository extends JpaRepository<RenBoEntity, String> {
 
-    @Query(value = "select boid, boName from ren_bo where pid = ?1", nativeQuery = true)
+    @Query(value = "select boid, bo_name from ren_bo where pid = ?1", nativeQuery = true)
     List<Object> findBoIdAndBoNameByPid(String pid);
 
 }
