@@ -4,11 +4,11 @@
  */
 package org.sysu.renResourcing.utility;
 
-import org.hibernate.Session;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renCommon.utility.TimestampUtil;
 import org.sysu.renResourcing.GlobalContext;
 import org.sysu.renResourcing.context.steady.RenLogEntity;
+import org.sysu.renResourcing.dao.RenLogEntityDAO;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -20,6 +20,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * Usage : Static methods for resource service internal logging.
  */
 public final class LogUtil {
+
+    private static RenLogEntityDAO renLogEntityDAO = (RenLogEntityDAO) SpringContextUtil.getBean("renLogEntityDAO");
+
     /**
      * Show a structure information message.
      * @param msg message text
@@ -102,7 +105,6 @@ public final class LogUtil {
             LogUtil.readWriteLock.writeLock().unlock();
             return;
         }
-        Session session = HibernateUtil.GetLocalSession();
         try {
             LogMessagePackage lmp;
             while ((lmp = LogUtil.logBuffer.poll()) != null) {
@@ -113,16 +115,14 @@ public final class LogUtil {
                 rnle.setMessage(lmp.Message);
                 rnle.setTimestamp(lmp.Timestamp);
                 rnle.setRtid(lmp.Rtid);
-                session.save(rnle);
+                LogUtil.renLogEntityDAO.saveOrUpdate(rnle);
             }
-            session.flush();
         }
         catch (Exception ex) {
             LogUtil.Echo("Flush log exception, " + ex, LogUtil.class.getName(), LogLevelType.ERROR);
         }
         finally {
             LogUtil.readWriteLock.writeLock().unlock();
-            HibernateUtil.CloseLocalSession();
         }
     }
 

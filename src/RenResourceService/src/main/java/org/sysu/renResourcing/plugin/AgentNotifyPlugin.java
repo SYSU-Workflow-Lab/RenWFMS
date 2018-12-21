@@ -115,7 +115,6 @@ public class AgentNotifyPlugin extends AsyncRunnablePlugin {
                 GlobalContext.Interaction.Send(agentContext.getAgentLocation(), args, rtid);
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             // do not rethrown the exception, since this is tolerable.
             LogUtil.Log("Send notification to agent failed, " + ex, AgentNotifyPlugin.class.getName(),
                     LogLevelType.WARNING, rtid);

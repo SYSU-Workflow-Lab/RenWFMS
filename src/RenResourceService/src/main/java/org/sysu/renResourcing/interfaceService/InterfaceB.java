@@ -50,6 +50,15 @@ public class InterfaceB {
     private InterfaceA interfaceA;
 
     @Autowired
+    private InterfaceE interfaceE;
+
+    @Autowired
+    private InterfaceO interfaceO;
+
+    @Autowired
+    private InterfaceX interfaceX;
+
+    @Autowired
     private RenRuntimerecordEntityDAO renRuntimerecordEntityDAO;
 
     @Autowired
@@ -80,11 +89,11 @@ public class InterfaceB {
         if (principle == null) {
             LogUtil.Log(String.format("Cannot parse principle %s", taskContext.getPrinciple()), InterfaceB.class.getName(),
                     LogLevelType.ERROR, ctx.getRtid());
-            InterfaceX.PrincipleParseFailedRedirectToDomainPool(workitem);
+            interfaceX.PrincipleParseFailedRedirectToDomainPool(workitem);
             return;
         }
         // get valid resources
-        HashSet<ParticipantContext> validParticipants = InterfaceO.GetParticipantByBRole(ctx.getRtid(), taskContext.getBrole());
+        HashSet<ParticipantContext> validParticipants = interfaceO.GetParticipantByBRole(ctx.getRtid(), taskContext.getBrole());
         if (validParticipants.isEmpty()) {
             LogUtil.Log("A task cannot be allocated to any valid resources, so it will be put into admin unoffered queue.",
                     InterfaceB.class.getName(), LogLevelType.WARNING, ctx.getRtid());
@@ -208,7 +217,7 @@ public class InterfaceB {
             this.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Allocated, payload, false);
             boolean result = this.StartWorkitem(participant, workitem, payload);
             if (!result) {
-                InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "AcceptOffered by System but failed to start");
+                interfaceX.FailedRedirectToLauncherDomainPool(workitem, "AcceptOffered by System but failed to start");
                 return false;
             }
         }
@@ -231,14 +240,14 @@ public class InterfaceB {
      * @return true for a successful workitem deallocate
      */
     public boolean DeallocateWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
-        if (InterfaceO.CheckPrivilege(participant, workitem, PrivilegeType.CAN_DEALLOCATE)) {
+        if (interfaceO.CheckPrivilege(participant, workitem, PrivilegeType.CAN_DEALLOCATE)) {
             try {
                 WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
                 container.MoveAllocatedToOffered(workitem);
                 this.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Offered, payload);
                 return true;
             } catch (Exception ex) {
-                InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Deallocate but exception occurred: " + ex);
+                interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Deallocate but exception occurred: " + ex);
                 return false;
             }
         } else {
@@ -296,14 +305,14 @@ public class InterfaceB {
      * @return true for a successful workitem reallocate
      */
     public boolean ReallocateWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
-        if (InterfaceO.CheckPrivilege(participant, workitem, PrivilegeType.CAN_REALLOCATE)) {
+        if (interfaceO.CheckPrivilege(participant, workitem, PrivilegeType.CAN_REALLOCATE)) {
             try {
                 WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
                 container.MoveStartedToAllocated(workitem);
                 this.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Allocated, payload);
                 return true;
             } catch (Exception ex) {
-                InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Reallocate but exception occurred: " + ex);
+                interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Reallocate but exception occurred: " + ex);
                 return false;
             }
         } else {
@@ -322,14 +331,14 @@ public class InterfaceB {
      * @return true for a successful workitem suspend
      */
     public boolean SuspendWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
-        if (InterfaceO.CheckPrivilege(participant, workitem, PrivilegeType.CAN_SUSPEND)) {
+        if (interfaceO.CheckPrivilege(participant, workitem, PrivilegeType.CAN_SUSPEND)) {
             try {
                 WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
                 container.MoveStartedToSuspend(workitem);
                 this.WorkitemChanged(workitem, WorkitemStatusType.Suspended, WorkitemResourcingStatusType.Suspended, payload);
                 return true;
             } catch (Exception ex) {
-                InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Suspend but exception occurred: " + ex);
+                interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Suspend but exception occurred: " + ex);
                 return false;
             }
         } else {
@@ -354,7 +363,7 @@ public class InterfaceB {
             this.WorkitemChanged(workitem, WorkitemStatusType.Executing, WorkitemResourcingStatusType.Started, payload);
             return true;
         } catch (Exception ex) {
-            InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Unsuspend but exception occurred: " + ex);
+            interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Unsuspend but exception occurred: " + ex);
             return false;
         }
     }
@@ -368,15 +377,15 @@ public class InterfaceB {
      * @return true for a successful workitem skip
      */
     public boolean SkipWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
-        if (InterfaceO.CheckPrivilege(participant, workitem, PrivilegeType.CAN_SKIP)) {
+        if (interfaceO.CheckPrivilege(participant, workitem, PrivilegeType.CAN_SKIP)) {
             try {
                 WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
                 container.RemoveFromQueue(workitem, WorkQueueType.ALLOCATED);
                 this.WorkitemChanged(workitem, WorkitemStatusType.ForcedComplete, WorkitemResourcingStatusType.Skipped, payload);
-                InterfaceE.WriteLog(workitem, participant.getWorkerId(), RSEventType.skip);
+                interfaceE.WriteLog(workitem, participant.getWorkerId(), RSEventType.skip);
                 return true;
             } catch (Exception ex) {
-                InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Skip but exception occurred: " + ex);
+                interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Skip but exception occurred: " + ex);
                 return false;
             }
         } else {
@@ -406,10 +415,10 @@ public class InterfaceB {
             WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
             container.RemoveFromQueue(workitem, WorkQueueType.STARTED);
             this.WorkitemChanged(workitem, WorkitemStatusType.Complete, WorkitemResourcingStatusType.Completed, payload);
-            InterfaceE.WriteLog(workitem, participant.getWorkerId(), RSEventType.complete);
+            interfaceE.WriteLog(workitem, participant.getWorkerId(), RSEventType.complete);
             return true;
         } catch (Exception ex) {
-            InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Complete but exception occurred: " + ex);
+            interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Complete but exception occurred: " + ex);
             return false;
         }
     }
@@ -488,7 +497,7 @@ public class InterfaceB {
             } catch (Exception ex) {
                 LogUtil.Log(String.format("Workitem(%s) status changed but failed to handle callbacks and hooks, %s", workitem.getEntity().getWid(), ex),
                         InterfaceB.class.getName(), LogLevelType.ERROR, workitem.getEntity().getRtid());
-                InterfaceX.NotifyException(workitem);
+                interfaceX.NotifyException(workitem);
             }
         }
     }

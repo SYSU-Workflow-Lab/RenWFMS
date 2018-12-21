@@ -4,8 +4,10 @@
  */
 package org.sysu.renResourcing.interfaceService;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.sysu.renCommon.enums.FailedWorkitemStatusType;
 import org.sysu.renCommon.enums.FailedWorkitemVisibilityType;
 import org.sysu.renCommon.enums.RSEventType;
@@ -13,7 +15,7 @@ import org.sysu.renCommon.utility.AuthDomainHelper;
 import org.sysu.renCommon.utility.TimestampUtil;
 import org.sysu.renResourcing.context.WorkitemContext;
 import org.sysu.renResourcing.context.steady.RenExitemEntity;
-import org.sysu.renResourcing.utility.HibernateUtil;
+import org.sysu.renResourcing.dao.RenExitemEntityDAO;
 
 /**
  * Author: Rinkako
@@ -21,7 +23,15 @@ import org.sysu.renResourcing.utility.HibernateUtil;
  * Usage : Implementation of Interface X of Resource Service.
  *         Interface X is responsible for process exception handling.
  */
+
+@Service
 public class InterfaceX {
+
+    @Autowired
+    private InterfaceE interfaceE;
+
+    @Autowired
+    private RenExitemEntityDAO renExitemEntityDAO;
 
     /**
      * Signal a workitem is failed, and redirect it to its admin launcher exception workitem pool.
@@ -29,9 +39,9 @@ public class InterfaceX {
      * @param workitem failed workitem
      * @param reason failed reason
      */
-    public static void FailedRedirectToLauncherDomainPool(WorkitemContext workitem, String reason) {
-        InterfaceE.WriteLog(workitem, "", RSEventType.exception_lifecycle);
-        InterfaceX.RouteFailedWorkitem(workitem, reason, FailedWorkitemVisibilityType.DomainOnly);
+    public void FailedRedirectToLauncherDomainPool(WorkitemContext workitem, String reason) {
+        interfaceE.WriteLog(workitem, "", RSEventType.exception_lifecycle);
+        this.RouteFailedWorkitem(workitem, reason, FailedWorkitemVisibilityType.DomainOnly);
     }
 
     /**
@@ -40,9 +50,9 @@ public class InterfaceX {
      * @param workitem failed workitem
      * @param reason failed reason
      */
-    public static void FailedRedirecToWFMSAdminPool(WorkitemContext workitem, String reason) {
-        InterfaceE.WriteLog(workitem, "", RSEventType.exception_lifecycle);
-        InterfaceX.RouteFailedWorkitem(workitem, reason, FailedWorkitemVisibilityType.DomainAndWFMSAdmin);
+    public void FailedRedirecToWFMSAdminPool(WorkitemContext workitem, String reason) {
+        interfaceE.WriteLog(workitem, "", RSEventType.exception_lifecycle);
+        this.RouteFailedWorkitem(workitem, reason, FailedWorkitemVisibilityType.DomainAndWFMSAdmin);
     }
 
     /**
@@ -50,9 +60,9 @@ public class InterfaceX {
      *
      * @param workitem failed workitem
      */
-    public static void PrincipleParseFailedRedirectToDomainPool(WorkitemContext workitem) {
-        InterfaceE.WriteLog(workitem, "", RSEventType.exception_principle);
-        InterfaceX.RouteFailedWorkitem(workitem, "Principle Parse Failed.", FailedWorkitemVisibilityType.DomainOnly);
+    public void PrincipleParseFailedRedirectToDomainPool(WorkitemContext workitem) {
+        interfaceE.WriteLog(workitem, "", RSEventType.exception_principle);
+        this.RouteFailedWorkitem(workitem, "Principle Parse Failed.", FailedWorkitemVisibilityType.DomainOnly);
     }
 
     /**
@@ -60,23 +70,18 @@ public class InterfaceX {
      * @param workitem failed workitem
      * @param rtid process rtid
      */
-    public static void RedirectToUnofferedQueue(WorkitemContext workitem, String rtid) {
+    @Transactional(rollbackFor = Exception.class)
+    public void RedirectToUnofferedQueue(WorkitemContext workitem, String rtid) {
         String handler = AuthDomainHelper.GetAuthNameByRTID(rtid);
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
         try {
-            RenExitemEntity ree = session.get(RenExitemEntity.class, workitem.getEntity().getWid());
+            RenExitemEntity ree = renExitemEntityDAO.findByWid(workitem.getEntity().getWid());
             ree.setStatus(FailedWorkitemStatusType.Redo.ordinal());
             ree.setHandlerAuthName(handler);
             ree.setTimestamp(TimestampUtil.GetCurrentTimestamp());
-            session.update(ree);
-            transaction.commit();
+            renExitemEntityDAO.saveOrUpdate(ree);
         }
         catch (Exception ex) {
-            transaction.rollback();
-        }
-        finally {
-            HibernateUtil.CloseLocalSession();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
     }
 
@@ -85,23 +90,18 @@ public class InterfaceX {
      * @param workitem failed workitem
      * @param rtid process rtid
      */
-    public static void RedirectToIgnored(WorkitemContext workitem, String rtid) {
+    @Transactional(rollbackFor = Exception.class)
+    public void RedirectToIgnored(WorkitemContext workitem, String rtid) {
         String handler = AuthDomainHelper.GetAuthNameByRTID(rtid);
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
         try {
-            RenExitemEntity ree = session.get(RenExitemEntity.class, workitem.getEntity().getWid());
+            RenExitemEntity ree = renExitemEntityDAO.findByWid(workitem.getEntity().getWid());
             ree.setStatus(FailedWorkitemStatusType.Ignored.ordinal());
             ree.setHandlerAuthName(handler);
             ree.setTimestamp(TimestampUtil.GetCurrentTimestamp());
-            session.update(ree);
-            transaction.commit();
+            renExitemEntityDAO.saveOrUpdate(ree);
         }
         catch (Exception ex) {
-            transaction.rollback();
-        }
-        finally {
-            HibernateUtil.CloseLocalSession();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
     }
 
@@ -111,9 +111,8 @@ public class InterfaceX {
      * @param workitem failed workitem
      * @param reason reason of failure
      */
-    public static void RouteFailedWorkitem(WorkitemContext workitem, String reason, FailedWorkitemVisibilityType visibility) {
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
+    @Transactional(rollbackFor = Exception.class)
+    public void RouteFailedWorkitem(WorkitemContext workitem, String reason, FailedWorkitemVisibilityType visibility) {
         try {
             RenExitemEntity ree = new RenExitemEntity();
             ree.setRtid(workitem.getEntity().getRtid());
@@ -122,16 +121,12 @@ public class InterfaceX {
             ree.setStatus(FailedWorkitemStatusType.Unhandled.ordinal());
             ree.setVisibility(visibility.ordinal());
             ree.setTimestamp(TimestampUtil.GetCurrentTimestamp());
-            session.saveOrUpdate(ree);
-            transaction.commit();
+            renExitemEntityDAO.saveOrUpdate(ree);
         }
         catch (Exception ex) {
-            transaction.rollback();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
-        finally {
-            HibernateUtil.CloseLocalSession();
-        }
-        InterfaceX.NotifyException(workitem);
+        this.NotifyException(workitem);
     }
 
     /**
@@ -139,7 +134,7 @@ public class InterfaceX {
      *
      * @param rtid process rtid
      */
-    public static void HandleFastFail(String rtid) {
+    public void HandleFastFail(String rtid) {
         // todo
     }
 
@@ -148,7 +143,7 @@ public class InterfaceX {
      *
      * @param workitem failed workitem
      */
-    public static void NotifyException(WorkitemContext workitem) {
+    public void NotifyException(WorkitemContext workitem) {
         String rtid = workitem.getEntity().getRtid();
         String launcher = AuthDomainHelper.GetAuthNameByRTID(rtid);
         // todo here do notification.

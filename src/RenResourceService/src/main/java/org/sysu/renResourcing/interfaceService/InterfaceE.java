@@ -4,6 +4,7 @@
  */
 package org.sysu.renResourcing.interfaceService;
 
+import org.springframework.stereotype.Service;
 import org.sysu.renResourcing.GlobalContext;
 import org.sysu.renCommon.enums.RSEventType;
 import org.sysu.renResourcing.context.WorkitemContext;
@@ -22,24 +23,26 @@ import java.util.UUID;
  *         Interface E is responsible for resourcing logging service. Here log means
  *         event records of workitems and work queues.
  */
+
+@Service
 public class InterfaceE {
 
     /**
      * Service blocked rtid set.
      */
-    private static HashSet<String> banSet = new HashSet<>();
+    private HashSet<String> banSet = new HashSet<>();
 
     /**
      * Enable RS event log service.
      */
-    public static synchronized void EnableLogService() {
+    public synchronized void EnableLogService() {
         GlobalContext.EVENTLOG_ENABLE = true;
     }
 
     /**
      * Disable RS event log service.
      */
-    public static synchronized void DisableLogService() {
+    public synchronized void DisableLogService() {
         GlobalContext.EVENTLOG_ENABLE = false;
     }
 
@@ -48,8 +51,8 @@ public class InterfaceE {
      *
      * @param rtid process rtid
      */
-    public static synchronized void DisableLogServiceForRTID(String rtid) {
-        InterfaceE.banSet.add(rtid);
+    public synchronized void DisableLogServiceForRTID(String rtid) {
+        this.banSet.add(rtid);
     }
 
     /**
@@ -57,8 +60,8 @@ public class InterfaceE {
      *
      * @param rtid process rtid
      */
-    public static synchronized void ResumeLogServiceForRTID(String rtid) {
-        InterfaceE.banSet.remove(rtid);
+    public synchronized void ResumeLogServiceForRTID(String rtid) {
+        this.banSet.remove(rtid);
     }
 
     /**
@@ -66,8 +69,8 @@ public class InterfaceE {
      *
      * @param rtid process rtid
      */
-    public static synchronized boolean IsDisabledLogServiceForRTID(String rtid) {
-        return InterfaceE.banSet.contains(rtid);
+    public synchronized boolean IsDisabledLogServiceForRTID(String rtid) {
+        return this.banSet.contains(rtid);
     }
 
     /**
@@ -77,8 +80,8 @@ public class InterfaceE {
      * @param workerId worker global id
      * @param event    event type enum
      */
-    public static void WriteLog(WorkitemContext workitem, String workerId, RSEventType event) {
-        if (!GlobalContext.EVENTLOG_ENABLE || InterfaceE.IsDisabledLogServiceForRTID(workitem.getEntity().getRtid())) {
+    public void WriteLog(WorkitemContext workitem, String workerId, RSEventType event) {
+        if (!GlobalContext.EVENTLOG_ENABLE || this.IsDisabledLogServiceForRTID(workitem.getEntity().getRtid())) {
             return;
         }
         EventLogWriterPlugin writer = new EventLogWriterPlugin();

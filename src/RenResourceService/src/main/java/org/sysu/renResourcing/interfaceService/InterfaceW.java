@@ -33,6 +33,12 @@ public class InterfaceW {
     @Autowired
     private InterfaceB interfaceB;
 
+    @Autowired
+    private InterfaceO interfaceO;
+
+    @Autowired
+    private InterfaceX interfaceX;
+
     /**
      * Accept offer a workitem.
      * @param ctx rs context
@@ -55,11 +61,11 @@ public class InterfaceW {
             return false;
         }
         if (participant == null) {
-            if (InterfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
-                InterfaceX.HandleFastFail(ctx.getRtid());
+            if (interfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
+                interfaceX.HandleFastFail(ctx.getRtid());
             }
             else {
-                InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when AcceptOffer");
+                interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when AcceptOffer");
             }
             return false;
         }
@@ -88,11 +94,11 @@ public class InterfaceW {
             return false;
         }
         if (participant == null) {
-            if (InterfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
-                InterfaceX.HandleFastFail(ctx.getRtid());
+            if (interfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
+                interfaceX.HandleFastFail(ctx.getRtid());
             }
             else {
-                InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Deallocate");
+                interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Deallocate");
             }
             return false;
         }
@@ -121,11 +127,11 @@ public class InterfaceW {
             return false;
         }
         if (participant == null) {
-            if (InterfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
-                InterfaceX.HandleFastFail(ctx.getRtid());
+            if (interfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
+                interfaceX.HandleFastFail(ctx.getRtid());
             }
             else {
-                InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Start");
+                interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Start");
             }
             return false;
         }
@@ -154,11 +160,11 @@ public class InterfaceW {
             return false;
         }
         if (participant == null) {
-            if (InterfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
-                InterfaceX.HandleFastFail(ctx.getRtid());
+            if (interfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
+                interfaceX.HandleFastFail(ctx.getRtid());
             }
             else {
-                InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Reallocate");
+                interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Reallocate");
             }
             return false;
         }
@@ -187,11 +193,11 @@ public class InterfaceW {
             return false;
         }
         if (participant == null) {
-            if (InterfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
-                InterfaceX.HandleFastFail(ctx.getRtid());
+            if (interfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
+                interfaceX.HandleFastFail(ctx.getRtid());
             }
             else {
-                InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when AcceptAndStart");
+                interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when AcceptAndStart");
             }
             return false;
         }
@@ -220,11 +226,11 @@ public class InterfaceW {
             return false;
         }
         if (participant == null) {
-            if (InterfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
-                InterfaceX.HandleFastFail(ctx.getRtid());
+            if (interfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
+                interfaceX.HandleFastFail(ctx.getRtid());
             }
             else {
-                InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Skip");
+                interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Skip");
             }
             return false;
         }
@@ -253,11 +259,11 @@ public class InterfaceW {
             return false;
         }
         if (participant == null) {
-            if (InterfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
-                InterfaceX.HandleFastFail(ctx.getRtid());
+            if (interfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
+                interfaceX.HandleFastFail(ctx.getRtid());
             }
             else {
-                InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Suspend");
+                interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Suspend");
             }
             return false;
         }
@@ -286,11 +292,11 @@ public class InterfaceW {
             return false;
         }
         if (participant == null) {
-            if (InterfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
-                InterfaceX.HandleFastFail(ctx.getRtid());
+            if (interfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
+                interfaceX.HandleFastFail(ctx.getRtid());
             }
             else {
-                InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Unsuspend");
+                interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Unsuspend");
             }
             return false;
         }
@@ -319,11 +325,11 @@ public class InterfaceW {
             return false;
         }
         if (participant == null) {
-            if (InterfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
-                InterfaceX.HandleFastFail(ctx.getRtid());
+            if (interfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
+                interfaceX.HandleFastFail(ctx.getRtid());
             }
             else {
-                InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Complete");
+                interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Complete");
             }
             return false;
         }

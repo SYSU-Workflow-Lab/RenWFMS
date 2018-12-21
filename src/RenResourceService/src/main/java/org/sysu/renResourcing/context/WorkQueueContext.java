@@ -19,6 +19,7 @@ import org.sysu.renResourcing.interfaceService.InterfaceE;
 import org.sysu.renCommon.utility.AuthDomainHelper;
 import org.sysu.renResourcing.utility.HibernateUtil;
 import org.sysu.renResourcing.utility.LogUtil;
+import org.sysu.renResourcing.utility.SpringContextUtil;
 
 import java.io.Serializable;
 import java.util.*;
@@ -325,7 +326,8 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
                     break;
             }
             assert evtType != null;
-            InterfaceE.WriteLog(workitem, this.ownerWorkerId, evtType);
+            InterfaceE interfaceE = (InterfaceE) SpringContextUtil.getBean("interfaceE");
+            interfaceE.WriteLog(workitem, this.ownerWorkerId, evtType);
         }
     }
 
