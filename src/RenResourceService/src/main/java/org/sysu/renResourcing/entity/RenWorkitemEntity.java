@@ -14,7 +14,7 @@ import java.util.Objects;
  * Usage :
  */
 @Entity
-@Table(name = "ren_workitem", schema = "renboengine", catalog = "")
+@Table(name = "ren_workitem", schema = "renboengine")
 public class RenWorkitemEntity {
     private String wid;
     private String rtid;

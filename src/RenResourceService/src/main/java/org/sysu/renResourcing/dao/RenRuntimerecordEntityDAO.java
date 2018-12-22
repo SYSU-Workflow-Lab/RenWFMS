@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 @Repository
-@CacheConfig(cacheNames = "ren_runtimerecord")
+@CacheConfig(cacheNames = "rs_ren_runtimerecord")
 public class RenRuntimerecordEntityDAO {
 
     @Autowired
@@ -29,10 +29,6 @@ public class RenRuntimerecordEntityDAO {
     @CachePut(key = "#p0.rtid")
     public RenRuntimerecordEntity saveOrUpdate(RenRuntimerecordEntity renRuntimerecordEntity) {
         return renRuntimerecordEntityRepository.saveAndFlush(renRuntimerecordEntity);
-    }
-
-    public List<RenRuntimerecordEntity> findAll() {
-        return renRuntimerecordEntityRepository.findAll();
     }
 
 }

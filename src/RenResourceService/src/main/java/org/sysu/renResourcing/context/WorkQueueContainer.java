@@ -4,10 +4,13 @@
  */
 package org.sysu.renResourcing.context;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.sysu.renResourcing.GlobalContext;
 import org.sysu.renCommon.enums.WorkQueueContainerType;
 import org.sysu.renCommon.enums.WorkQueueType;
 import org.sysu.renResourcing.consistency.ContextCachePool;
+import org.sysu.renResourcing.context.contextService.WorkQueueContextService;
+import org.sysu.renResourcing.utility.SpringContextUtil;
 
 import java.util.Collections;
 import java.util.Set;
@@ -60,41 +63,6 @@ public class WorkQueueContainer implements RCacheablesContext {
     private WorkQueueContainerType type;
 
     /**
-     * Get the queue container of a specific worker.
-     *
-     * @param workerId worker global id, {@code GlobalContext.WORKQUEUE_ADMIN_PREFIX} if admin user
-     * @return Work queue container of this worker
-     */
-    public static WorkQueueContainer GetContext(String workerId) {
-        return WorkQueueContainer.GetContext(workerId, false);
-    }
-
-    /**
-     * Get the queue container of a specific worker.
-     *
-     * @param workerId    worker global id, {@code GlobalContext.WORKQUEUE_ADMIN_PREFIX} if admin user
-     * @param forceReload force reload from entity and refresh cache
-     * @return Work queue container of this worker
-     */
-    public static WorkQueueContainer GetContext(String workerId, boolean forceReload) {
-        WorkQueueContainer retContainer = ContextCachePool.Retrieve(WorkQueueContainer.class, workerId);
-        // fetch cache
-        if (retContainer != null && !forceReload) {
-            return retContainer;
-        }
-        // admin queue
-        if (workerId.startsWith(GlobalContext.WORKQUEUE_ADMIN_PREFIX)) {
-            retContainer = new WorkQueueContainer(workerId, WorkQueueContainerType.AdminSet);
-        }
-        // participant queue
-        else {
-            retContainer = new WorkQueueContainer(workerId, WorkQueueContainerType.ParticipantSet);
-        }
-        ContextCachePool.AddOrUpdate(workerId, retContainer);
-        return retContainer;
-    }
-
-    /**
      * Move workitem queue: OFFERED -> ALLOCATED
      *
      * @param workitem workitem context
@@ -135,6 +103,7 @@ public class WorkQueueContainer implements RCacheablesContext {
      *
      * @param workitem workitem context
      */
+    @Transactional(rollbackFor = Exception.class)
     public void MoveAllocatedToStarted(WorkitemContext workitem) {
         this.Move(workitem, WorkQueueType.ALLOCATED, WorkQueueType.STARTED);
     }
@@ -174,6 +143,7 @@ public class WorkQueueContainer implements RCacheablesContext {
      * @param from     from queue type
      * @param to       to queue type
      */
+    @Transactional(rollbackFor = Exception.class)
     public void Move(WorkitemContext workitem, WorkQueueType from, WorkQueueType to) {
         this.RemoveFromQueue(workitem, from);
         this.AddToQueue(workitem, to);
@@ -207,6 +177,7 @@ public class WorkQueueContainer implements RCacheablesContext {
      * @param workitem workitem context
      * @param type     queue type
      */
+    @Transactional(rollbackFor = Exception.class)
     public void RemoveFromQueue(WorkitemContext workitem, WorkQueueType type) {
         this.GetQueue(type).Remove(workitem);
     }
@@ -365,40 +336,41 @@ public class WorkQueueContainer implements RCacheablesContext {
      * @return queue reference
      */
     public WorkQueueContext GetQueue(WorkQueueType type) {
+        WorkQueueContextService workQueueContextService = (WorkQueueContextService) SpringContextUtil.getBean("workQueueContextService");
         switch (type) {
             case UNDEFINED:
                 if (this.unofferedQueue == null) {
-                    this.unofferedQueue = WorkQueueContext.GetContext(this.ownerWorkerId, type);
+                    this.unofferedQueue = workQueueContextService.GetContext(this.ownerWorkerId, type);
                 }
                 return this.unofferedQueue;
             case OFFERED:
                 if (this.offeredQueue == null) {
-                    this.offeredQueue = WorkQueueContext.GetContext(this.ownerWorkerId, type);
+                    this.offeredQueue = workQueueContextService.GetContext(this.ownerWorkerId, type);
                 }
                 return this.offeredQueue;
             case ALLOCATED:
                 if (this.allocatedQueue == null) {
-                    this.allocatedQueue = WorkQueueContext.GetContext(this.ownerWorkerId, type);
+                    this.allocatedQueue = workQueueContextService.GetContext(this.ownerWorkerId, type);
                 }
                 return this.allocatedQueue;
             case STARTED:
                 if (this.startedQueue == null) {
-                    this.startedQueue = WorkQueueContext.GetContext(this.ownerWorkerId, type);
+                    this.startedQueue = workQueueContextService.GetContext(this.ownerWorkerId, type);
                 }
                 return this.startedQueue;
             case SUSPENDED:
                 if (this.suspendedQueue == null) {
-                    this.suspendedQueue = WorkQueueContext.GetContext(this.ownerWorkerId, type);
+                    this.suspendedQueue = workQueueContextService.GetContext(this.ownerWorkerId, type);
                 }
                 return this.suspendedQueue;
             case UNOFFERED:
                 if (this.unofferedQueue == null) {
-                    this.unofferedQueue = WorkQueueContext.GetContext(this.ownerWorkerId, type);
+                    this.unofferedQueue = workQueueContextService.GetContext(this.ownerWorkerId, type);
                 }
                 return this.unofferedQueue;
             case WORKLISTED:
                 if (this.worklistedQueue == null) {
-                    this.worklistedQueue = WorkQueueContext.GetContext(this.ownerWorkerId, type);
+                    this.worklistedQueue = workQueueContextService.GetContext(this.ownerWorkerId, type);
                 }
                 return this.worklistedQueue;
         }
@@ -412,7 +384,7 @@ public class WorkQueueContainer implements RCacheablesContext {
      * @param workerGid owner worker global id
      * @param type      container type
      */
-    private WorkQueueContainer(String workerGid, WorkQueueContainerType type) {
+    public WorkQueueContainer(String workerGid, WorkQueueContainerType type) {
         this.ownerWorkerId = workerGid;
         this.type = type;
     }

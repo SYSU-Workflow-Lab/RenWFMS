@@ -35,7 +35,6 @@ public class EngineController {
      */
     @RequestMapping(value = "/launchProcess", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel LaunchProcess(@RequestParam(value = "rtid", required = false) String rtid) {
         ReturnModel rnModel = new ReturnModel();
         try {
@@ -62,7 +61,6 @@ public class EngineController {
      */
     @RequestMapping(value = "/serializeBO", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel SerializeBO(@RequestParam(value = "boidlist", required = false) String boidlist) {
         ReturnModel rnModel = new ReturnModel();
         try {
@@ -89,7 +87,6 @@ public class EngineController {
      */
     @RequestMapping(value = "/getSpanTree", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetSpanTreeByRTID(@RequestParam(value = "rtid", required = false) String rtid) {
         ReturnModel rnModel = new ReturnModel();
         try {
@@ -116,7 +113,6 @@ public class EngineController {
      */
     @RequestMapping(value = "/resume", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel Resume(@RequestParam(value = "rtid", required = false) String rtid) {
         ReturnModel rnModel = new ReturnModel();
         try {
@@ -143,7 +139,6 @@ public class EngineController {
      */
     @RequestMapping(value = "/resumeMany", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel ResumeMany(@RequestParam(value = "rtidList", required = false) String rtidList) {
         ReturnModel rnModel = new ReturnModel();
         try {
@@ -176,7 +171,6 @@ public class EngineController {
      */
     @RequestMapping(value = "/callback", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel Callback(@RequestParam(value="rtid", required = false)String rtid,
                                 @RequestParam(value="bo", required = false)String bo,
                                 @RequestParam(value="on", required = false)String on,

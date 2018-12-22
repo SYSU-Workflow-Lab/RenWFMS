@@ -13,7 +13,7 @@ import org.sysu.renResourcing.repository.RenRsrecordEntityRepository;
  */
 
 @Repository
-@CacheConfig(cacheNames = "ren_rsrecord")
+@CacheConfig(cacheNames = "rs_ren_rsrecord")
 public class RenRsrecordEntityDAO {
 
     @Autowired

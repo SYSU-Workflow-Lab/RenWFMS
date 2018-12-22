@@ -17,15 +17,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableCaching
-public class RenNameServiceApplication implements EmbeddedServletContainerCustomizer {
+public class RenNameServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(RenNameServiceApplication.class, args);
-    }
-
-    @Override
-    public void customize(ConfigurableEmbeddedServletContainer configurableEmbeddedServletContainer) {
-        configurableEmbeddedServletContainer.setPort(10234);
     }
 
 }

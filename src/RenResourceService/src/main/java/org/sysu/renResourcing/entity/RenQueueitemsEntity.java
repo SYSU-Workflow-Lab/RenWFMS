@@ -4,6 +4,8 @@
  */
 package org.sysu.renResourcing.entity;
 
+import org.sysu.renResourcing.entity.multikeyclass.RenQueueitemsEntityMKC;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -13,8 +15,8 @@ import java.util.Objects;
  * Usage :
  */
 @Entity
-@Table(name = "ren_queueitems", schema = "renboengine", catalog = "")
-@IdClass(RenQueueitemsEntityPK.class)
+@Table(name = "ren_queueitems", schema = "renboengine")
+@IdClass(RenQueueitemsEntityMKC.class)
 public class RenQueueitemsEntity {
     private String workqueueId;
     private String workitemId;

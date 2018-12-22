@@ -14,7 +14,7 @@ public class RenAuthuserEntityMKC implements Serializable {
     private String username;
     private String domain;
 
-    @Column(name = "username", nullable = false, length = 255)
+    @Column(name = "username", nullable = false)
     @Id
     public String getUsername() {
         return username;
@@ -24,7 +24,7 @@ public class RenAuthuserEntityMKC implements Serializable {
         this.username = username;
     }
 
-    @Column(name = "domain", nullable = false, length = 255)
+    @Column(name = "domain", nullable = false)
     @Id
     public String getDomain() {
         return domain;

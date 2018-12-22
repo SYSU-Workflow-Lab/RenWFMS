@@ -14,7 +14,7 @@ import java.util.Objects;
  * Usage :
  */
 @Entity
-@Table(name = "ren_rseventlog", schema = "renboengine", catalog = "")
+@Table(name = "ren_rseventlog", schema = "renboengine")
 public class RenRseventlogEntity {
     private String rsevid;
     private String wid;

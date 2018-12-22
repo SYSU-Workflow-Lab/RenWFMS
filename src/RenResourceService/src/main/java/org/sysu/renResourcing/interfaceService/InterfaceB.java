@@ -13,6 +13,9 @@ import org.sysu.renResourcing.GlobalContext;
 import org.sysu.renCommon.enums.*;
 import org.sysu.renResourcing.consistency.ContextLockManager;
 import org.sysu.renResourcing.context.*;
+import org.sysu.renResourcing.context.contextService.WorkQueueContainerService;
+import org.sysu.renResourcing.context.contextService.WorkQueueContextService;
+import org.sysu.renResourcing.context.contextService.WorkitemContextService;
 import org.sysu.renResourcing.entity.RenProcessEntity;
 import org.sysu.renResourcing.entity.RenRsparticipantEntity;
 import org.sysu.renResourcing.entity.RenRuntimerecordEntity;
@@ -68,6 +71,24 @@ public class InterfaceB {
     private RenProcessEntityDAO renProcessEntityDAO;
 
     /**
+     * WorkitemContext Handler.
+     */
+    @Autowired
+    private WorkitemContextService workitemContextService;
+
+    /**
+     * WorkQueueContext Handler.
+     */
+    @Autowired
+    private WorkQueueContextService workQueueContextService;
+
+    /**
+     * WorkQueueContainer Handler.
+     */
+    @Autowired
+    private WorkQueueContainerService workQueueContainerService;
+
+    /**
      * Handle perform submit task.
      *
      * @param ctx rs context
@@ -82,7 +103,7 @@ public class InterfaceB {
         String domain = AuthDomainHelper.GetDomainByRTID(runtimeRecord.getRtid());
 
         // generate workitem
-        WorkitemContext workitem = WorkitemContext.GenerateContext(taskContext, ctx.getRtid(), (HashMap) ctx.getArgs().get("taskArgumentsVector"), nodeId);
+        WorkitemContext workitem = workitemContextService.GenerateContext(taskContext, ctx.getRtid(), (HashMap) ctx.getArgs().get("taskArgumentsVector"), nodeId);
 
         // parse resourcing principle
         RPrinciple principle = PrincipleParser.Parse(taskContext.getPrinciple());
@@ -98,7 +119,7 @@ public class InterfaceB {
             LogUtil.Log("A task cannot be allocated to any valid resources, so it will be put into admin unoffered queue.",
                     InterfaceB.class.getName(), LogLevelType.WARNING, ctx.getRtid());
             // move workitem to admin unoffered queue
-            WorkQueueContainer adminContainer = WorkQueueContainer.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + domain);
+            WorkQueueContainer adminContainer = workQueueContainerService.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + domain);
             adminContainer.AddToQueue(workitem, WorkQueueType.UNOFFERED);
             return;
         }
@@ -112,7 +133,7 @@ public class InterfaceB {
                 // do allocate to select a participant for handle this workitem
                 ParticipantContext chosenOne = allocateInteraction.PerformAllocation(validParticipants, workitem);
                 // put workitem to the chosen participant allocated queue
-                WorkQueueContainer container = WorkQueueContainer.GetContext(chosenOne.getWorkerId());
+                WorkQueueContainer container = workQueueContainerService.GetContext(chosenOne.getWorkerId());
                 container.AddToQueue(workitem, WorkQueueType.ALLOCATED);
                 // change workitem status
                 workitem.getEntity().setFiringTime(TimestampUtil.GetCurrentTimestamp());
@@ -120,7 +141,7 @@ public class InterfaceB {
                 // notify if agent
                 if (chosenOne.getWorkerType() == WorkerType.Agent) {
                     AgentNotifyPlugin allocateAnp = new AgentNotifyPlugin();
-                    HashMap<String, String> allocateNotifyMap = new HashMap<>(WorkitemContext.GenerateResponseWorkitem(workitem));
+                    HashMap<String, String> allocateNotifyMap = new HashMap<>(workitemContextService.GenerateResponseWorkitem(workitem));
                     allocateAnp.AddNotification(chosenOne, allocateNotifyMap, ctx.getRtid());
                     AsyncPluginRunner.AsyncRun(allocateAnp);
                 }
@@ -135,9 +156,9 @@ public class InterfaceB {
                 Set<ParticipantContext> chosenSet = offerInteraction.PerformOffer(validParticipants, workitem);
                 // put workitem to chosen participants offered queue
                 AgentNotifyPlugin offerAnp = new AgentNotifyPlugin();
-                HashMap<String, String> offerNotifyMap = new HashMap<>(WorkitemContext.GenerateResponseWorkitem(workitem));
+                HashMap<String, String> offerNotifyMap = new HashMap<>(workitemContextService.GenerateResponseWorkitem(workitem));
                 for (ParticipantContext oneInSet : chosenSet) {
-                    WorkQueueContainer oneInSetContainer = WorkQueueContainer.GetContext(oneInSet.getWorkerId());
+                    WorkQueueContainer oneInSetContainer = workQueueContainerService.GetContext(oneInSet.getWorkerId());
                     oneInSetContainer.AddToQueue(workitem, WorkQueueType.OFFERED);
                     // notify if agent
                     if (oneInSet.getWorkerType() == WorkerType.Agent) {
@@ -210,7 +231,7 @@ public class InterfaceB {
      */
     public boolean AcceptOfferedWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload, InitializationByType initType) {
         // remove from all queue
-        WorkQueueContext.RemoveFromAllQueue(workitem);
+        workQueueContextService.RemoveFromAllQueue(workitem);
         // if internal call, means accept and start
         if (initType == InitializationByType.SYSTEM_INITIATED) {
             // write an allocated event without notification
@@ -223,7 +244,7 @@ public class InterfaceB {
         }
         // otherwise workitem should be put to allocated queue
         else {
-            WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
+            WorkQueueContainer container = workQueueContainerService.GetContext(participant.getWorkerId());
             container.MoveOfferedToAllocated(workitem);
             this.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Allocated, payload);
         }
@@ -242,7 +263,7 @@ public class InterfaceB {
     public boolean DeallocateWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
         if (interfaceO.CheckPrivilege(participant, workitem, PrivilegeType.CAN_DEALLOCATE)) {
             try {
-                WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
+                WorkQueueContainer container = workQueueContainerService.GetContext(participant.getWorkerId());
                 container.MoveAllocatedToOffered(workitem);
                 this.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Offered, payload);
                 return true;
@@ -265,15 +286,16 @@ public class InterfaceB {
      * @param payload     payload in JSON encoded string
      * @return true for a successful workitem start
      */
+    @Transactional(rollbackFor = Exception.class)
     public boolean StartWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
         try {
-            WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
+            WorkQueueContainer container = workQueueContainerService.GetContext(participant.getWorkerId());
             container.MoveAllocatedToStarted(workitem);
             RenWorkitemEntity rwe = workitem.getEntity();
             rwe.setLatestStartTime(TimestampUtil.GetCurrentTimestamp());
             rwe.setStartTime(TimestampUtil.GetCurrentTimestamp());
             rwe.setStartedBy(participant.getWorkerId());
-            WorkitemContext.SaveToSteady(workitem);
+            workitemContextService.SaveToSteady(workitem);
             // already started
             if (workitem.getEntity().getStatus().equals(WorkitemStatusType.Executing.name())) {
                 this.WorkitemChanged(workitem, WorkitemStatusType.Executing, WorkitemResourcingStatusType.Started, payload);
@@ -284,12 +306,13 @@ public class InterfaceB {
                 RenRuntimerecordEntity runtimeRecord = assistantService.IBfindRuntimerecordEntityByRtid(workitem.getEntity().getRtid());
                 // get admin queue for this auth user
                 String adminQueuePostfix = runtimeRecord.getSessionId().split("_")[1];
-                WorkQueueContainer adminContainer = WorkQueueContainer.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + adminQueuePostfix);
+                WorkQueueContainer adminContainer = workQueueContainerService.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + adminQueuePostfix);
                 adminContainer.RemoveFromQueue(workitem, WorkQueueType.UNOFFERED);
             }
             this.WorkitemChanged(workitem, WorkitemStatusType.Executing, WorkitemResourcingStatusType.Started, payload);
             return true;
         } catch (Exception ex) {
+            ex.printStackTrace();
             LogUtil.Log("ParticipantStart get Runtime record failed. " + ex,
                     InterfaceB.class.getName(), LogLevelType.ERROR, workitem.getEntity().getRtid());
             return false;
@@ -307,7 +330,7 @@ public class InterfaceB {
     public boolean ReallocateWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
         if (interfaceO.CheckPrivilege(participant, workitem, PrivilegeType.CAN_REALLOCATE)) {
             try {
-                WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
+                WorkQueueContainer container = workQueueContainerService.GetContext(participant.getWorkerId());
                 container.MoveStartedToAllocated(workitem);
                 this.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Allocated, payload);
                 return true;
@@ -333,7 +356,7 @@ public class InterfaceB {
     public boolean SuspendWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
         if (interfaceO.CheckPrivilege(participant, workitem, PrivilegeType.CAN_SUSPEND)) {
             try {
-                WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
+                WorkQueueContainer container = workQueueContainerService.GetContext(participant.getWorkerId());
                 container.MoveStartedToSuspend(workitem);
                 this.WorkitemChanged(workitem, WorkitemStatusType.Suspended, WorkitemResourcingStatusType.Suspended, payload);
                 return true;
@@ -358,7 +381,7 @@ public class InterfaceB {
      */
     public boolean UnsuspendWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
         try {
-            WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
+            WorkQueueContainer container = workQueueContainerService.GetContext(participant.getWorkerId());
             container.MoveSuspendToStarted(workitem);
             this.WorkitemChanged(workitem, WorkitemStatusType.Executing, WorkitemResourcingStatusType.Started, payload);
             return true;
@@ -379,7 +402,7 @@ public class InterfaceB {
     public boolean SkipWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
         if (interfaceO.CheckPrivilege(participant, workitem, PrivilegeType.CAN_SKIP)) {
             try {
-                WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
+                WorkQueueContainer container = workQueueContainerService.GetContext(participant.getWorkerId());
                 container.RemoveFromQueue(workitem, WorkQueueType.ALLOCATED);
                 this.WorkitemChanged(workitem, WorkitemStatusType.ForcedComplete, WorkitemResourcingStatusType.Skipped, payload);
                 interfaceE.WriteLog(workitem, participant.getWorkerId(), RSEventType.skip);
@@ -411,8 +434,8 @@ public class InterfaceB {
             rwe.setExecuteTime(currentTS.getTime() - startTS.getTime());
             rwe.setCompletionTime(currentTS);
             rwe.setCompletedBy(participant.getWorkerId());
-            WorkitemContext.SaveToSteady(workitem);
-            WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
+            workitemContextService.SaveToSteady(workitem);
+            WorkQueueContainer container = workQueueContainerService.GetContext(participant.getWorkerId());
             container.RemoveFromQueue(workitem, WorkQueueType.STARTED);
             this.WorkitemChanged(workitem, WorkitemStatusType.Complete, WorkitemResourcingStatusType.Completed, payload);
             interfaceE.WriteLog(workitem, participant.getWorkerId(), RSEventType.complete);
@@ -486,7 +509,7 @@ public class InterfaceB {
             if (toResourcingStatus != null) {
                 workitem.getEntity().setResourceStatus(toResourcingStatus.name());
             }
-            WorkitemContext.SaveToSteady(workitem);
+            workitemContextService.SaveToSteady(workitem);
         } finally {
             ContextLockManager.WriteUnLock(workitem.getClass(), workitem.getEntity().getWid());
         }

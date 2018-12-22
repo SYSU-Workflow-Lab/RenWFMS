@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 @Repository
-@CacheConfig(cacheNames = "ren_domain")
+@CacheConfig(cacheNames = "ns_ren_domain")
 public class RenDomainEntityDAO {
 
     @Autowired

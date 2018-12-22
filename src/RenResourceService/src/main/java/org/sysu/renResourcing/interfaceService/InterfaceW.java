@@ -6,6 +6,7 @@ package org.sysu.renResourcing.interfaceService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renResourcing.GlobalContext;
 import org.sysu.renCommon.enums.InitializationByType;
@@ -13,6 +14,8 @@ import org.sysu.renCommon.enums.WorkQueueType;
 import org.sysu.renCommon.enums.WorkitemResourcingStatusType;
 import org.sysu.renResourcing.context.*;
 import org.sysu.renCommon.utility.AuthDomainHelper;
+import org.sysu.renResourcing.context.contextService.WorkQueueContainerService;
+import org.sysu.renResourcing.context.contextService.WorkitemContextService;
 import org.sysu.renResourcing.utility.LogUtil;
 import org.sysu.renCommon.utility.SerializationUtil;
 
@@ -40,6 +43,18 @@ public class InterfaceW {
     private InterfaceX interfaceX;
 
     /**
+     * WorkitemContext Handler.
+     */
+    @Autowired
+    private WorkitemContextService workitemContextService;
+
+    /**
+     * WorkQueueContainer Handler.
+     */
+    @Autowired
+    private WorkQueueContainerService workQueueContainerService;
+
+    /**
      * Accept offer a workitem.
      * @param ctx rs context
      * @return true for a successful workitem accept
@@ -48,7 +63,7 @@ public class InterfaceW {
         String workitemId = (String) ctx.getArgs().get("workitemId");
         String workerId = (String) ctx.getArgs().get("workerId");
         String payload = (String) ctx.getArgs().get("payload");
-        WorkitemContext workitem = WorkitemContext.GetContext(workitemId, ctx.getRtid());
+        WorkitemContext workitem = workitemContextService.GetContext(workitemId, ctx.getRtid());
         if (!workitem.IsAtResourcingStatus(WorkitemResourcingStatusType.Offered)) {
             LogUtil.Log(String.format("Try to accept workitem(%s) but not at Offered status", workitemId),
                     InterfaceW.class.getName(), LogLevelType.ERROR, workitem.getEntity().getRtid());
@@ -81,7 +96,7 @@ public class InterfaceW {
         String workitemId = (String) ctx.getArgs().get("workitemId");
         String workerId = (String) ctx.getArgs().get("workerId");
         String payload = (String) ctx.getArgs().get("payload");
-        WorkitemContext workitem = WorkitemContext.GetContext(workitemId, ctx.getRtid());
+        WorkitemContext workitem = workitemContextService.GetContext(workitemId, ctx.getRtid());
         if (!workitem.IsAtResourcingStatus(WorkitemResourcingStatusType.Allocated)) {
             LogUtil.Log(String.format("Try to deallocate workitem(%s) but not at Allocated status", workitemId),
                     InterfaceW.class.getName(), LogLevelType.ERROR, workitem.getEntity().getRtid());
@@ -110,11 +125,12 @@ public class InterfaceW {
      * @param ctx rs context
      * @return true for a successful workitem start
      */
+    @Transactional(rollbackFor = Exception.class)
     public boolean Start(ResourcingContext ctx) {
         String workitemId = (String) ctx.getArgs().get("workitemId");
         String workerId = (String) ctx.getArgs().get("workerId");
         String payload = (String) ctx.getArgs().get("payload");
-        WorkitemContext workitem = WorkitemContext.GetContext(workitemId, ctx.getRtid());
+        WorkitemContext workitem = workitemContextService.GetContext(workitemId, ctx.getRtid());
         if (!workitem.IsAtResourcingStatus(WorkitemResourcingStatusType.Allocated)) {
             LogUtil.Log(String.format("Try to start workitem(%s) but not at Allocated status", workitemId),
                     InterfaceW.class.getName(), LogLevelType.ERROR, workitem.getEntity().getRtid());
@@ -147,7 +163,7 @@ public class InterfaceW {
         String workitemId = (String) ctx.getArgs().get("workitemId");
         String workerId = (String) ctx.getArgs().get("workerId");
         String payload = (String) ctx.getArgs().get("payload");
-        WorkitemContext workitem = WorkitemContext.GetContext(workitemId, ctx.getRtid());
+        WorkitemContext workitem = workitemContextService.GetContext(workitemId, ctx.getRtid());
         if (!workitem.IsAtResourcingStatus(WorkitemResourcingStatusType.Started)) {
             LogUtil.Log(String.format("Try to reallocate workitem(%s) but not at Started status", workitemId),
                     InterfaceW.class.getName(), LogLevelType.ERROR, workitem.getEntity().getRtid());
@@ -180,7 +196,7 @@ public class InterfaceW {
         String workitemId = (String) ctx.getArgs().get("workitemId");
         String workerId = (String) ctx.getArgs().get("workerId");
         String payload = (String) ctx.getArgs().get("payload");
-        WorkitemContext workitem = WorkitemContext.GetContext(workitemId, ctx.getRtid());
+        WorkitemContext workitem = workitemContextService.GetContext(workitemId, ctx.getRtid());
         if (!workitem.IsAtResourcingStatus(WorkitemResourcingStatusType.Offered)) {
             LogUtil.Log(String.format("Try to accept and start workitem(%s) but not at Offered status", workitemId),
                     InterfaceW.class.getName(), LogLevelType.ERROR, workitem.getEntity().getRtid());
@@ -213,7 +229,7 @@ public class InterfaceW {
         String workitemId = (String) ctx.getArgs().get("workitemId");
         String workerId = (String) ctx.getArgs().get("workerId");
         String payload = (String) ctx.getArgs().get("payload");
-        WorkitemContext workitem = WorkitemContext.GetContext(workitemId, ctx.getRtid());
+        WorkitemContext workitem = workitemContextService.GetContext(workitemId, ctx.getRtid());
         if (!workitem.IsAtResourcingStatus(WorkitemResourcingStatusType.Allocated)) {
             LogUtil.Log(String.format("Try to skip workitem(%s) but not at Allocated status", workitemId),
                     InterfaceW.class.getName(), LogLevelType.ERROR, workitem.getEntity().getRtid());
@@ -246,7 +262,7 @@ public class InterfaceW {
         String workitemId = (String) ctx.getArgs().get("workitemId");
         String workerId = (String) ctx.getArgs().get("workerId");
         String payload = (String) ctx.getArgs().get("payload");
-        WorkitemContext workitem = WorkitemContext.GetContext(workitemId, ctx.getRtid());
+        WorkitemContext workitem = workitemContextService.GetContext(workitemId, ctx.getRtid());
         if (!workitem.IsAtResourcingStatus(WorkitemResourcingStatusType.Started)) {
             LogUtil.Log(String.format("Try to suspend workitem(%s) but not at Started status", workitemId),
                     InterfaceW.class.getName(), LogLevelType.ERROR, workitem.getEntity().getRtid());
@@ -279,7 +295,7 @@ public class InterfaceW {
         String workitemId = (String) ctx.getArgs().get("workitemId");
         String workerId = (String) ctx.getArgs().get("workerId");
         String payload = (String) ctx.getArgs().get("payload");
-        WorkitemContext workitem = WorkitemContext.GetContext(workitemId, ctx.getRtid());
+        WorkitemContext workitem = workitemContextService.GetContext(workitemId, ctx.getRtid());
         if (!workitem.IsAtResourcingStatus(WorkitemResourcingStatusType.Suspended)) {
             LogUtil.Log(String.format("Try to unsuspend workitem(%s) but not at Suspended status", workitemId),
                     InterfaceW.class.getName(), LogLevelType.ERROR, workitem.getEntity().getRtid());
@@ -312,7 +328,7 @@ public class InterfaceW {
         String workitemId = (String) ctx.getArgs().get("workitemId");
         String workerId = (String) ctx.getArgs().get("workerId");
         String payload = (String) ctx.getArgs().get("payload");
-        WorkitemContext workitem = WorkitemContext.GetContext(workitemId, ctx.getRtid());
+        WorkitemContext workitem = workitemContextService.GetContext(workitemId, ctx.getRtid());
         if (!workitem.IsAtResourcingStatus(WorkitemResourcingStatusType.Started)) {
             LogUtil.Log(String.format("Try to complete workitem(%s) but not at Started status", workitemId),
                     InterfaceW.class.getName(), LogLevelType.ERROR, workitem.getEntity().getRtid());
@@ -344,7 +360,7 @@ public class InterfaceW {
     public Map<String, Set<WorkitemContext>> GetWorkQueues(ResourcingContext ctx) {
         String domain = (String) ctx.getArgs().get("domain");
         String workerId = (String) ctx.getArgs().get("workerId");
-        WorkQueueContainer container = WorkQueueContainer.GetContext(workerId);
+        WorkQueueContainer container = workQueueContainerService.GetContext(workerId);
         HashMap<String, Set<WorkitemContext>> retMap = new HashMap<>();
         Set<WorkitemContext> allocateSet = container.GetQueuedWorkitem(WorkQueueType.ALLOCATED);
         retMap.put(WorkQueueType.ALLOCATED.name(), new HashSet<>());
@@ -400,7 +416,7 @@ public class InterfaceW {
                     LogLevelType.ERROR, rtid);
             throw ex;
         }
-        WorkQueueContainer container = WorkQueueContainer.GetContext(workerId);
+        WorkQueueContainer container = workQueueContainerService.GetContext(workerId);
         Set<WorkitemContext> queueSet = container.GetQueuedWorkitem(wqType);
         HashSet retSet = new HashSet();
         for (WorkitemContext workitem : queueSet) {
@@ -426,7 +442,7 @@ public class InterfaceW {
             String queueTypeName = ((String) ctx.getArgs().get("type"));
             String domain = AuthDomainHelper.GetDomainByRTID(rtid);
             WorkQueueType wqType = WorkQueueType.valueOf(queueTypeName.toUpperCase());
-            WorkQueueContainer container = WorkQueueContainer.GetContext(workerId);
+            WorkQueueContainer container = workQueueContainerService.GetContext(workerId);
             HashSet<WorkitemContext> queueSet = (HashSet<WorkitemContext>) container.GetQueuedWorkitem(wqType);
             HashSet retSet = new HashSet();
             for (WorkitemContext workitem : queueSet) {
@@ -447,13 +463,13 @@ public class InterfaceW {
      */
     public ArrayList<HashMap<String, String>> GetAllActiveWorkitemsInUserFriendly(ResourcingContext ctx) {
         String rtid = (String) ctx.getArgs().get("rtid");
-        ArrayList<WorkitemContext> workitemList = WorkitemContext.GetContextRTID(rtid);
+        ArrayList<WorkitemContext> workitemList = workitemContextService.GetContextRTID(rtid);
         if (workitemList == null) {
             LogUtil.Log("Cannot get workitem for RTID: " + rtid, InterfaceW.class.getName(),
                     LogLevelType.ERROR, rtid);
             return null;
         }
-        return WorkitemContext.GenerateResponseWorkitems(workitemList, true);
+        return workitemContextService.GenerateResponseWorkitems(workitemList, true);
     }
 
     /**
@@ -463,13 +479,13 @@ public class InterfaceW {
      */
     public ArrayList<HashMap<String, String>> GetAllWorkitemsInUserFriendlyForDomain(ResourcingContext ctx) {
         String domain = (String) ctx.getArgs().get("domain");
-        ArrayList<WorkitemContext> workitemList = WorkitemContext.GetContextInDomain(domain);
+        ArrayList<WorkitemContext> workitemList = workitemContextService.GetContextInDomain(domain);
         if (workitemList == null) {
             LogUtil.Log("Cannot get workitem for Domain: " + domain, InterfaceW.class.getName(),
                     LogLevelType.ERROR, "");
             return null;
         }
-        return WorkitemContext.GenerateResponseWorkitems(workitemList, false);
+        return workitemContextService.GenerateResponseWorkitems(workitemList, false);
     }
 
     /**
@@ -479,10 +495,10 @@ public class InterfaceW {
      */
     public ArrayList<HashMap<String, String>> GetAllWorkitemsInUserFriendlyForParticipant(ResourcingContext ctx) {
         String workerId = (String) ctx.getArgs().get("workerId");
-        WorkQueueContainer container = WorkQueueContainer.GetContext(workerId);
+        WorkQueueContainer container = workQueueContainerService.GetContext(workerId);
         Set<WorkitemContext> worklistedCtxList = container.GetWorklistedQueue().GetQueueAsSet();
         ArrayList<WorkitemContext> wList = new ArrayList<>(worklistedCtxList);
-        return WorkitemContext.GenerateResponseWorkitems(wList, false);
+        return workitemContextService.GenerateResponseWorkitems(wList, false);
     }
 
     /**
@@ -492,13 +508,13 @@ public class InterfaceW {
      */
     public HashMap<String, String> GetWorkitemInFriendly(ResourcingContext ctx) {
         String wid = (String) ctx.getArgs().get("wid");
-        WorkitemContext workitem = WorkitemContext.GetContext(wid, "");
+        WorkitemContext workitem = workitemContextService.GetContext(wid, "");
         if (workitem == null) {
             LogUtil.Log("Cannot get workitem for Wid: " + wid, InterfaceW.class.getName(),
                     LogLevelType.ERROR, "");
             return null;
         }
-        return WorkitemContext.GenerateResponseWorkitem(workitem);
+        return workitemContextService.GenerateResponseWorkitem(workitem);
     }
 
     /**
@@ -508,7 +524,7 @@ public class InterfaceW {
      */
     public String GetNotEmptyQueueWorkers(ResourcingContext ctx) {
         String domain = (String) ctx.getArgs().get("domain");
-        WorkQueueContainer adminContainer = WorkQueueContainer.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + domain);
+        WorkQueueContainer adminContainer = workQueueContainerService.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + domain);
         Set<WorkitemContext> worklisted = adminContainer.GetQueue(WorkQueueType.WORKLISTED).GetQueueAsSet();
         HashSet<String> retParticipantIds = new HashSet<>();
         for (WorkitemContext workitem : worklisted) {
@@ -524,7 +540,7 @@ public class InterfaceW {
      */
     public String GetNotEmptyOfferedQueueWorkers(ResourcingContext ctx) {
         String domain = (String) ctx.getArgs().get("domain");
-        WorkQueueContainer adminContainer = WorkQueueContainer.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + domain);
+        WorkQueueContainer adminContainer = workQueueContainerService.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + domain);
         Set<WorkitemContext> worklisted = adminContainer.GetQueue(WorkQueueType.WORKLISTED).GetQueueAsSet();
         HashSet<String> retParticipantIds = new HashSet<>();
         for (WorkitemContext workitem : worklisted) {
@@ -542,7 +558,7 @@ public class InterfaceW {
      */
     public String GetNotEmptyAllocatedQueueWorkers(ResourcingContext ctx) {
         String domain = (String) ctx.getArgs().get("domain");
-        WorkQueueContainer adminContainer = WorkQueueContainer.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + domain);
+        WorkQueueContainer adminContainer = workQueueContainerService.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + domain);
         Set<WorkitemContext> worklisted = adminContainer.GetQueue(WorkQueueType.WORKLISTED).GetQueueAsSet();
         HashSet<String> retParticipantIds = new HashSet<>();
         for (WorkitemContext workitem : worklisted) {
@@ -560,7 +576,7 @@ public class InterfaceW {
      */
     public String GetNotEmptyOfferedAllocatedQueueWorkers(ResourcingContext ctx) {
         String domain = (String) ctx.getArgs().get("domain");
-        WorkQueueContainer adminContainer = WorkQueueContainer.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + domain);
+        WorkQueueContainer adminContainer = workQueueContainerService.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + domain);
         Set<WorkitemContext> worklisted = adminContainer.GetQueue(WorkQueueType.WORKLISTED).GetQueueAsSet();
         HashSet<String> retParticipantIds = new HashSet<>();
         for (WorkitemContext workitem : worklisted) {

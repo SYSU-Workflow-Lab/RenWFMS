@@ -10,7 +10,7 @@ import java.util.Objects;
  * Usage :
  */
 @Entity
-@Table(name = "ren_process", schema = "renboengine", catalog = "")
+@Table(name = "ren_process", schema = "renboengine")
 public class RenProcessEntity {
     private String pid;
     private String processName;

@@ -18,6 +18,7 @@ import org.sysu.renResourcing.context.ResourcingContext;
 import org.sysu.renResourcing.context.TaskContext;
 import org.sysu.renResourcing.context.WorkitemContext;
 import org.sysu.renResourcing.context.contextService.ResourcingContextService;
+import org.sysu.renResourcing.context.contextService.TaskContextService;
 import org.sysu.renResourcing.utility.LogUtil;
 
 import java.util.HashMap;
@@ -48,6 +49,12 @@ public class InterfaceA {
     private ResourcingContextService resourcingContextService;
 
     /**
+     * TaskContext Handler.
+     */
+    @Autowired
+    private TaskContextService taskContextService;
+
+    /**
      * Handle resourcing submission request from BO Engine.
      *
      * @param rtid             process runtime record id
@@ -59,7 +66,7 @@ public class InterfaceA {
      */
     public String EngineSubmitTask(String rtid, String boName, String nodeId, String polymorphismName, String arguments) {
         try {
-            TaskContext taskContext = TaskContext.GetContext(rtid, boName, polymorphismName);
+            TaskContext taskContext = taskContextService.GetContext(rtid, boName, polymorphismName);
             Hashtable<String, Object> args = new Hashtable<>();
             HashMap argMap = SerializationUtil.JsonDeserialization(arguments, HashMap.class);
             args.put("taskContext", taskContext);

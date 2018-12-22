@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 @Repository
-@CacheConfig(cacheNames = "ren_process")
+@CacheConfig(cacheNames = "rs_ren_process")
 public class RenProcessEntityDAO {
 
     @Autowired

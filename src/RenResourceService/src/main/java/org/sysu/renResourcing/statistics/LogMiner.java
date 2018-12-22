@@ -1,12 +1,11 @@
 package org.sysu.renResourcing.statistics;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renCommon.utility.CommonUtil;
+import org.sysu.renResourcing.dao.RenRseventlogEntityDAO;
 import org.sysu.renResourcing.entity.RenRseventlogEntity;
-import org.sysu.renResourcing.utility.HibernateUtil;
 import org.sysu.renResourcing.utility.LogUtil;
+import org.sysu.renResourcing.utility.SpringContextUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,10 +18,7 @@ import java.util.List;
  */
 public class LogMiner {
 
-    /**
-     * Base query string prefix.
-     */
-    private static final String baseQuery = "FROM RenRseventlogEntity AS re";
+    private static RenRseventlogEntityDAO renRseventlogEntityDAO = (RenRseventlogEntityDAO) SpringContextUtil.getBean("renRseventlogEntityDAO");
 
     /**
      * Get a list of durations(start -> complete) of a task processed by a participant.
@@ -76,6 +72,11 @@ public class LogMiner {
     }
 
     /**
+     * Base query string prefix.
+     */
+    private static final String baseQuery = "FROM RenRseventlogEntity AS re";
+
+    /**
      * Get a list of durations(completed - started) of a task processed by a participant.
      *
      * @param taskId        task global id
@@ -87,24 +88,14 @@ public class LogMiner {
      */
     @SuppressWarnings("unchecked")
     public static List<Long> GetDurations(String taskId, String beginStatus, String endStatus, String participantId, String rtid) {
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
         List<Long> retList = new ArrayList<>();
-        boolean cmtFlag = false;
         try {
-            StringBuilder sb = new StringBuilder(LogMiner.baseQuery);
-            sb.append(" WHERE re.taskid = '%s' AND");
-            sb.append(" event IN ('%s', '%s')");
-            String parsedSQL;
+            List<RenRseventlogEntity> evtList;
             if (CommonUtil.IsNullOrEmpty(participantId)) {
-                parsedSQL = String.format(sb.toString(), taskId, beginStatus, endStatus);
+                evtList = renRseventlogEntityDAO.findRenRseventlogEntitiesByTaskidAndTwoEvent(taskId, beginStatus, endStatus);
             } else {
-                sb.append(" AND re.workerid = '%s'");
-                parsedSQL = String.format(sb.toString(), taskId, beginStatus, endStatus, participantId);
+                evtList = renRseventlogEntityDAO.findRenRseventlogEntitiesByTaskidAndTwoEventAndWorkerId(taskId, beginStatus, endStatus, participantId);
             }
-            List<RenRseventlogEntity> evtList = session.createQuery(parsedSQL).list();
-            transaction.commit();
-            cmtFlag = true;
             HashMap<String, RenRseventlogEntity> pendingMap = new HashMap<>();
             for (RenRseventlogEntity anEvtList : evtList) {
                 String currentWid = anEvtList.getWid();
@@ -120,13 +111,8 @@ public class LogMiner {
                 }
             }
         } catch (Exception ex) {
-            if (!cmtFlag) {
-                transaction.rollback();
-            }
             LogUtil.Log(String.format("Exception when duration retrieving(%s -> %s), service rollback. %s", beginStatus, endStatus, ex),
                     LogMiner.class.getName(), LogLevelType.ERROR, rtid);
-        } finally {
-            HibernateUtil.CloseLocalSession();
         }
         return retList;
     }

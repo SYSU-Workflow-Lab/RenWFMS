@@ -13,7 +13,7 @@ import java.util.Objects;
  * Usage :
  */
 @Entity
-@Table(name = "ren_workqueue", schema = "renboengine", catalog = "")
+@Table(name = "ren_workqueue", schema = "renboengine")
 public class RenWorkqueueEntity {
     private String queueId;
     private String ownerId;

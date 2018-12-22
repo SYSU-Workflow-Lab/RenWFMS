@@ -14,7 +14,7 @@ import java.util.Objects;
  * Usage :
  */
 @Entity
-@Table(name = "ren_runtimerecord", schema = "renboengine", catalog = "")
+@Table(name = "ren_runtimerecord", schema = "renboengine")
 public class RenRuntimerecordEntity {
     private String rtid;
     private String processId;

@@ -13,8 +13,8 @@ import org.sysu.renResourcing.context.WorkitemContext;
 import org.sysu.renCommon.dto.ReturnModel;
 import org.sysu.renCommon.dto.StatusCode;
 import org.sysu.renResourcing.context.contextService.ResourcingContextService;
+import org.sysu.renResourcing.context.contextService.WorkitemContextService;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -34,8 +34,17 @@ public class WorkitemController {
     @Autowired
     private RScheduler rScheduler;
 
+    /**
+     * ResourcingContext Handler.
+     */
     @Autowired
     private ResourcingContextService resourcingContextService;
+
+    /**
+     * WorkitemContext Handler.
+     */
+    @Autowired
+    private WorkitemContextService workitemContextService;
 
     /**
      * Start a workitem by auth user.
@@ -47,7 +56,6 @@ public class WorkitemController {
      */
     @RequestMapping(value = "/start", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel StartWorkitem(@RequestParam(value = "workerId", required = false) String workerId,
                                      @RequestParam(value = "workitemId", required = false) String workitemId,
                                      @RequestParam(value = "payload", required = false) String payload) {
@@ -61,7 +69,7 @@ public class WorkitemController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // logic
-            WorkitemContext workitem = WorkitemContext.GetContext(workitemId, null);
+            WorkitemContext workitem = workitemContextService.GetContext(workitemId, null);
             Hashtable<String, Object> args = new Hashtable<>();
             args.put("workitemId", workitemId);
             args.put("workerId", workerId);
@@ -89,7 +97,6 @@ public class WorkitemController {
      */
     @RequestMapping(value = "/accept", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel AcceptWorkitem(@RequestParam(value = "workerId", required = false) String workerId,
                                       @RequestParam(value = "workitemId", required = false) String workitemId,
                                       @RequestParam(value = "payload", required = false) String payload) {
@@ -103,7 +110,7 @@ public class WorkitemController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // logic
-            WorkitemContext workitem = WorkitemContext.GetContext(workitemId, null);
+            WorkitemContext workitem = workitemContextService.GetContext(workitemId, null);
             Hashtable<String, Object> args = new Hashtable<>();
             args.put("workitemId", workitemId);
             args.put("workerId", workerId);
@@ -132,7 +139,6 @@ public class WorkitemController {
      */
     @RequestMapping(value = "/acceptStart", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel AcceptAndStartWorkitem(@RequestParam(value = "workerId", required = false) String workerId,
                                               @RequestParam(value = "workitemId", required = false) String workitemId,
                                               @RequestParam(value = "payload", required = false) String payload) {
@@ -146,7 +152,7 @@ public class WorkitemController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // logic
-            WorkitemContext workitem = WorkitemContext.GetContext(workitemId, null);
+            WorkitemContext workitem = workitemContextService.GetContext(workitemId, null);
             Hashtable<String, Object> args = new Hashtable<>();
             args.put("workitemId", workitemId);
             args.put("workerId", workerId);
@@ -175,7 +181,6 @@ public class WorkitemController {
      */
     @RequestMapping(value = "/complete", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel CompleteWorkitem(@RequestParam(value = "workerId", required = false) String workerId,
                                         @RequestParam(value = "workitemId", required = false) String workitemId,
                                         @RequestParam(value = "payload", required = false) String payload) {
@@ -189,7 +194,7 @@ public class WorkitemController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // logic
-            WorkitemContext workitem = WorkitemContext.GetContext(workitemId, null);
+            WorkitemContext workitem = workitemContextService.GetContext(workitemId, null);
             Hashtable<String, Object> args = new Hashtable<>();
             args.put("workitemId", workitemId);
             args.put("workerId", workerId);
@@ -218,7 +223,6 @@ public class WorkitemController {
      */
     @RequestMapping(value = "/suspend", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel SuspendWorkitem(@RequestParam(value = "workerId", required = false) String workerId,
                                        @RequestParam(value = "workitemId", required = false) String workitemId,
                                        @RequestParam(value = "payload", required = false) String payload) {
@@ -232,7 +236,7 @@ public class WorkitemController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // logic
-            WorkitemContext workitem = WorkitemContext.GetContext(workitemId, null);
+            WorkitemContext workitem = workitemContextService.GetContext(workitemId, null);
             Hashtable<String, Object> args = new Hashtable<>();
             args.put("workitemId", workitemId);
             args.put("workerId", workerId);
@@ -261,7 +265,6 @@ public class WorkitemController {
      */
     @RequestMapping(value = "/unsuspend", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel UnsuspendWorkitem(@RequestParam(value = "workerId", required = false) String workerId,
                                          @RequestParam(value = "workitemId", required = false) String workitemId,
                                          @RequestParam(value = "payload", required = false) String payload) {
@@ -275,7 +278,7 @@ public class WorkitemController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // logic
-            WorkitemContext workitem = WorkitemContext.GetContext(workitemId, null);
+            WorkitemContext workitem = workitemContextService.GetContext(workitemId, null);
             Hashtable<String, Object> args = new Hashtable<>();
             args.put("workitemId", workitemId);
             args.put("workerId", workerId);
@@ -304,7 +307,6 @@ public class WorkitemController {
      */
     @RequestMapping(value = "/skip", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel SkipWorkitem(@RequestParam(value = "workerId", required = false) String workerId,
                                     @RequestParam(value = "workitemId", required = false) String workitemId,
                                     @RequestParam(value = "payload", required = false) String payload) {
@@ -318,7 +320,7 @@ public class WorkitemController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // logic
-            WorkitemContext workitem = WorkitemContext.GetContext(workitemId, null);
+            WorkitemContext workitem = workitemContextService.GetContext(workitemId, null);
             Hashtable<String, Object> args = new Hashtable<>();
             args.put("workitemId", workitemId);
             args.put("workerId", workerId);
@@ -347,7 +349,6 @@ public class WorkitemController {
      */
     @RequestMapping(value = "/reallocate", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel ReallocateWorkitem(@RequestParam(value = "workerId", required = false) String workerId,
                                           @RequestParam(value = "workitemId", required = false) String workitemId,
                                           @RequestParam(value = "payload", required = false) String payload) {
@@ -361,7 +362,7 @@ public class WorkitemController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // logic
-            WorkitemContext workitem = WorkitemContext.GetContext(workitemId, null);
+            WorkitemContext workitem = workitemContextService.GetContext(workitemId, null);
             Hashtable<String, Object> args = new Hashtable<>();
             args.put("workitemId", workitemId);
             args.put("workerId", workerId);
@@ -390,7 +391,6 @@ public class WorkitemController {
      */
     @RequestMapping(value = "/deallocate", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel DeallocateWorkitem(@RequestParam(value = "workerId", required = false) String workerId,
                                           @RequestParam(value = "workitemId", required = false) String workitemId,
                                           @RequestParam(value = "payload", required = false) String payload) {
@@ -404,7 +404,7 @@ public class WorkitemController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // logic
-            WorkitemContext workitem = WorkitemContext.GetContext(workitemId, null);
+            WorkitemContext workitem = workitemContextService.GetContext(workitemId, null);
             Hashtable<String, Object> args = new Hashtable<>();
             args.put("workitemId", workitemId);
             args.put("workerId", workerId);
@@ -431,7 +431,6 @@ public class WorkitemController {
      */
     @RequestMapping(value = "/getAll", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetAll(@RequestParam(value = "rtid", required = false) String rtid) {
         ReturnModel rnModel = new ReturnModel();
         try {
@@ -463,7 +462,6 @@ public class WorkitemController {
      */
     @RequestMapping(value = "/getAllForDomain", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetAllForDomain(@RequestParam(value = "domain", required = false) String domain) {
         ReturnModel rnModel = new ReturnModel();
         try {

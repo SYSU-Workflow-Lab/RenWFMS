@@ -2,7 +2,7 @@
  * Project Ren @ 2018
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
-package org.sysu.renResourcing.entity;
+package org.sysu.renResourcing.entity.multikeyclass;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -14,7 +14,7 @@ import java.util.Objects;
  * Date  : 2018/2/8
  * Usage :
  */
-public class RenQueueitemsEntityPK implements Serializable {
+public class RenQueueitemsEntityMKC implements Serializable {
     private String workqueueId;
     private String workitemId;
 
@@ -42,7 +42,7 @@ public class RenQueueitemsEntityPK implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RenQueueitemsEntityPK that = (RenQueueitemsEntityPK) o;
+        RenQueueitemsEntityMKC that = (RenQueueitemsEntityMKC) o;
         return Objects.equals(workqueueId, that.workqueueId) &&
                 Objects.equals(workitemId, that.workitemId);
     }

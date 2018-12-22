@@ -13,7 +13,7 @@ import org.sysu.renResourcing.repository.RenExitemEntityRepository;
  */
 
 @Repository
-@CacheConfig(cacheNames = "ren_exitem")
+@CacheConfig(cacheNames = "rs_ren_exitem")
 public class RenExitemEntityDAO {
 
     @Autowired

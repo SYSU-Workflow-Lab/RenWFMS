@@ -94,7 +94,7 @@ public class ResourcingContextService {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             }
             LogUtil.Log("Get resourcing request context but exception occurred, " + ex,
-                    TaskContext.class.getName(), LogLevelType.ERROR, rtid);
+                    ResourcingContextService.class.getName(), LogLevelType.ERROR, rtid);
             return null;
         }
     }
@@ -123,7 +123,7 @@ public class ResourcingContextService {
         catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             LogUtil.Log("Save resourcing request context but exception occurred, " + ex,
-                    TaskContext.class.getName(), LogLevelType.ERROR, context.getRtid());
+                    ResourcingContextService.class.getName(), LogLevelType.ERROR, context.getRtid());
         }
     }
 }

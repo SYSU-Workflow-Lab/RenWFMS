@@ -14,7 +14,7 @@ import org.sysu.renResourcing.repository.RenRsparticipantEntityRepository;
  */
 
 @Repository
-@CacheConfig(cacheNames = "ren_rsparticipant")
+@CacheConfig(cacheNames = "rs_ren_rsparticipant")
 public class RenRsparticipantEntityDAO {
 
     @Autowired
