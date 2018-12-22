@@ -12,11 +12,10 @@ import org.sysu.renCommon.enums.RSEventType;
 import org.sysu.renCommon.enums.WorkQueueType;
 import org.sysu.renCommon.enums.WorkitemResourcingStatusType;
 import org.sysu.renResourcing.consistency.ContextCachePool;
-import org.sysu.renResourcing.context.steady.RenQueueitemsEntity;
-import org.sysu.renResourcing.context.steady.RenWorkitemEntity;
-import org.sysu.renResourcing.context.steady.RenWorkqueueEntity;
+import org.sysu.renResourcing.entity.RenQueueitemsEntity;
+import org.sysu.renResourcing.entity.RenWorkitemEntity;
+import org.sysu.renResourcing.entity.RenWorkqueueEntity;
 import org.sysu.renResourcing.interfaceService.InterfaceE;
-import org.sysu.renCommon.utility.AuthDomainHelper;
 import org.sysu.renResourcing.utility.HibernateUtil;
 import org.sysu.renResourcing.utility.LogUtil;
 import org.sysu.renResourcing.utility.SpringContextUtil;
@@ -221,7 +220,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Get the specific queue context and store to steady.
+     * Get the specific queue context and store to entity.
      * @param ownerWorkerId queue owner worker id
      * @param queueType queue type enum
      * @return a workqueue context
@@ -231,10 +230,10 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Get the specific queue context and store to steady.
+     * Get the specific queue context and store to entity.
      * @param ownerWorkerId queue owner worker id
      * @param queueType queue type enum
-     * @param forceReload force reload from steady and refresh cache
+     * @param forceReload force reload from entity and refresh cache
      * @return a workqueue context
      */
     public synchronized static WorkQueueContext GetContext(String ownerWorkerId, WorkQueueType queueType, boolean forceReload) {
@@ -250,7 +249,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
         try {
             RenWorkqueueEntity rwqe = (RenWorkqueueEntity) session.createQuery(String.format("FROM RenWorkqueueEntity WHERE ownerId = '%s' AND type = %s",
                     ownerWorkerId, queueType.ordinal())).uniqueResult();
-            // if not exist in steady then create a new one
+            // if not exist in entity then create a new one
             if (rwqe == null) {
                 rwqe = new RenWorkqueueEntity();
                 rwqe.setQueueId(wqid);
@@ -302,7 +301,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Write resource event log to steady.
+     * Write resource event log to entity.
      * @param workitem workitem context
      */
     private void LogEvent(WorkitemContext workitem) {
@@ -332,7 +331,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Write resource event log to steady.
+     * Write resource event log to entity.
      * @param workitems workitem context map
      */
     private void LogEvent(Map<String, WorkitemContext> workitems) {
@@ -342,7 +341,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Refresh remove workitem changes to steady.
+     * Refresh remove workitem changes to entity.
      * NOTICE this method will be called when perform SET DATA type of queue context
      * to make sure data consistency among all RS.
      * @param removeItemId id of context to remove
@@ -354,7 +353,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Refresh remove workitem changes to steady.
+     * Refresh remove workitem changes to entity.
      * NOTICE this method will be called when perform SET DATA type of queue context
      * to make sure data consistency among all RS.
      * @param removeSet id of contexts to remove
@@ -379,7 +378,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
         }
         catch (Exception ex) {
             transaction.rollback();
-            LogUtil.Log(String.format("When WorkQueue(%s of %s, %s) flush remove changes to steady exception occurred, %s",
+            LogUtil.Log(String.format("When WorkQueue(%s of %s, %s) flush remove changes to entity exception occurred, %s",
                         this.queueId, this.ownerWorkerId, this.type.name(), ex), WorkQueueContext.class.getName(),
                         LogLevelType.ERROR, "");
             throw ex;
@@ -390,7 +389,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Refresh add workitem changes to steady.
+     * Refresh add workitem changes to entity.
      * NOTICE this method will be called when perform SET DATA type of queue context
      * to make sure data consistency among all RS.
      * @param addItem context to add
@@ -402,7 +401,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Refresh add workitem changes to steady.
+     * Refresh add workitem changes to entity.
      * NOTICE this method will be called when perform SET DATA type of queue context
      * to make sure data consistency among all RS.
      * @param addSet set of context to add
@@ -428,7 +427,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
         }
         catch (Exception ex) {
             transaction.rollback();
-            LogUtil.Log(String.format("When WorkQueue(%s of %s, %s) flush add changes to steady exception occurred, %s",
+            LogUtil.Log(String.format("When WorkQueue(%s of %s, %s) flush add changes to entity exception occurred, %s",
                     this.queueId, this.ownerWorkerId, this.type.name(), ex), WorkQueueContext.class.getName(),
                     LogLevelType.ERROR, "");
             throw ex;
@@ -439,7 +438,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Refresh work queue from steady.
+     * Refresh work queue from entity.
      * NOTICE this method will be called when perform GET DATA type of queue context
      * to make sure data consistency among all RS.
      */
@@ -487,7 +486,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
             if (!cmtFlag) {
                 transaction.rollback();
             }
-            LogUtil.Log(String.format("When WorkQueue(%s of %s, %s) refresh from steady exception occurred, %s",
+            LogUtil.Log(String.format("When WorkQueue(%s of %s, %s) refresh from entity exception occurred, %s",
                     this.queueId, this.ownerWorkerId, this.type.name(), ex), WorkQueueContext.class.getName(),
                     LogLevelType.ERROR, "");
             throw ex;
@@ -513,7 +512,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
         }
         catch (Exception ex) {
             transaction.rollback();
-            LogUtil.Log(String.format("When RemoveFromAllQueue(%s) refresh from steady exception occurred, %s",
+            LogUtil.Log(String.format("When RemoveFromAllQueue(%s) refresh from entity exception occurred, %s",
                     workitem.getEntity().getWid(), ex), WorkQueueContext.class.getName(),
                     LogLevelType.ERROR, workitem.getEntity().getRtid());
         }
@@ -523,7 +522,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Generate a context by its steady entity.
+     * Generate a context by its entity entity.
      * @param workqueueEntity WorkQueue entity
      * @return WorkQueue context
      */

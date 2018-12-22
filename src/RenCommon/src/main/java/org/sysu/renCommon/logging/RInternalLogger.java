@@ -29,14 +29,14 @@ public abstract class RInternalLogger {
     public abstract void Echo(String msg, String label, LogLevelType level);
 
     /**
-     * Log a structure information message to steady.
+     * Log a structure information message to entity.
      * @param msg message text
      * @param label message label
      */
     public abstract void Log(String msg, String label, String rtid);
 
     /**
-     * Log a structure message to steady.
+     * Log a structure message to entity.
      * @param msg message text
      * @param label message label
      * @param level message level

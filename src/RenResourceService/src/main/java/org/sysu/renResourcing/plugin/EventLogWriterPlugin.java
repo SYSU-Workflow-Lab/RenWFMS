@@ -4,12 +4,11 @@
  */
 package org.sysu.renResourcing.plugin;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.sysu.renCommon.enums.LogLevelType;
-import org.sysu.renResourcing.context.steady.RenRseventlogEntity;
-import org.sysu.renResourcing.utility.HibernateUtil;
+import org.sysu.renResourcing.entity.RenRseventlogEntity;
+import org.sysu.renResourcing.dao.RenRseventlogEntityDAO;
 import org.sysu.renResourcing.utility.LogUtil;
+import org.sysu.renResourcing.utility.SpringContextUtil;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -62,25 +61,23 @@ public class EventLogWriterPlugin extends AsyncRunnablePlugin {
     }
 
     /**
-     * Write a log to steady asynchronously.
+     * Write a log to entity asynchronously.
      */
     private void DoWrite() {
         if (logEvtQueue == null || logEvtQueue.isEmpty()) {
             return;
         }
-        Session session = HibernateUtil.GetLocalSession();
         while (!logEvtQueue.isEmpty()) {
             RenRseventlogEntity eventEntity = logEvtQueue.poll();
             try {
-                session.save(eventEntity);
+                RenRseventlogEntityDAO renRseventlogEntityDAO = (RenRseventlogEntityDAO) SpringContextUtil.getBean("renRseventlogEntityDAO");
+                renRseventlogEntityDAO.saveOrUpdate(eventEntity);
             }
             catch (Exception ex) {
-                LogUtil.Echo(String.format("Fail to insert RS event log to steady. (Wid: %s, Pid: %s, WorkerId: %s, Evt: %s), %s",
+                LogUtil.Echo(String.format("Fail to insert RS event log to entity. (Wid: %s, Pid: %s, WorkerId: %s, Evt: %s), %s",
                         eventEntity.getWid(), eventEntity.getProcessid(), eventEntity.getWorkerid(), eventEntity.getEvent(), ex),
                         EventLogWriterPlugin.class.getName(), LogLevelType.ERROR);
             }
         }
-        session.flush();
-        HibernateUtil.CloseLocalSession();
     }
 }

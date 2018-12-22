@@ -73,7 +73,7 @@ public class WorkQueueContainer implements RCacheablesContext {
      * Get the queue container of a specific worker.
      *
      * @param workerId    worker global id, {@code GlobalContext.WORKQUEUE_ADMIN_PREFIX} if admin user
-     * @param forceReload force reload from steady and refresh cache
+     * @param forceReload force reload from entity and refresh cache
      * @return Work queue container of this worker
      */
     public static WorkQueueContainer GetContext(String workerId, boolean forceReload) {

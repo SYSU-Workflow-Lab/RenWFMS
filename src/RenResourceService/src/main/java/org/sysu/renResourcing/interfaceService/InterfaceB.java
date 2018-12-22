@@ -13,10 +13,10 @@ import org.sysu.renResourcing.GlobalContext;
 import org.sysu.renCommon.enums.*;
 import org.sysu.renResourcing.consistency.ContextLockManager;
 import org.sysu.renResourcing.context.*;
-import org.sysu.renResourcing.context.steady.RenProcessEntity;
-import org.sysu.renResourcing.context.steady.RenRsparticipantEntity;
-import org.sysu.renResourcing.context.steady.RenRuntimerecordEntity;
-import org.sysu.renResourcing.context.steady.RenWorkitemEntity;
+import org.sysu.renResourcing.entity.RenProcessEntity;
+import org.sysu.renResourcing.entity.RenRsparticipantEntity;
+import org.sysu.renResourcing.entity.RenRuntimerecordEntity;
+import org.sysu.renResourcing.entity.RenWorkitemEntity;
 import org.sysu.renResourcing.dao.RenProcessEntityDAO;
 import org.sysu.renResourcing.dao.RenRsparticipantEntityDAO;
 import org.sysu.renResourcing.dao.RenRuntimerecordEntityDAO;
@@ -477,7 +477,7 @@ public class InterfaceB {
      * @param notify             whether need to process callback and hook
      */
     private void WorkitemChanged(WorkitemContext workitem, WorkitemStatusType toStatus, WorkitemResourcingStatusType toResourcingStatus, String payload, boolean notify) {
-        // refresh changed to steady
+        // refresh changed to entity
         ContextLockManager.WriteLock(workitem.getClass(), workitem.getEntity().getWid());
         try {
             if (toStatus != null) {

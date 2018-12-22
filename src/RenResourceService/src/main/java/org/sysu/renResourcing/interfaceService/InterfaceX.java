@@ -14,7 +14,7 @@ import org.sysu.renCommon.enums.RSEventType;
 import org.sysu.renCommon.utility.AuthDomainHelper;
 import org.sysu.renCommon.utility.TimestampUtil;
 import org.sysu.renResourcing.context.WorkitemContext;
-import org.sysu.renResourcing.context.steady.RenExitemEntity;
+import org.sysu.renResourcing.entity.RenExitemEntity;
 import org.sysu.renResourcing.dao.RenExitemEntityDAO;
 
 /**

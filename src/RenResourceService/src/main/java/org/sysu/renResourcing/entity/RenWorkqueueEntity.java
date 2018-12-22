@@ -2,7 +2,7 @@
  * Project Ren @ 2018
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
-package org.sysu.renResourcing.context.steady;
+package org.sysu.renResourcing.entity;
 
 import javax.persistence.*;
 import java.util.Objects;

@@ -41,7 +41,6 @@ public class EngineController {
      */
     @PostMapping(value = "/submitTask", produces = {"application/json", "application/xml"})
     @ResponseBody
-    @Transactional
     public ReturnModel SubmitTask(@RequestParam(value="rtid", required = false)String rtid,
                                   @RequestParam(value="boname", required = false)String boname,
                                   @RequestParam(value="nodeId", required = false)String nodeId,
@@ -77,7 +76,6 @@ public class EngineController {
      */
     @PostMapping(value = "/finRtid", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel FinRtid(@RequestParam(value="rtid", required = false)String rtid,
                                @RequestParam(value="successFlag", required = false)String successFlag) {
         ReturnModel rnModel = new ReturnModel();

@@ -6,7 +6,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
-import org.sysu.renResourcing.context.steady.RenRsparticipantEntity;
+import org.sysu.renResourcing.entity.RenRsparticipantEntity;
 import org.sysu.renResourcing.repository.RenRsparticipantEntityRepository;
 
 /**

@@ -4,11 +4,13 @@
  */
 package org.sysu.renResourcing;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.sysu.renCommon.context.ObservableMessage;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renResourcing.consistency.ContextCachePool;
 import org.sysu.renResourcing.context.ResourcingContext;
+import org.sysu.renResourcing.context.contextService.ResourcingContextService;
 import org.sysu.renResourcing.utility.LogUtil;
 
 import java.util.ArrayList;
@@ -49,6 +51,12 @@ public class RScheduler implements Observer {
      * This field is thread safe.
      */
     private PriorityBlockingQueue<ResourcingContext> pendingQueue = new PriorityBlockingQueue<>();
+
+    /**
+     * ResourcingContext Handler.
+     */
+    @Autowired
+    private ResourcingContextService resourcingContextService;
 
     /**
      * Schedule a resourcing context.
@@ -125,7 +133,7 @@ public class RScheduler implements Observer {
                     LogUtil.Log(String.format("Resourcing context(%s) is scheduled to launch.", pCtx.getRstid()),
                             RScheduler.class.getName(), LogLevelType.INFO, pCtx.getRtid());
                     pCtx.SetScheduled();
-                    ResourcingContext.SaveToSteady(pCtx);
+                    resourcingContextService.SaveToSteady(pCtx);
                     this.LaunchTracker(pCtx);
                 } else {
                     break;
@@ -186,7 +194,7 @@ public class RScheduler implements Observer {
                     rCtx.setIsSucceed(0);
                     break;
             }
-            ResourcingContext.SaveToSteady(rCtx);
+            resourcingContextService.SaveToSteady(rCtx);
             ContextCachePool.Remove(ResourcingContext.class, rCtx.getRstid());
         } catch (Exception ex) {
             try {

@@ -2,11 +2,9 @@
  * Project Ren @ 2018
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
-package org.sysu.renResourcing.context.steady;
+package org.sysu.renResourcing.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import java.io.Serializable;
+import javax.persistence.*;
 import java.util.Objects;
 
 /**
@@ -14,12 +12,15 @@ import java.util.Objects;
  * Date  : 2018/2/8
  * Usage :
  */
-public class RenQueueitemsEntityPK implements Serializable {
+@Entity
+@Table(name = "ren_queueitems", schema = "renboengine", catalog = "")
+@IdClass(RenQueueitemsEntityPK.class)
+public class RenQueueitemsEntity {
     private String workqueueId;
     private String workitemId;
 
-    @Column(name = "workqueueId", nullable = false, length = 64)
     @Id
+    @Column(name = "workqueueId", nullable = false, length = 64)
     public String getWorkqueueId() {
         return workqueueId;
     }
@@ -28,8 +29,8 @@ public class RenQueueitemsEntityPK implements Serializable {
         this.workqueueId = workqueueId;
     }
 
-    @Column(name = "workitemId", nullable = false, length = 64)
     @Id
+    @Column(name = "workitemId", nullable = false, length = 64)
     public String getWorkitemId() {
         return workitemId;
     }
@@ -42,7 +43,7 @@ public class RenQueueitemsEntityPK implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RenQueueitemsEntityPK that = (RenQueueitemsEntityPK) o;
+        RenQueueitemsEntity that = (RenQueueitemsEntity) o;
         return Objects.equals(workqueueId, that.workqueueId) &&
                 Objects.equals(workitemId, that.workitemId);
     }

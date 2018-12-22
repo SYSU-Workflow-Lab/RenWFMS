@@ -32,7 +32,7 @@ public class SteadyStepService {
     public static boolean EnableSteadyStep = true;
 
     /**
-     * Write a steady step to steady memory.
+     * Write a entity step to entity memory.
      *
      * @param exctx BOXML execution context
      */
@@ -60,7 +60,7 @@ public class SteadyStepService {
             transaction.commit();
         } catch (Exception ex) {
             transaction.rollback();
-            LogUtil.Log("Write stateless steady step to DB failed, save action rollback.",
+            LogUtil.Log("Write stateless entity step to DB failed, save action rollback.",
                     SteadyStepService.class.getName(), LogLevelType.ERROR, exctx.Rtid);
         } finally {
             HibernateUtil.CloseLocalSession();
@@ -68,7 +68,7 @@ public class SteadyStepService {
     }
 
     /**
-     * Clear steady step snapshot after final state, and write a span tree descriptor to archived tree table.
+     * Clear entity step snapshot after final state, and write a span tree descriptor to archived tree table.
      *
      * @param rtid process runtime record id
      */
@@ -84,7 +84,7 @@ public class SteadyStepService {
             transaction.commit();
         } catch (Exception ex) {
             transaction.rollback();
-            LogUtil.Log("Clear stateless steady step failed, action rollback.",
+            LogUtil.Log("Clear stateless entity step failed, action rollback.",
                     SteadyStepService.class.getName(), LogLevelType.ERROR, rtid);
         } finally {
             HibernateUtil.CloseLocalSession();
@@ -92,7 +92,7 @@ public class SteadyStepService {
     }
 
     /**
-     * Resume instances from steady memory, and register it to instance manager.
+     * Resume instances from entity memory, and register it to instance manager.
      *
      * @param rtidList rtid in JSON list
      */
@@ -109,7 +109,7 @@ public class SteadyStepService {
     }
 
     /**
-     * Resume a instance from steady memory, and register it to instance manager.
+     * Resume a instance from entity memory, and register it to instance manager.
      *
      * @param rtid process runtime record id
      */
@@ -159,7 +159,7 @@ public class SteadyStepService {
             if (!cmtFlag) {
                 transaction.rollback();
             }
-            LogUtil.Log("Resume stateless steady step from DB failed, action rollback.",
+            LogUtil.Log("Resume stateless entity step from DB failed, action rollback.",
                     SteadyStepService.class.getName(), LogLevelType.ERROR, rtid);
             return false;
         } finally {

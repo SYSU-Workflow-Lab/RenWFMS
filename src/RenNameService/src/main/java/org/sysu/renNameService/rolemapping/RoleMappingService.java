@@ -50,7 +50,7 @@ public class RoleMappingService {
     @SuppressWarnings("unchecked")
     public ArrayList<RenRolemapEntity> GetInvolvedResource(String rtid) {
         CachedRoleMap crm = RoleMapCachePool.Retrieve(rtid);
-        // from steady
+        // from entity
         if (crm == null) {
             try {
                 List<RenRolemapEntity> qRet = renRolemapEntityDAO.findRenRolemapEntitiesByRtid(rtid);
@@ -195,7 +195,7 @@ public class RoleMappingService {
     public ArrayList<String> GetWorkerByBusinessRole(String rtid, String bRoleName) {
         ArrayList<String> retList = new ArrayList<>();
         CachedRoleMap crm = RoleMapCachePool.Retrieve(rtid);
-        // from steady
+        // from entity
         if (crm == null) {
             crm = new CachedRoleMap();
             try {
@@ -236,7 +236,7 @@ public class RoleMappingService {
     public ArrayList<String> GetBusinessRoleByGlobalId(String rtid, String globalId) {
         ArrayList<String> retList = new ArrayList<>();
         CachedRoleMap crm = RoleMapCachePool.Retrieve(rtid);
-        // from steady
+        // from entity
         if (crm == null) {
             crm = new CachedRoleMap();
             try {
@@ -277,7 +277,7 @@ public class RoleMappingService {
     public void FinishRoleMapService(String rtid) {
         // remove cache
         RoleMapCachePool.Remove(rtid);
-        // remove relations in steady memory
+        // remove relations in entity memory
         try {
             List<RenRolemapEntity> qRet = renRolemapEntityDAO.findRenRolemapEntitiesByRtid(rtid);
             for (RenRolemapEntity rre : qRet) {
@@ -320,7 +320,7 @@ public class RoleMappingService {
             rre.setDataVersion(dataVersion);
             crm.addCacheItem(rre);
         }
-        // save to steady
+        // save to entity
         List<RenRolemapEntity> rreList = crm.getCacheList();
         try {
             for (RenRolemapEntity t : rreList) {

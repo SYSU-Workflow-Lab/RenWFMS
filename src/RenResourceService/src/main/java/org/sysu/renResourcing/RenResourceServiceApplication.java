@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @SpringBootApplication
 @EnableTransactionManagement
-@EntityScan(basePackages = "org.sysu.renResourcing.context.steady")
+@EntityScan(basePackages = "org.sysu.renResourcing.entity")
 public class RenResourceServiceApplication implements EmbeddedServletContainerCustomizer {
 
 	public static void main(String[] args) {

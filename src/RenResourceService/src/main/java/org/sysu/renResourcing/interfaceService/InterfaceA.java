@@ -17,6 +17,7 @@ import org.sysu.renResourcing.RScheduler;
 import org.sysu.renResourcing.context.ResourcingContext;
 import org.sysu.renResourcing.context.TaskContext;
 import org.sysu.renResourcing.context.WorkitemContext;
+import org.sysu.renResourcing.context.contextService.ResourcingContextService;
 import org.sysu.renResourcing.utility.LogUtil;
 
 import java.util.HashMap;
@@ -41,6 +42,12 @@ public class InterfaceA {
     private RScheduler mainScheduler;
 
     /**
+     * ResourcingContext Handler.
+     */
+    @Autowired
+    private ResourcingContextService resourcingContextService;
+
+    /**
      * Handle resourcing submission request from BO Engine.
      *
      * @param rtid             process runtime record id
@@ -58,7 +65,7 @@ public class InterfaceA {
             args.put("taskContext", taskContext);
             args.put("nodeId", nodeId);
             args.put("taskArgumentsVector", argMap);
-            ResourcingContext ctx = ResourcingContext.GetContext(null, rtid, RServiceType.SubmitResourcingTask, args);
+            ResourcingContext ctx = resourcingContextService.GetContext(null, rtid, RServiceType.SubmitResourcingTask, args);
             this.mainScheduler.Schedule(ctx);
             return GlobalContext.RESPONSE_SUCCESS;
         } catch (Exception ex) {
@@ -79,7 +86,7 @@ public class InterfaceA {
         Hashtable<String, Object> args = new Hashtable<>();
         args.put("rtid", rtid);
         args.put("successFlag", successFlag == null ? "1" : successFlag);
-        ResourcingContext ctx = ResourcingContext.GetContext(null, rtid, RServiceType.FinishProcess, args);
+        ResourcingContext ctx = resourcingContextService.GetContext(null, rtid, RServiceType.FinishProcess, args);
         this.mainScheduler.Schedule(ctx);
         return GlobalContext.RESPONSE_SUCCESS;
     }

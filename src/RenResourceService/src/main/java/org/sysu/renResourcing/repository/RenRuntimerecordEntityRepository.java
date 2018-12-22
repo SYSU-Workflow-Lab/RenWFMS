@@ -1,7 +1,7 @@
 package org.sysu.renResourcing.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.sysu.renResourcing.context.steady.RenRuntimerecordEntity;
+import org.sysu.renResourcing.entity.RenRuntimerecordEntity;
 
 /**
  * Created by Skye on 2018/12/5.

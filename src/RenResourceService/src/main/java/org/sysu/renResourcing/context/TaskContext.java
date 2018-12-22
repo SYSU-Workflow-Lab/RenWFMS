@@ -9,9 +9,9 @@ import org.hibernate.Transaction;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renCommon.enums.WorkitemStatusType;
 import org.sysu.renResourcing.consistency.ContextCachePool;
-import org.sysu.renResourcing.context.steady.RenBoEntity;
-import org.sysu.renResourcing.context.steady.RenRstaskEntity;
-import org.sysu.renResourcing.context.steady.RenRuntimerecordEntity;
+import org.sysu.renResourcing.entity.RenBoEntity;
+import org.sysu.renResourcing.entity.RenRstaskEntity;
+import org.sysu.renResourcing.entity.RenRuntimerecordEntity;
 import org.sysu.renCommon.utility.CommonUtil;
 import org.sysu.renResourcing.utility.HibernateUtil;
 import org.sysu.renResourcing.utility.LogUtil;
@@ -19,7 +19,6 @@ import org.sysu.renCommon.utility.SerializationUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -277,7 +276,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Parse hooks by a descriptor in steady.
+     * Parse hooks by a descriptor in entity.
      * @param hookJSONDescriptor JSON descriptor
      */
     @SuppressWarnings("unchecked")
@@ -290,7 +289,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Parse callback events by a descriptor in steady.
+     * Parse callback events by a descriptor in entity.
      * @param callbackJSONDescriptor JSON descriptor
      */
     @SuppressWarnings("unchecked")
@@ -303,7 +302,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Parse parameter vector by a descriptor in steady.
+     * Parse parameter vector by a descriptor in entity.
      * @param parametersDescriptor parameter string descriptor
      */
     @SuppressWarnings("unchecked")
@@ -314,7 +313,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Generate a task context by a steady entity.
+     * Generate a task context by a entity entity.
      * @param rstaskEntity RS task entity
      * @param pid Belong to process global id
      * @return equivalent task context.

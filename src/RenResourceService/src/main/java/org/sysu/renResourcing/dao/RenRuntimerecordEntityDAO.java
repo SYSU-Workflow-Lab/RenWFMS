@@ -5,7 +5,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
-import org.sysu.renResourcing.context.steady.RenRuntimerecordEntity;
+import org.sysu.renResourcing.entity.RenRuntimerecordEntity;
 import org.sysu.renResourcing.repository.RenRuntimerecordEntityRepository;
 
 import java.util.List;

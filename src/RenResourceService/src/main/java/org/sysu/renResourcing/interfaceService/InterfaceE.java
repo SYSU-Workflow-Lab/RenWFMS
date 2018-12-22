@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.sysu.renResourcing.GlobalContext;
 import org.sysu.renCommon.enums.RSEventType;
 import org.sysu.renResourcing.context.WorkitemContext;
-import org.sysu.renResourcing.context.steady.RenRseventlogEntity;
+import org.sysu.renResourcing.entity.RenRseventlogEntity;
 import org.sysu.renResourcing.plugin.AsyncPluginRunner;
 import org.sysu.renResourcing.plugin.EventLogWriterPlugin;
 import org.sysu.renCommon.utility.TimestampUtil;
@@ -74,7 +74,7 @@ public class InterfaceE {
     }
 
     /**
-     * Add a event log to steady.
+     * Add a event log to entity.
      *
      * @param workitem workitem context
      * @param workerId worker global id

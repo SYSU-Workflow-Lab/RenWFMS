@@ -1,11 +1,11 @@
-package org.sysu.renResourcing.context.steady;
+package org.sysu.renResourcing.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "ren_rsrecord", schema = "renboengine", catalog = "")
+@Table(name = "ren_rsrecord", schema = "renboengine")
 public class RenRsrecordEntity {
     private String rstid;
     private String rtid;

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.sysu.renCommon.enums.LogLevelType;
-import org.sysu.renResourcing.context.steady.RenRuntimerecordEntity;
+import org.sysu.renResourcing.entity.RenRuntimerecordEntity;
 import org.sysu.renResourcing.dao.RenRuntimerecordEntityDAO;
 import org.sysu.renResourcing.utility.LogUtil;
 

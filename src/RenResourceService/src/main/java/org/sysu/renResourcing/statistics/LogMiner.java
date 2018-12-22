@@ -4,7 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renCommon.utility.CommonUtil;
-import org.sysu.renResourcing.context.steady.RenRseventlogEntity;
+import org.sysu.renResourcing.entity.RenRseventlogEntity;
 import org.sysu.renResourcing.utility.HibernateUtil;
 import org.sysu.renResourcing.utility.LogUtil;
 

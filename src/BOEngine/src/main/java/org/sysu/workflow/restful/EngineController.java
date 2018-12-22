@@ -110,7 +110,7 @@ public class EngineController {
     }
 
     /**
-     * Resume a running process from steady binlog.
+     * Resume a running process from entity binlog.
      * @param rtid process rtid
      * @return response package
      */
@@ -137,7 +137,7 @@ public class EngineController {
     }
 
     /**
-     * Resume a running process from steady binlog.
+     * Resume a running process from entity binlog.
      * @param rtidList process rtid in JSON list
      * @return response package
      */

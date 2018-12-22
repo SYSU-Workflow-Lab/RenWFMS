@@ -12,6 +12,7 @@ import org.sysu.renResourcing.context.ResourcingContext;
 import org.sysu.renResourcing.context.WorkitemContext;
 import org.sysu.renCommon.dto.ReturnModel;
 import org.sysu.renCommon.dto.StatusCode;
+import org.sysu.renResourcing.context.contextService.ResourcingContextService;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -32,6 +33,9 @@ public class WorkitemController {
      */
     @Autowired
     private RScheduler rScheduler;
+
+    @Autowired
+    private ResourcingContextService resourcingContextService;
 
     /**
      * Start a workitem by auth user.
@@ -64,7 +68,7 @@ public class WorkitemController {
             if (payload != null) {
                 args.put("payload", payload);
             }
-            ResourcingContext rCtx = ResourcingContext.GetContext(null, workitem.getEntity().getRtid(), RServiceType.StartWorkitem, args);
+            ResourcingContext rCtx = resourcingContextService.GetContext(null, workitem.getEntity().getRtid(), RServiceType.StartWorkitem, args);
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
@@ -106,7 +110,7 @@ public class WorkitemController {
             if (payload != null) {
                 args.put("payload", payload);
             }
-            ResourcingContext rCtx = ResourcingContext.GetContext(null, workitem.getEntity().getRtid(),
+            ResourcingContext rCtx = resourcingContextService.GetContext(null, workitem.getEntity().getRtid(),
                     RServiceType.AcceptWorkitem, args);
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
@@ -149,7 +153,7 @@ public class WorkitemController {
             if (payload != null) {
                 args.put("payload", payload);
             }
-            ResourcingContext rCtx = ResourcingContext.GetContext(null, workitem.getEntity().getRtid(),
+            ResourcingContext rCtx = resourcingContextService.GetContext(null, workitem.getEntity().getRtid(),
                     RServiceType.AcceptAndStartWorkitem, args);
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
@@ -192,7 +196,7 @@ public class WorkitemController {
             if (payload != null) {
                 args.put("payload", payload);
             }
-            ResourcingContext rCtx = ResourcingContext.GetContext(null, workitem.getEntity().getRtid(),
+            ResourcingContext rCtx = resourcingContextService.GetContext(null, workitem.getEntity().getRtid(),
                     RServiceType.CompleteWorkitem, args);
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
@@ -235,7 +239,7 @@ public class WorkitemController {
             if (payload != null) {
                 args.put("payload", payload);
             }
-            ResourcingContext rCtx = ResourcingContext.GetContext(null, workitem.getEntity().getRtid(),
+            ResourcingContext rCtx = resourcingContextService.GetContext(null, workitem.getEntity().getRtid(),
                     RServiceType.SuspendWorkitem, args);
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
@@ -278,7 +282,7 @@ public class WorkitemController {
             if (payload != null) {
                 args.put("payload", payload);
             }
-            ResourcingContext rCtx = ResourcingContext.GetContext(null, workitem.getEntity().getRtid(),
+            ResourcingContext rCtx = resourcingContextService.GetContext(null, workitem.getEntity().getRtid(),
                     RServiceType.UnsuspendWorkitem, args);
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
@@ -321,7 +325,7 @@ public class WorkitemController {
             if (payload != null) {
                 args.put("payload", payload);
             }
-            ResourcingContext rCtx = ResourcingContext.GetContext(null, workitem.getEntity().getRtid(),
+            ResourcingContext rCtx = resourcingContextService.GetContext(null, workitem.getEntity().getRtid(),
                     RServiceType.SkipWorkitem, args);
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
@@ -364,7 +368,7 @@ public class WorkitemController {
             if (payload != null) {
                 args.put("payload", payload);
             }
-            ResourcingContext rCtx = ResourcingContext.GetContext(null, workitem.getEntity().getRtid(),
+            ResourcingContext rCtx = resourcingContextService.GetContext(null, workitem.getEntity().getRtid(),
                     RServiceType.ReallocateWorkitem, args);
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
@@ -407,7 +411,7 @@ public class WorkitemController {
             if (payload != null) {
                 args.put("payload", payload);
             }
-            ResourcingContext rCtx = ResourcingContext.GetContext(null, workitem.getEntity().getRtid(),
+            ResourcingContext rCtx = resourcingContextService.GetContext(null, workitem.getEntity().getRtid(),
                     RServiceType.DeallocateWorkitem, args);
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
@@ -440,7 +444,7 @@ public class WorkitemController {
             // logic
             Hashtable<String, Object> args = new Hashtable<>();
             args.put("rtid", rtid);
-            ResourcingContext rCtx = ResourcingContext.GetContext(null, rtid,
+            ResourcingContext rCtx = resourcingContextService.GetContext(null, rtid,
                     RServiceType.GetAllWorkitemsByRTID, args);
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
@@ -472,7 +476,7 @@ public class WorkitemController {
             // logic
             Hashtable<String, Object> args = new Hashtable<>();
             args.put("domain", domain);
-            ResourcingContext rCtx = ResourcingContext.GetContext(null, "",
+            ResourcingContext rCtx = resourcingContextService.GetContext(null, "",
                     RServiceType.GetAllWorkitemsByDomain, args);
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
@@ -491,7 +495,6 @@ public class WorkitemController {
      */
     @RequestMapping(value = "/getAllForParticipant", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetAllForParticipant(@RequestParam(value = "workerId", required = false) String workerId) {
         ReturnModel rnModel = new ReturnModel();
         try {
@@ -504,7 +507,7 @@ public class WorkitemController {
             // logic
             Hashtable<String, Object> args = new Hashtable<>();
             args.put("workerId", workerId);
-            ResourcingContext rCtx = ResourcingContext.GetContext(null, "",
+            ResourcingContext rCtx = resourcingContextService.GetContext(null, "",
                     RServiceType.GetAllWorkitemsByParticipant, args);
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
@@ -523,7 +526,6 @@ public class WorkitemController {
      */
     @RequestMapping(value = "/get", produces = {"application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetByWid(@RequestParam(value = "wid", required = false) String wid) {
         ReturnModel rnModel = new ReturnModel();
         try {
@@ -536,7 +538,7 @@ public class WorkitemController {
             // logic
             Hashtable<String, Object> args = new Hashtable<>();
             args.put("wid", wid);
-            ResourcingContext rCtx = ResourcingContext.GetContext(null, "",
+            ResourcingContext rCtx = resourcingContextService.GetContext(null, "",
                     RServiceType.GetByWid, args);
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return

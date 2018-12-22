@@ -82,7 +82,7 @@ public class SCXMLSemanticsImpl implements BOXMLSemantics {
         if (exctx.isRunning()) {
             macroStep(exctx, statesToInvoke);
         }
-        // write steady step
+        // write entity step
         SteadyStepService.WriteSteady(exctx);
         // if stop, goto finalStep
         if (!exctx.isRunning()) {
@@ -136,7 +136,7 @@ public class SCXMLSemanticsImpl implements BOXMLSemantics {
                 }
             }
         }
-        // write steady step unless whole process finished
+        // write entity step unless whole process finished
         if (InstanceManager.ContainsInstanceTree(exctx.Rtid)) {
             SteadyStepService.WriteSteady(exctx);
         }
@@ -192,7 +192,7 @@ public class SCXMLSemanticsImpl implements BOXMLSemantics {
             try {
                 // only remove the tree when root BO finish
                 if (exctx.NodeId.equals(exctx.RootNodeId)) {
-                    // remove steady snapshot
+                    // remove entity snapshot
                     SteadyStepService.ClearSteadyWriteArchivedTree(exctx.Rtid);
                     // remove instance tree
                     InstanceManager.UnregisterInstanceTree(exctx.Rtid);

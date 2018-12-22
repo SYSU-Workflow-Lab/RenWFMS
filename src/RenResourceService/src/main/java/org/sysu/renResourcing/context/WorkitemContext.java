@@ -13,10 +13,10 @@ import org.sysu.renResourcing.GlobalContext;
 import org.sysu.renCommon.enums.WorkitemResourcingStatusType;
 import org.sysu.renCommon.enums.WorkitemStatusType;
 import org.sysu.renResourcing.consistency.ContextCachePool;
-import org.sysu.renResourcing.context.steady.RenBoEntity;
-import org.sysu.renResourcing.context.steady.RenQueueitemsEntity;
-import org.sysu.renResourcing.context.steady.RenRstaskEntity;
-import org.sysu.renResourcing.context.steady.RenWorkitemEntity;
+import org.sysu.renResourcing.entity.RenBoEntity;
+import org.sysu.renResourcing.entity.RenQueueitemsEntity;
+import org.sysu.renResourcing.entity.RenRstaskEntity;
+import org.sysu.renResourcing.entity.RenWorkitemEntity;
 import org.sysu.renResourcing.interfaceService.InterfaceA;
 import org.sysu.renResourcing.utility.*;
 
@@ -122,7 +122,7 @@ public class WorkitemContext implements Serializable, RCacheablesContext {
             relations = (ArrayList<RenQueueitemsEntity>) session.createQuery(String.format("FROM RenQueueitemsEntity WHERE workitemId = '%s'", workitemId)).list();
             transaction.commit();
         } catch (Exception ex) {
-            LogUtil.Log("GenerateResponseWorkitem but cannot read relation from steady, " + ex,
+            LogUtil.Log("GenerateResponseWorkitem but cannot read relation from entity, " + ex,
                     WorkitemContext.class.getName(), LogLevelType.ERROR, entity.getRtid());
             transaction.rollback();
         } finally {
@@ -235,7 +235,7 @@ public class WorkitemContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Get an exist workitem context from cache or steady.
+     * Get an exist workitem context from cache or entity.
      *
      * @param wid workitem global id
      * @return workitem context
@@ -249,7 +249,7 @@ public class WorkitemContext implements Serializable, RCacheablesContext {
      *
      * @param wid         workitem global id
      * @param rtid        process rtid
-     * @param forceReload force reload from steady and refresh cache
+     * @param forceReload force reload from entity and refresh cache
      * @return workitem context
      */
     public static WorkitemContext GetContext(String wid, String rtid, boolean forceReload) {
@@ -291,7 +291,7 @@ public class WorkitemContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Generate a workitem context and save it to steady by a task context.
+     * Generate a workitem context and save it to entity by a task context.
      *
      * @param taskContext    task context to be the generation template
      * @param rtid           process rtid
@@ -349,7 +349,7 @@ public class WorkitemContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Save changes context to steady memory.
+     * Save changes context to entity memory.
      *
      * @param context context to be saved
      */

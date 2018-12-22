@@ -6,14 +6,12 @@ package org.sysu.renResourcing.interfaceService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renCommon.enums.PrivilegeType;
 import org.sysu.renCommon.enums.ResourceBindingType;
 import org.sysu.renResourcing.context.ParticipantContext;
 import org.sysu.renResourcing.context.WorkitemContext;
-import org.sysu.renResourcing.context.steady.RenRuntimerecordEntity;
+import org.sysu.renResourcing.entity.RenRuntimerecordEntity;
 import org.sysu.renCommon.utility.CommonUtil;
 import org.sysu.renResourcing.dao.RenRuntimerecordEntityDAO;
 import org.sysu.renResourcing.utility.LogUtil;
@@ -27,7 +25,7 @@ import java.util.HashSet;
  *         Interface O is responsible for resources managements. In RenWFMS, we defined
  *         resources in COrgan, and register involved resources to Participant in Name
  *         Service. Therefore we assert when Resource Service need to refer a RESOURCE,
- *         it has already been registered in steady memory as a PARTICIPANT. So, this
+ *         it has already been registered in entity memory as a PARTICIPANT. So, this
  *         interface just for involved resources information retrieving and participants
  *         privileges management.
  */
@@ -106,7 +104,7 @@ public class InterfaceO {
     }
 
     /**
-     * This method is called when sensed participant in steady is changed.
+     * This method is called when sensed participant in entity is changed.
      * @param rtid process rtid
      * @return is fail-fast when organization data changed
      */

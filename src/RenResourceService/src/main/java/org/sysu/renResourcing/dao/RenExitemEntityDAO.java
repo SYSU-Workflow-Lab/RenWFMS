@@ -5,7 +5,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
-import org.sysu.renResourcing.context.steady.RenExitemEntity;
+import org.sysu.renResourcing.entity.RenExitemEntity;
 import org.sysu.renResourcing.repository.RenExitemEntityRepository;
 
 /**
