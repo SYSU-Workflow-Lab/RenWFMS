@@ -8,9 +8,10 @@ import org.sysu.workflow.instanceTree.InstanceManager;
 import org.sysu.workflow.invoke.Invoker;
 import org.sysu.workflow.invoke.InvokerException;
 import org.sysu.workflow.model.*;
-import org.sysu.workflow.stateless.SteadyStepService;
+import org.sysu.workflow.service.SteadyStepService;
 import org.sysu.workflow.utility.LogUtil;
 import org.sysu.workflow.system.EventVariable;
+import org.sysu.workflow.utility.SpringContextUtil;
 
 import java.util.*;
 
@@ -21,7 +22,7 @@ import java.util.*;
  * <p/>
  * <p>Custom semantics can be created by sub-classing this implementation.</p>
  * <p/>
- * <p>This implementation is full stateless and all methods are public accessible to make
+ * <p>This implementation is full service and all methods are public accessible to make
  * <p/>
  * it easier to extend, reuse and test its behavior.</p>
  */
@@ -32,6 +33,12 @@ public class SCXMLSemanticsImpl implements BOXMLSemantics {
      * model locations.
      */
     public static final String ERR_ILLEGAL_ALLOC = ".error.illegalalloc";
+
+    private SteadyStepService steadyStepService;
+
+    public SCXMLSemanticsImpl() {
+        this.steadyStepService =(SteadyStepService) SpringContextUtil.getBean("steadyStepService");
+    }
 
     /**
      * Optional post processing immediately following BOXMLReader. May be used
@@ -83,7 +90,7 @@ public class SCXMLSemanticsImpl implements BOXMLSemantics {
             macroStep(exctx, statesToInvoke);
         }
         // write entity step
-        SteadyStepService.WriteSteady(exctx);
+        steadyStepService.WriteSteady(exctx);
         // if stop, goto finalStep
         if (!exctx.isRunning()) {
             finalStep(exctx);
@@ -138,7 +145,7 @@ public class SCXMLSemanticsImpl implements BOXMLSemantics {
         }
         // write entity step unless whole process finished
         if (InstanceManager.ContainsInstanceTree(exctx.Rtid)) {
-            SteadyStepService.WriteSteady(exctx);
+            steadyStepService.WriteSteady(exctx);
         }
         // handle goto final
         if (!exctx.isRunning()) {
@@ -193,7 +200,7 @@ public class SCXMLSemanticsImpl implements BOXMLSemantics {
                 // only remove the tree when root BO finish
                 if (exctx.NodeId.equals(exctx.RootNodeId)) {
                     // remove entity snapshot
-                    SteadyStepService.ClearSteadyWriteArchivedTree(exctx.Rtid);
+                    steadyStepService.ClearSteadyWriteArchivedTree(exctx.Rtid);
                     // remove instance tree
                     InstanceManager.UnregisterInstanceTree(exctx.Rtid);
                     // notify resource service GC

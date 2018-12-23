@@ -2,12 +2,15 @@
  * Project Ren @ 2018
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
-package org.sysu.workflow.stateless;
+package org.sysu.workflow.service;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.workflow.*;
+import org.sysu.workflow.dao.*;
 import org.sysu.workflow.entity.*;
 import org.sysu.workflow.env.MultiStateMachineDispatcher;
 import org.sysu.workflow.env.SimpleErrorReporter;
@@ -19,7 +22,6 @@ import org.sysu.workflow.model.EnterableState;
 import org.sysu.workflow.model.SCXML;
 import org.sysu.workflow.model.extend.Task;
 import org.sysu.workflow.model.extend.Tasks;
-import org.sysu.workflow.utility.HibernateUtil;
 import org.sysu.workflow.utility.LogUtil;
 import org.sysu.workflow.utility.SerializationUtil;
 
@@ -34,36 +36,55 @@ import java.util.*;
  * Date  : 2018/1/22
  * Usage : Methods for processes runtime management.
  */
-public final class RuntimeManagementService {
+
+@Service
+public class RuntimeManagementService {
+
+    @Autowired
+    private RenRuntimerecordEntityDAO renRuntimerecordEntityDAO;
+
+    @Autowired
+    private RenProcessEntityDAO renProcessEntityDAO;
+
+    @Autowired
+    private RenBoEntityDAO renBoEntityDAO;
+
+    @Autowired
+    private RenRstaskEntityDAO renRstaskEntityDAO;
+
+    @Autowired
+    private RenArchivedTreeEntityDAO renArchivedTreeEntityDAO;
 
     /**
      * obtain main bo xml content from database according to the process id, and then read and execute it
      *
      * @param rtid the runtime record of a process
      */
-    public static void LaunchProcess(String rtid) {
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
+    @Transactional(rollbackFor = Exception.class)
+    public void LaunchProcess(String rtid) {
         boolean cmtFlag = false;
         try {
-            RenRuntimerecordEntity rre = session.get(RenRuntimerecordEntity.class, rtid);
-            assert rre != null;
+            RenRuntimerecordEntity rre = renRuntimerecordEntityDAO.findByRtid(rtid);
+            if (rre == null) {
+                throw new RuntimeException("RenRuntimerecordEntity:" + rtid + " is NULL!");
+            }
             String pid = rre.getProcessId();
             rre.setInterpreterId(GlobalContext.ENGINE_GLOBAL_ID);
-            session.save(rre);
-            RenProcessEntity rpe = session.get(RenProcessEntity.class, pid);
-            assert rpe != null;
+            renRuntimerecordEntityDAO.saveOrUpdate(rre);
+            RenProcessEntity rpe = renProcessEntityDAO.findByPid(pid);
+            if (rpe == null) {
+                throw new RuntimeException("RenProcessEntity:" + pid + " is NULL!");
+            }
             String mainBO = rpe.getMainBo();
-            List boList = session.createQuery(String.format("FROM RenBoEntity WHERE pid = '%s'", pid)).list();
+            List<RenBoEntity> boList = renBoEntityDAO.findRenBoEntitiesByPid(pid);
             RenBoEntity mainBoEntity = null;
-            for (Object bo : boList) {
-                RenBoEntity boEntity = (RenBoEntity) bo;
+            for (RenBoEntity bo : boList) {
+                RenBoEntity boEntity = bo;
                 if (boEntity.getBoName().equals(mainBO)) {
                     mainBoEntity = boEntity;
                     break;
                 }
             }
-            transaction.commit();
             cmtFlag = true;
             if (mainBoEntity == null) {
                 LogUtil.Log("Main BO not exist for launching process: " + rtid,
@@ -72,15 +93,13 @@ public final class RuntimeManagementService {
             }
             byte[] serializedBO = mainBoEntity.getSerialized();
             SCXML DeserializedBO = SerializationUtil.DeserializationSCXMLByByteArray(serializedBO);
-            RuntimeManagementService.ExecuteBO(DeserializedBO, rtid, pid);
+            this.ExecuteBO(DeserializedBO, rtid, pid);
         } catch (Exception e) {
             if (!cmtFlag) {
-                transaction.rollback();
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             }
             LogUtil.Log("When read bo by rtid, exception occurred, " + e.toString() + ", service rollback",
                     RuntimeManagementService.class.getName(), LogLevelType.ERROR, rtid);
-        } finally {
-            HibernateUtil.CloseLocalSession();
         }
     }
 
@@ -90,22 +109,21 @@ public final class RuntimeManagementService {
      * @param boidList BOs to be serialized
      * @return HashSet of Involved business role name
      */
-    public static HashSet<String> SerializeBO(String boidList) {
+    @Transactional(rollbackFor = Exception.class)
+    public HashSet<String> SerializeBO(String boidList) {
         HashSet<String> retSet = new HashSet<>();
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
         try {
             String[] boidItems = boidList.split(",");
             for (String boid : boidItems) {
-                RenBoEntity rbe = session.get(RenBoEntity.class, boid);
+                RenBoEntity rbe = renBoEntityDAO.findByBoId(boid);
                 if (rbe == null) {
                     throw new NullPointerException("RenBoEntity is not found");
                 }
-                SCXML scxml = RuntimeManagementService.ParseStringToSCXML(rbe.getBoContent());
+                SCXML scxml = this.ParseStringToSCXML(rbe.getBoContent());
                 if (scxml == null) {
                     continue;
                 }
-                HashSet<String> oneInvolves = RuntimeManagementService.GetInvolvedBusinessRole(scxml);
+                HashSet<String> oneInvolves = this.GetInvolvedBusinessRole(scxml);
                 retSet.addAll(oneInvolves);
                 rbe.setBroles(SerializationUtil.JsonSerialization(oneInvolves, ""));
                 rbe.setSerialized(SerializationUtil.SerializationSCXMLToByteArray(scxml));
@@ -123,18 +141,15 @@ public final class RuntimeManagementService {
                     rrte.setPolymorphismName(t.getName());
                     rrte.setBrole(t.getBrole());
                     rrte.setParameters(t.GenerateParamDescriptor());
-                    session.save(rrte);
+                    renRstaskEntityDAO.saveOrUpdate(rrte);
                 }
             }
-            transaction.commit();
             return retSet;
         } catch (Exception ex) {
-            transaction.rollback();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             ex.printStackTrace();
             LogUtil.Log(String.format("When serialize BOList(%s), exception occurred, %s, service rollback", boidList, ex),
                     RuntimeManagementService.class.getName(), LogLevelType.ERROR, boidList);
-        } finally {
-            HibernateUtil.CloseLocalSession();
         }
         return retSet;
     }
@@ -145,21 +160,16 @@ public final class RuntimeManagementService {
      * @param rtid process runtime record id
      * @return a descriptor of span instance tree JSON descriptor
      */
-    public static String GetSpanTreeDescriptor(String rtid) {
+    @Transactional(rollbackFor = Exception.class)
+    public String GetSpanTreeDescriptor(String rtid) {
         RInstanceTree tree = InstanceManager.GetInstanceTree(rtid, false);
         if (tree == null || tree.Root == null) {
-            Session session = HibernateUtil.GetLocalSession();
-            Transaction transaction = session.beginTransaction();
             RenArchivedTreeEntity rate = null;
             try {
-                rate = session.get(RenArchivedTreeEntity.class, rtid);
-                transaction.commit();
+                rate = renArchivedTreeEntityDAO.findByRtid(rtid);
             }
             catch (Exception ex) {
-                transaction.rollback();
-            }
-            finally {
-                HibernateUtil.CloseLocalSession();
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             }
             if (rate == null) {
                 return null;
@@ -167,7 +177,7 @@ public final class RuntimeManagementService {
             return rate.getTree();
         }
         FriendlyTreeNode rootFNode = new FriendlyTreeNode();
-        RuntimeManagementService.Nephren(tree.Root, rootFNode);
+        this.Nephren(tree.Root, rootFNode);
         return SerializationUtil.JsonSerialization(rootFNode, rtid);
     }
 
@@ -178,7 +188,7 @@ public final class RuntimeManagementService {
      * @param node current span root node
      * @param fNode user-friendly package node of current span node
      */
-    private static void Nephren(@NotNull RTreeNode node, @NotNull FriendlyTreeNode fNode) {
+    private void Nephren(@NotNull RTreeNode node, @NotNull FriendlyTreeNode fNode) {
         fNode.BOName = node.getExect().getScInstance().getStateMachine().getName();
         fNode.GlobalId = node.getGlobalId();
         fNode.NotifiableId = node.getExect().NotifiableId;
@@ -190,7 +200,7 @@ public final class RuntimeManagementService {
         fNode.StatusDescriptor = SerializationUtil.JsonSerialization(stringSet, node.getExect().Rtid);
         for (RTreeNode sub : node.Children) {
             FriendlyTreeNode subFn = new FriendlyTreeNode();
-            RuntimeManagementService.Nephren(sub, subFn);
+            this.Nephren(sub, subFn);
             fNode.Children.add(subFn);
         }
     }
@@ -202,7 +212,7 @@ public final class RuntimeManagementService {
      * @param rtid process rtid
      * @param pid process global id
      */
-    private static void ExecuteBO(SCXML scxml, String rtid, String pid) {
+    private void ExecuteBO(SCXML scxml, String rtid, String pid) {
         try {
             Evaluator evaluator = EvaluatorFactory.getEvaluator(scxml);
             BOXMLExecutor executor = new BOXMLExecutor(evaluator, new MultiStateMachineDispatcher(), new SimpleErrorReporter());
@@ -224,7 +234,7 @@ public final class RuntimeManagementService {
      * @param boXMLContent BO XML string
      * @return {@code SCXML} instance
      */
-    private static SCXML ParseStringToSCXML(String boXMLContent) {
+    private SCXML ParseStringToSCXML(String boXMLContent) {
         try {
             InputStream inputStream = new ByteArrayInputStream(boXMLContent.getBytes());
             return BOXMLReader.read(inputStream);
@@ -241,7 +251,7 @@ public final class RuntimeManagementService {
      * @param scxml BO {@code SCXML} instance.
      * @return HashSet of involved business role name
      */
-    private static HashSet<String> GetInvolvedBusinessRole(SCXML scxml) {
+    private HashSet<String> GetInvolvedBusinessRole(SCXML scxml) {
         HashSet<String> retSet = new HashSet<String>();
         ArrayList<Task> taskList = scxml.getTasks().getTaskList();
         for (Task task : taskList) {
@@ -253,7 +263,7 @@ public final class RuntimeManagementService {
     /**
      * A class for user-friendly tree node data package.
      */
-    private static class FriendlyTreeNode {
+    private class FriendlyTreeNode {
 
         public String NotifiableId;
 

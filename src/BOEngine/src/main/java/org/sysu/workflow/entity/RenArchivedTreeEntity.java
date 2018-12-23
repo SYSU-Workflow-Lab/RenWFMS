@@ -9,7 +9,7 @@ import java.util.Objects;
  * Usage :
  */
 @Entity
-@Table(name = "ren_archived_tree", schema = "renboengine", catalog = "")
+@Table(name = "ren_archived_tree", schema = "renboengine")
 public class RenArchivedTreeEntity {
     private String rtid;
     private String tree;

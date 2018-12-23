@@ -1,12 +1,12 @@
-package org.sysu.renResourcing.dao;
+package org.sysu.workflow.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
-import org.sysu.renResourcing.entity.RenProcessEntity;
-import org.sysu.renResourcing.repository.RenProcessEntityRepository;
+import org.sysu.workflow.entity.RenProcessEntity;
+import org.sysu.workflow.repository.RenProcessEntityRepository;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 @Repository
-@CacheConfig(cacheNames = "rs_ren_process")
+@CacheConfig(cacheNames = "be_ren_process")
 public class RenProcessEntityDAO {
 
     @Autowired
@@ -29,6 +29,18 @@ public class RenProcessEntityDAO {
     @Cacheable(key = "#p0")
     public RenProcessEntity findByPid(String pid) {
         return renProcessEntityRepository.findOne(pid);
+    }
+
+    public List<RenProcessEntity> getProcessByRenId(String renid) {
+        return renProcessEntityRepository.findRenProcessEntitiesByCreatorRenidAndStateEquals0(renid);
+    }
+
+    public List<RenProcessEntity> getProcessByDomain(String domain) {
+        return renProcessEntityRepository.findRenProcessEntitiesByDomainAndStateEquals0(domain);
+    }
+
+    public List<RenProcessEntity> findRenProcessEntitiesByCreatorRenidAndProcessName(String renid, String processName) {
+        return renProcessEntityRepository.findRenProcessEntitiesByCreatorRenidAndProcessName(renid, processName);
     }
 
 }

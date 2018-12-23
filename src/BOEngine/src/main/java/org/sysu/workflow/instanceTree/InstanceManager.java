@@ -4,12 +4,9 @@
  */
 package org.sysu.workflow.instanceTree;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.workflow.BOXMLExecutionContext;
 import org.sysu.workflow.BOXMLExecutor;
-import org.sysu.workflow.utility.HibernateUtil;
 import org.sysu.workflow.utility.LogUtil;
 
 import java.util.Hashtable;
@@ -17,7 +14,7 @@ import java.util.Hashtable;
 /**
  * Author: Rinkako
  * Date  : 2017/3/15
- * Usage : Maintaining all running BO trees and providing methods for stateless operations.
+ * Usage : Maintaining all running BO trees and providing methods for service operations.
  */
 public class InstanceManager {
 

@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.sysu.workflow.env.MultiStateMachineDispatcher;
@@ -18,7 +19,7 @@ import org.sysu.workflow.instanceTree.RInstanceTree;
 import org.sysu.workflow.io.BOXMLReader;
 import org.sysu.workflow.model.SCXML;
 import org.sysu.workflow.model.extend.MessageMode;
-import org.sysu.workflow.stateless.RuntimeManagementService;
+import org.sysu.workflow.service.RuntimeManagementService;
 import org.sysu.workflow.utility.SerializationUtil;
 
 import java.net.URL;
@@ -31,6 +32,9 @@ import java.net.URL;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class InitBOParamTest {
+
+    @Autowired
+    private RuntimeManagementService runtimeManagementService;
 
     @Before
     public void Prepare() {
@@ -60,7 +64,7 @@ public class InitBOParamTest {
                 "stop", null, "", 0);
         Assert.assertEquals(tree.Root.getExect().getScInstance().getGlobalContext().getVars().get("finishCount"), 2);
         Assert.assertFalse(executor.getStatus().isFinal());
-        String st = SerializationUtil.JsonSerialization(RuntimeManagementService.GetSpanTreeDescriptor("testRTID"), "testRTID");
+        String st = SerializationUtil.JsonSerialization(runtimeManagementService.GetSpanTreeDescriptor("testRTID"), "testRTID");
         dispatcher.send("testRTID", ctx.NodeId, "", MessageMode.TO_NOTIFIABLE_ID, "InitBOTestSub_2", "", BOXMLIOProcessor.DEFAULT_EVENT_PROCESSOR,
                 "stop", null, "", 0);
         Assert.assertEquals(tree.Root.getExect().getScInstance().getGlobalContext().getVars().get("finishCount"), 3);

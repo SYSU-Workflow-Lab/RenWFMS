@@ -4,17 +4,17 @@
  */
 package org.sysu.workflow.restful;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.sysu.renCommon.enums.LogLevelType;
-import org.sysu.workflow.stateless.InteractionService;
-import org.sysu.workflow.stateless.RuntimeManagementService;
-import org.sysu.workflow.stateless.SteadyStepService;
+import org.sysu.workflow.service.InteractionService;
+import org.sysu.workflow.service.RuntimeManagementService;
+import org.sysu.workflow.service.SteadyStepService;
 import org.sysu.workflow.utility.LogUtil;
 import org.sysu.workflow.utility.SerializationUtil;
 import org.sysu.renCommon.dto.ReturnModel;
 import org.sysu.renCommon.dto.StatusCode;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +27,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/gateway")
 public class EngineController {
+
+    @Autowired
+    private InteractionService interactionService;
+
+    @Autowired
+    private RuntimeManagementService runtimeManagementService;
+
+    @Autowired
+    private SteadyStepService steadyStepService;
 
     /**
      * launch a process by the rtid
@@ -45,7 +54,7 @@ public class EngineController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // logic
-            RuntimeManagementService.LaunchProcess(rtid);
+            runtimeManagementService.LaunchProcess(rtid);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, "OK");
         } catch (Exception e) {
@@ -71,7 +80,7 @@ public class EngineController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // logic
-            String jsonify = SerializationUtil.JsonSerialization(RuntimeManagementService.SerializeBO(boidlist), "");
+            String jsonify = SerializationUtil.JsonSerialization(runtimeManagementService.SerializeBO(boidlist), "");
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonify);
         } catch (Exception e) {
@@ -97,7 +106,7 @@ public class EngineController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // logic
-            String jsonify = RuntimeManagementService.GetSpanTreeDescriptor(rtid);
+            String jsonify = runtimeManagementService.GetSpanTreeDescriptor(rtid);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonify);
         } catch (Exception e) {
@@ -123,7 +132,7 @@ public class EngineController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // logic
-            String jsonify = SerializationUtil.JsonSerialization(SteadyStepService.ResumeSteady(rtid), rtid);
+            String jsonify = SerializationUtil.JsonSerialization(steadyStepService.ResumeSteady(rtid), rtid);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonify);
         } catch (Exception e) {
@@ -150,7 +159,7 @@ public class EngineController {
             }
             // logic
             HashMap<String, List> retMap = new HashMap<>();
-            retMap.put("failed", SteadyStepService.ResumeSteadyMany(rtidList));
+            retMap.put("failed", steadyStepService.ResumeSteadyMany(rtidList));
             String jsonify = SerializationUtil.JsonSerialization(retMap, "");
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonify);
@@ -190,14 +199,14 @@ public class EngineController {
             }
             // logic
             if (bo != null) {
-                InteractionService.DispatchCallbackByNodeId(rtid, bo, on, event, payload);
+                interactionService.DispatchCallbackByNodeId(rtid, bo, on, event, payload);
                 if (id != null) {
                     LogUtil.Log("Received callback with both BO and ID, ID will be ignored.",
                             EngineController.class.getName(), LogLevelType.WARNING, rtid);
                 }
             }
             else {
-                InteractionService.DispatchCallbackByNotifiableId(rtid, id, on, event, payload);
+                interactionService.DispatchCallbackByNotifiableId(rtid, id, on, event, payload);
             }
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, "OK");

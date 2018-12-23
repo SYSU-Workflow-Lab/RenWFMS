@@ -2,8 +2,9 @@
  * Project Ren @ 2018
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
-package org.sysu.workflow.stateless;
+package org.sysu.workflow.service;
 
+import org.springframework.stereotype.Service;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.workflow.BOXMLExecutionContext;
 import org.sysu.workflow.BOXMLIOProcessor;
@@ -22,6 +23,7 @@ import java.util.HashMap;
  * Date  : 2018/3/1
  * Usage : Methods for handling state-machine interaction request outside BO Engine.
  */
+@Service
 public class InteractionService {
 
     /**
@@ -32,7 +34,7 @@ public class InteractionService {
      * @param event event send to engine (required)
      * @param payload event send to engine
      */
-    public static void DispatchCallbackByNodeId(String rtid, String bo, String on, String event, String payload) {
+    public void DispatchCallbackByNodeId(String rtid, String bo, String on, String event, String payload) {
         try {
             HashMap payloadMap = payload != null ? SerializationUtil.JsonDeserialization(payload, HashMap.class) : new HashMap();
             RInstanceTree instanceTree = InstanceManager.GetInstanceTree(rtid);
@@ -69,7 +71,7 @@ public class InteractionService {
      * @param event event send to engine (required)
      * @param payload event send to engine
      */
-    public static void DispatchCallbackByNotifiableId(String rtid, String id, String on, String event, String payload) {
+    public void DispatchCallbackByNotifiableId(String rtid, String id, String on, String event, String payload) {
         try {
             HashMap payloadMap = payload != null ? SerializationUtil.JsonDeserialization(payload, HashMap.class) : new HashMap();
             RInstanceTree instanceTree = InstanceManager.GetInstanceTree(rtid);
