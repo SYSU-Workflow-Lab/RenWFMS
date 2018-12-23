@@ -10,7 +10,7 @@ import java.util.Objects;
  * Usage :
  */
 @Entity
-@Table(name = "ren_binstep", schema = "renboengine", catalog = "")
+@Table(name = "ren_binstep", schema = "renboengine")
 public class RenBinstepEntity {
     private String nodeId;
     private String rtid;

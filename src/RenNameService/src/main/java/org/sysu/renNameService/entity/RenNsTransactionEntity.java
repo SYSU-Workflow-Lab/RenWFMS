@@ -14,7 +14,7 @@ import java.util.Objects;
  * Usage :
  */
 @Entity
-@Table(name = "ren_ns_transaction", schema = "renboengine", catalog = "")
+@Table(name = "ren_ns_transaction", schema = "renboengine")
 public class RenNsTransactionEntity {
     private String nsid;
     private Integer type;

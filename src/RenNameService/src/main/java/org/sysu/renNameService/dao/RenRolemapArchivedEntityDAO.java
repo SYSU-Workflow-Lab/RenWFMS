@@ -12,7 +12,7 @@ import org.sysu.renNameService.repository.RenRolemapArchivedEntityRepository;
  */
 
 @Repository
-@CacheConfig(cacheNames = "ren_rolemap_archived")
+@CacheConfig(cacheNames = "ns_ren_rolemap_archived")
 public class RenRolemapArchivedEntityDAO {
 
     @Autowired

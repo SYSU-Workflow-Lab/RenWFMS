@@ -1,21 +1,14 @@
 package org.sysu.renResourcing.context;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renCommon.utility.CommonUtil;
 import org.sysu.renCommon.utility.SerializationUtil;
 import org.sysu.renCommon.utility.TimestampUtil;
-import org.sysu.renResourcing.GlobalContext;
 import org.sysu.renCommon.enums.RServiceType;
-import org.sysu.renResourcing.consistency.ContextCachePool;
-import org.sysu.renResourcing.context.steady.RenRsrecordEntity;
-import org.sysu.renResourcing.utility.*;
+import org.sysu.renResourcing.entity.RenRsrecordEntity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Hashtable;
-import java.util.UUID;
 
 /**
  * Author: Rinkako
@@ -80,115 +73,9 @@ public class ResourcingContext implements Comparable<ResourcingContext>, Seriali
     private int isSucceed;
 
     /**
-     * Execution result descriptor, not save to steady.
+     * Execution result descriptor, not save to entity.
      */
     private String executionResult;
-
-    /**
-     * Get a resourcing request context.
-     * @param rstid resourcing request global id, null if create a new one
-     * @param rtid process rtid
-     * @param service service type enum
-     * @param argsDict service argument dict
-     * @return Resourcing request context, null if exception occurred or assertion error
-     */
-    public static ResourcingContext GetContext(String rstid, String rtid, RServiceType service, Hashtable<String, Object> argsDict) {
-        return ResourcingContext.GetContext(rstid, rtid, service, argsDict, false);
-    }
-
-    /**
-     * Get a resourcing request context.
-     * @param rstid resourcing request global id, null if create a new one
-     * @param rtid process rtid
-     * @param service service type enum
-     * @param argsDict service argument dict
-     * @param forceReload force reload from steady and refresh cache
-     * @return Resourcing request context, null if exception occurred or assertion error
-     */
-    public static ResourcingContext GetContext(String rstid, String rtid, RServiceType service, Hashtable<String, Object> argsDict, boolean forceReload) {
-        if (rstid != null && !forceReload) {
-            ResourcingContext cachedCtx = ContextCachePool.Retrieve(ResourcingContext.class, rstid);
-            // fetch cache
-            if (cachedCtx != null) {
-                return cachedCtx;
-            }
-        }
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
-        boolean cmtFlag = false;
-        try {
-            RenRsrecordEntity renRsrecordEntity;
-            // create new
-            if (rstid == null) {
-                renRsrecordEntity = new RenRsrecordEntity();
-                rstid = String.format("RSR_%s", UUID.randomUUID().toString());
-                renRsrecordEntity.setRstid(rstid);
-                renRsrecordEntity.setRtid(rtid);
-                renRsrecordEntity.setPriority(0);
-                renRsrecordEntity.setReceiveTimestamp(TimestampUtil.GetCurrentTimestamp());
-                renRsrecordEntity.setResourcingId(GlobalContext.RESOURCE_SERVICE_GLOBAL_ID);
-                renRsrecordEntity.setService(service.name());
-                renRsrecordEntity.setArgs(SerializationUtil.JsonSerialization(argsDict));
-                session.saveOrUpdate(renRsrecordEntity);
-                transaction.commit();
-                cmtFlag = true;
-            }
-            // exist from steady
-            else {
-                renRsrecordEntity = session.get(RenRsrecordEntity.class, rstid);
-                assert renRsrecordEntity != null;
-                transaction.commit();
-                cmtFlag = true;
-            }
-            ResourcingContext generatedCtx = ResourcingContext.GenerateResourcingContext(renRsrecordEntity);
-            ContextCachePool.AddOrUpdate(rstid, generatedCtx);
-            return generatedCtx;
-        }
-        catch (Exception ex) {
-            if (!cmtFlag) {
-                transaction.rollback();
-            }
-            LogUtil.Log("Get resourcing request context but exception occurred, " + ex,
-                    TaskContext.class.getName(), LogLevelType.ERROR, rtid);
-            return null;
-        }
-        finally {
-            HibernateUtil.CloseLocalSession();
-        }
-    }
-
-    /**
-     * Save changes context to steady memory.
-     * @param context context to be saved
-     */
-    public static void SaveToSteady(ResourcingContext context) {
-        if (context == null) {
-            LogUtil.Log("Ignore null resourcing context saving.", TaskContext.class.getName(),
-                    LogLevelType.WARNING, "");
-            return;
-        }
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
-        try {
-            RenRsrecordEntity rre = session.get(RenRsrecordEntity.class, context.rstid);
-            assert rre != null;
-            rre.setReceiveTimestamp(context.receivedTimestamp);
-            rre.setScheduledTimestamp(context.scheduledTimestamp);
-            rre.setFinishTimestamp(context.finishTimestamp);
-            rre.setIsSucceed(context.isSucceed);
-            rre.setExecutionTimespan(context.executionTimespan);
-            session.update(rre);
-            transaction.commit();
-        }
-        catch (Exception ex) {
-            transaction.rollback();
-            LogUtil.Log("Save resourcing request context but exception occurred, " + ex,
-                    TaskContext.class.getName(), LogLevelType.ERROR, context.getRtid());
-        }
-        finally {
-            HibernateUtil.CloseLocalSession();
-        }
-    }
 
     /**
      * Get the resourcing request global id.
@@ -334,12 +221,12 @@ public class ResourcingContext implements Comparable<ResourcingContext>, Seriali
     }
 
     /**
-     * Generate a resourcing context by a steady entity.
+     * Generate a resourcing context by a entity entity.
      * @param rsrecordEntity RS Record entity
      * @return equivalent resourcing context.
      */
     @SuppressWarnings("unchecked")
-    private static ResourcingContext GenerateResourcingContext(RenRsrecordEntity rsrecordEntity) {
+    public static ResourcingContext GenerateResourcingContext(RenRsrecordEntity rsrecordEntity) {
         assert rsrecordEntity != null;
         String argdDescriptor = rsrecordEntity.getArgs();
         Hashtable<String, Object> dict;

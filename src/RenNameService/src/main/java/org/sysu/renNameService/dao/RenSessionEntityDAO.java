@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 @Repository
-@CacheConfig(cacheNames = "ren_session")
+@CacheConfig(cacheNames = "ns_ren_session")
 public class RenSessionEntityDAO {
 
     @Autowired

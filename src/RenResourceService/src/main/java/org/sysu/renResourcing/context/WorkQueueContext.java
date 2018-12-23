@@ -4,21 +4,22 @@
  */
 package org.sysu.renResourcing.context;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renResourcing.GlobalContext;
 import org.sysu.renCommon.enums.RSEventType;
 import org.sysu.renCommon.enums.WorkQueueType;
 import org.sysu.renCommon.enums.WorkitemResourcingStatusType;
-import org.sysu.renResourcing.consistency.ContextCachePool;
-import org.sysu.renResourcing.context.steady.RenQueueitemsEntity;
-import org.sysu.renResourcing.context.steady.RenWorkitemEntity;
-import org.sysu.renResourcing.context.steady.RenWorkqueueEntity;
+import org.sysu.renResourcing.context.contextService.WorkitemContextService;
+import org.sysu.renResourcing.dao.RenQueueitemsEntityDAO;
+import org.sysu.renResourcing.dao.RenWorkitemEntityDAO;
+import org.sysu.renResourcing.entity.RenQueueitemsEntity;
+import org.sysu.renResourcing.entity.RenWorkitemEntity;
+import org.sysu.renResourcing.entity.RenWorkqueueEntity;
 import org.sysu.renResourcing.interfaceService.InterfaceE;
-import org.sysu.renCommon.utility.AuthDomainHelper;
-import org.sysu.renResourcing.utility.HibernateUtil;
 import org.sysu.renResourcing.utility.LogUtil;
+import org.sysu.renResourcing.utility.SpringContextUtil;
 
 import java.io.Serializable;
 import java.util.*;
@@ -28,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Author: Rinkako
  * Date  : 2018/2/7
  * Usage : WorkQueueContext context is an encapsulation of RenWorkqueueEntity in a
- *         convenient way for resourcing service.
+ * convenient way for resourcing service.
  */
 public class WorkQueueContext implements Serializable, RCacheablesContext {
     /**
@@ -53,6 +54,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
 
     /**
      * Add or update a workitem to this queue.
+     *
      * @param workitem workitem entity.
      */
     public synchronized void AddOrUpdate(WorkitemContext workitem) {
@@ -64,6 +66,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
 
     /**
      * Add or update all entries of a work item queue Map.
+     *
      * @param queueMap Map in pattern (workitemId, workitemObject)
      */
     public synchronized void AddQueue(Map<String, WorkitemContext> queueMap) {
@@ -76,6 +79,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
     /**
      * Add or update all item in the queue passed by another queue.
      * Entries in another queue will be copied and append to this queue.
+     *
      * @param queue queue to be added
      */
     public synchronized void AddQueue(WorkQueueContext queue) {
@@ -88,6 +92,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
 
     /**
      * Remove a workitem from this queue.
+     *
      * @param workitemId workitem global id
      */
     public synchronized void Remove(String workitemId) {
@@ -98,8 +103,10 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
 
     /**
      * Remove a workitem from this queue.
+     *
      * @param workitem workitem context
      */
+    @Transactional(rollbackFor = Exception.class)
     public synchronized void Remove(WorkitemContext workitem) {
         this.RefreshFromSteady();
         String wid = workitem.getEntity().getWid();
@@ -109,8 +116,10 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
 
     /**
      * Removes all entries in a queue.
+     *
      * @param queue the queue of items to remove
      */
+    @Transactional(rollbackFor = Exception.class)
     public synchronized void RemoveQueue(WorkQueueContext queue) {
         this.RefreshFromSteady();
         Set<WorkitemContext> qSet = queue.GetQueueAsSet();
@@ -125,8 +134,10 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
 
     /**
      * Remove all entries from a specific process runtime.
+     *
      * @param rtid process rtid
      */
+    @Transactional(rollbackFor = Exception.class)
     public synchronized void RemoveByRtid(String rtid) {
         this.RefreshFromSteady();
         // clone queue prevent iteration fault
@@ -146,6 +157,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
 
     /**
      * Check this queue is empty.
+     *
      * @return true if queue empty
      */
     public synchronized boolean IsEmpty() {
@@ -155,6 +167,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
 
     /**
      * Count the queue length.
+     *
      * @return number of workitems in this queue
      */
     public synchronized int Count() {
@@ -164,6 +177,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
 
     /**
      * Check if a workitem in queue.
+     *
      * @param workitemId workitem global id
      * @return true if exist in queue
      */
@@ -174,6 +188,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
 
     /**
      * Get a workitem context from this queue by its global id.
+     *
      * @param workitemId workitem global id
      * @return workitem context, null if not exist
      */
@@ -185,6 +200,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
     /**
      * Clear the queue.
      */
+    @Transactional(rollbackFor = Exception.class)
     public synchronized void Clear() {
         this.RefreshFromSteady();
         HashSet<String> idSet = new HashSet<>();
@@ -197,6 +213,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
 
     /**
      * Get a concurrent hash map of all workitem in queue.
+     *
      * @return all members of the queue as a HashMap of (workitemId, workitemObject)
      */
     public synchronized Map<String, WorkitemContext> GetQueueAsMap() {
@@ -206,6 +223,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
 
     /**
      * Get a copied hash set of all workitem in queue.
+     *
      * @return all members of the queue as a HashSet
      */
     public synchronized Set<WorkitemContext> GetQueueAsSet() {
@@ -220,64 +238,8 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Get the specific queue context and store to steady.
-     * @param ownerWorkerId queue owner worker id
-     * @param queueType queue type enum
-     * @return a workqueue context
-     */
-    public synchronized static WorkQueueContext GetContext(String ownerWorkerId, WorkQueueType queueType) {
-        return WorkQueueContext.GetContext(ownerWorkerId, queueType, false);
-    }
-
-    /**
-     * Get the specific queue context and store to steady.
-     * @param ownerWorkerId queue owner worker id
-     * @param queueType queue type enum
-     * @param forceReload force reload from steady and refresh cache
-     * @return a workqueue context
-     */
-    public synchronized static WorkQueueContext GetContext(String ownerWorkerId, WorkQueueType queueType, boolean forceReload) {
-        String wqid = String.format("WQ_%s_%s", queueType.name(), ownerWorkerId);
-        WorkQueueContext retCtx = ContextCachePool.Retrieve(WorkQueueContext.class, wqid);
-        // fetch cache
-        if (retCtx != null && !forceReload) {
-            return retCtx;
-        }
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
-        boolean cmtFlag = false;
-        try {
-            RenWorkqueueEntity rwqe = (RenWorkqueueEntity) session.createQuery(String.format("FROM RenWorkqueueEntity WHERE ownerId = '%s' AND type = %s",
-                    ownerWorkerId, queueType.ordinal())).uniqueResult();
-            // if not exist in steady then create a new one
-            if (rwqe == null) {
-                rwqe = new RenWorkqueueEntity();
-                rwqe.setQueueId(wqid);
-                rwqe.setOwnerId(ownerWorkerId);
-                rwqe.setType(queueType.ordinal());
-                session.saveOrUpdate(rwqe);
-            }
-            transaction.commit();
-            cmtFlag = true;
-            WorkQueueContext generateCtx = WorkQueueContext.GenerateContext(rwqe);
-            ContextCachePool.AddOrUpdate(wqid, generateCtx);
-            return generateCtx;
-        }
-        catch (Exception ex) {
-            if (!cmtFlag) {
-                transaction.rollback();
-            }
-            LogUtil.Log(String.format("Get WorkQueueContext (owner: %s, type: %s) exception occurred, %s", ownerWorkerId, queueType.name(), ex),
-                    WorkQueueContext.class.getName(), LogLevelType.ERROR, "");
-            throw ex;
-        }
-        finally {
-            HibernateUtil.CloseLocalSession();
-        }
-    }
-
-    /**
      * Get queue global id.
+     *
      * @return global id string
      */
     public String getQueueId() {
@@ -286,6 +248,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
 
     /**
      * Get owner worker global id, {@code GlobalContext.WORKQUEUE_ADMIN_PREFIX} if an admin queue.
+     *
      * @return global id string
      */
     public String getOwnerWorkerId() {
@@ -294,6 +257,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
 
     /**
      * Get queue type.
+     *
      * @return queue type enum
      */
     public WorkQueueType getType() {
@@ -301,7 +265,8 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Write resource event log to steady.
+     * Write resource event log to entity.
+     *
      * @param workitem workitem context
      */
     private void LogEvent(WorkitemContext workitem) {
@@ -325,12 +290,14 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
                     break;
             }
             assert evtType != null;
-            InterfaceE.WriteLog(workitem, this.ownerWorkerId, evtType);
+            InterfaceE interfaceE = (InterfaceE) SpringContextUtil.getBean("interfaceE");
+            interfaceE.WriteLog(workitem, this.ownerWorkerId, evtType);
         }
     }
 
     /**
-     * Write resource event log to steady.
+     * Write resource event log to entity.
+     *
      * @param workitems workitem context map
      */
     private void LogEvent(Map<String, WorkitemContext> workitems) {
@@ -340,29 +307,31 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Refresh remove workitem changes to steady.
+     * Refresh remove workitem changes to entity.
      * NOTICE this method will be called when perform SET DATA type of queue context
      * to make sure data consistency among all RS.
+     *
      * @param removeItemId id of context to remove
      */
-    private synchronized void RemoveChangesToSteady(String removeItemId) {
+    @Transactional(rollbackFor = Exception.class)
+    public synchronized void RemoveChangesToSteady(String removeItemId) {
         HashSet<String> oneSet = new HashSet<>();
         oneSet.add(removeItemId);
         this.RemoveChangesToSteady(oneSet);
     }
 
     /**
-     * Refresh remove workitem changes to steady.
+     * Refresh remove workitem changes to entity.
      * NOTICE this method will be called when perform SET DATA type of queue context
      * to make sure data consistency among all RS.
+     *
      * @param removeSet id of contexts to remove
      */
-    private synchronized void RemoveChangesToSteady(Set<String> removeSet) {
+    @Transactional(rollbackFor = Exception.class)
+    public synchronized void RemoveChangesToSteady(Set<String> removeSet) {
         if (this.type == WorkQueueType.WORKLISTED) {
             return;
         }
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
         try {
             StringBuilder ids = new StringBuilder();
             for (String workitemId : removeSet) {
@@ -372,89 +341,85 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
             if (idStr.length() > 0) {
                 idStr = idStr.substring(0, idStr.length() - 1);
             }
-            session.createQuery(String.format("DELETE FROM RenQueueitemsEntity WHERE workqueueId = '%s' AND workitemId IN (%s)", this.queueId, idStr)).executeUpdate();
-            transaction.commit();
-        }
-        catch (Exception ex) {
-            transaction.rollback();
-            LogUtil.Log(String.format("When WorkQueue(%s of %s, %s) flush remove changes to steady exception occurred, %s",
-                        this.queueId, this.ownerWorkerId, this.type.name(), ex), WorkQueueContext.class.getName(),
-                        LogLevelType.ERROR, "");
+            RenQueueitemsEntityDAO renQueueitemsEntityDAO = (RenQueueitemsEntityDAO) SpringContextUtil.getBean("renQueueitemsEntityDAO");
+            renQueueitemsEntityDAO.deleteByWorkqueueIdAndWorkitemId(this.queueId, idStr);
+        } catch (Exception ex) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            LogUtil.Log(String.format("When WorkQueue(%s of %s, %s) flush remove changes to entity exception occurred, %s",
+                    this.queueId, this.ownerWorkerId, this.type.name(), ex), WorkQueueContext.class.getName(),
+                    LogLevelType.ERROR, "");
             throw ex;
-        }
-        finally {
-            HibernateUtil.CloseLocalSession();
         }
     }
 
     /**
-     * Refresh add workitem changes to steady.
+     * Refresh add workitem changes to entity.
      * NOTICE this method will be called when perform SET DATA type of queue context
      * to make sure data consistency among all RS.
+     *
      * @param addItem context to add
      */
-    private synchronized void AddChangesToSteady(WorkitemContext addItem) {
+    public synchronized void AddChangesToSteady(WorkitemContext addItem) {
         HashSet<WorkitemContext> oneSet = new HashSet<>();
         oneSet.add(addItem);
         this.AddChangesToSteady(oneSet);
     }
 
     /**
-     * Refresh add workitem changes to steady.
+     * Refresh add workitem changes to entity.
      * NOTICE this method will be called when perform SET DATA type of queue context
      * to make sure data consistency among all RS.
+     *
      * @param addSet set of context to add
      */
-    private synchronized void AddChangesToSteady(Set<WorkitemContext> addSet) {
+    public synchronized void AddChangesToSteady(Set<WorkitemContext> addSet) {
         if (this.type == WorkQueueType.WORKLISTED) {
             return;
         }
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
         try {
+            RenQueueitemsEntityDAO renQueueitemsEntityDAO = (RenQueueitemsEntityDAO) SpringContextUtil.getBean("renQueueitemsEntityDAO");
             for (WorkitemContext workitem : addSet) {
                 String workitemId = workitem.getEntity().getWid();
-                RenQueueitemsEntity rqe = (RenQueueitemsEntity) session.createQuery(String.format("FROM RenQueueitemsEntity WHERE workqueueId = '%s' AND workitemId = '%s'", this.queueId, workitemId)).uniqueResult();
+                RenQueueitemsEntity rqe = renQueueitemsEntityDAO.findByWorkqueueIdAndWorkitemId(this.queueId, workitemId);
                 if (rqe == null) {
                     rqe = new RenQueueitemsEntity();
                     rqe.setWorkitemId(workitemId);
                     rqe.setWorkqueueId(this.queueId);
-                    session.saveOrUpdate(rqe);
+                    renQueueitemsEntityDAO.saveOrUpdate(rqe);
                 }
             }
-            transaction.commit();
-        }
-        catch (Exception ex) {
-            transaction.rollback();
-            LogUtil.Log(String.format("When WorkQueue(%s of %s, %s) flush add changes to steady exception occurred, %s",
+        } catch (Exception ex) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            LogUtil.Log(String.format("When WorkQueue(%s of %s, %s) flush add changes to entity exception occurred, %s",
                     this.queueId, this.ownerWorkerId, this.type.name(), ex), WorkQueueContext.class.getName(),
                     LogLevelType.ERROR, "");
             throw ex;
         }
-        finally {
-            HibernateUtil.CloseLocalSession();
-        }
     }
 
     /**
-     * Refresh work queue from steady.
+     * Refresh work queue from entity.
      * NOTICE this method will be called when perform GET DATA type of queue context
      * to make sure data consistency among all RS.
      */
+    @Transactional(rollbackFor = Exception.class)
     @SuppressWarnings("unchecked")
-    private synchronized void RefreshFromSteady() {
+    public synchronized void RefreshFromSteady() {
         // TODO: whether WORKLISTED is auto-generated or not is not clear. Here we generate by add up 4 queue.
         if (this.type == WorkQueueType.WORKLISTED) {
             return;
         }
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
         boolean cmtFlag = false;
         try {
             ConcurrentHashMap<String, WorkitemContext> newMaps = new ConcurrentHashMap<>();
+            WorkitemContextService workitemContextService = (WorkitemContextService) SpringContextUtil.getBean("workitemContextService");
             if (this.type == WorkQueueType.WORKLISTED) {  // TODO: never reach here
-                ArrayList<RenWorkitemEntity> allActiveItems = (ArrayList<RenWorkitemEntity>) session.createQuery(String.format("FROM RenWorkitemEntity WHERE resourceStatus IN ('%s', '%s', '%s', '%s')", WorkitemResourcingStatusType.Allocated.name(), WorkitemResourcingStatusType.Offered.name(), WorkitemResourcingStatusType.Started.name(), WorkitemResourcingStatusType.Suspended.name())).list();
-                transaction.commit();
+                RenWorkitemEntityDAO renWorkitemEntityDAO = (RenWorkitemEntityDAO) SpringContextUtil.getBean("renWorkitemEntityDAO");
+                List<RenWorkitemEntity> allActiveItems = renWorkitemEntityDAO.findRenWorkitemEntitiesByFourStatus(
+                        WorkitemResourcingStatusType.Allocated.name(),
+                        WorkitemResourcingStatusType.Offered.name(),
+                        WorkitemResourcingStatusType.Started.name(),
+                        WorkitemResourcingStatusType.Suspended.name());
                 cmtFlag = true;
                 // worklisted queue owner worker id is directly equals to admin auth name
 //                String myDomain = AuthDomainHelper.GetDomainByAuthName(this.ownerWorkerId);
@@ -466,66 +431,37 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
 //                    }
 //                }
                 for (RenWorkitemEntity workitemEntity : allActiveItems) {
-                    WorkitemContext workitem = WorkitemContext.GetContext(workitemEntity.getWid(), workitemEntity.getRtid());
+                    WorkitemContext workitem = workitemContextService.GetContext(workitemEntity.getWid(), workitemEntity.getRtid());
                     newMaps.put(workitemEntity.getWid(), workitem);
                 }
-            }
-            else {
-                ArrayList<RenQueueitemsEntity> inSteady = (ArrayList<RenQueueitemsEntity>) session.createQuery(String.format("FROM RenQueueitemsEntity WHERE workqueueId = '%s'", this.queueId)).list();
-                transaction.commit();
+            } else {
+                RenQueueitemsEntityDAO renQueueitemsEntityDAO = (RenQueueitemsEntityDAO) SpringContextUtil.getBean("renQueueitemsEntityDAO");
+                List<RenQueueitemsEntity> inSteady = (ArrayList<RenQueueitemsEntity>) renQueueitemsEntityDAO.findRenQueueitemsEntitiesByWorkqueueId(this.queueId);
                 cmtFlag = true;
                 for (RenQueueitemsEntity rqe : inSteady) {
-                    WorkitemContext workitem = WorkitemContext.GetContext(rqe.getWorkitemId(), "#RS_INTERNAL_" + GlobalContext.RESOURCE_SERVICE_GLOBAL_ID);
+                    WorkitemContext workitem = workitemContextService.GetContext(rqe.getWorkitemId(), "#RS_INTERNAL_" + GlobalContext.RESOURCE_SERVICE_GLOBAL_ID);
                     newMaps.put(rqe.getWorkitemId(), workitem);
                 }
             }
             this.workitems = newMaps;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             if (!cmtFlag) {
-                transaction.rollback();
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             }
-            LogUtil.Log(String.format("When WorkQueue(%s of %s, %s) refresh from steady exception occurred, %s",
+            LogUtil.Log(String.format("When WorkQueue(%s of %s, %s) refresh from entity exception occurred, %s",
                     this.queueId, this.ownerWorkerId, this.type.name(), ex), WorkQueueContext.class.getName(),
                     LogLevelType.ERROR, "");
             throw ex;
         }
-        finally {
-            HibernateUtil.CloseLocalSession();
-        }
     }
 
     /**
-     * Remove a workitem from all queue.
-     * @param workitem workitem context
-     */
-    public static synchronized void RemoveFromAllQueue(WorkitemContext workitem) {
-        if (workitem == null) {
-            return;
-        }
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
-        try {
-            session.createQuery(String.format("DELETE FROM RenQueueitemsEntity WHERE workitemId = '%s'", workitem.getEntity().getWid())).executeUpdate();
-            transaction.commit();
-        }
-        catch (Exception ex) {
-            transaction.rollback();
-            LogUtil.Log(String.format("When RemoveFromAllQueue(%s) refresh from steady exception occurred, %s",
-                    workitem.getEntity().getWid(), ex), WorkQueueContext.class.getName(),
-                    LogLevelType.ERROR, workitem.getEntity().getRtid());
-        }
-        finally {
-            HibernateUtil.CloseLocalSession();
-        }
-    }
-
-    /**
-     * Generate a context by its steady entity.
+     * Generate a context by its entity entity.
+     *
      * @param workqueueEntity WorkQueue entity
      * @return WorkQueue context
      */
-    private static WorkQueueContext GenerateContext(RenWorkqueueEntity workqueueEntity) {
+    public static WorkQueueContext GenerateContext(RenWorkqueueEntity workqueueEntity) {
         assert workqueueEntity != null;
         return new WorkQueueContext(workqueueEntity.getQueueId(),
                 workqueueEntity.getOwnerId(), WorkQueueType.values()[workqueueEntity.getType()]);
@@ -535,9 +471,10 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
     /**
      * Create a new work queue context.
      * NOTICE that usually this method should not be called unless <b>worklisted</b> queue.
-     * @param id work queue global id
+     *
+     * @param id            work queue global id
      * @param ownerWorkerId owner worker global id
-     * @param type queue type enum
+     * @param type          queue type enum
      */
     public WorkQueueContext(String id, String ownerWorkerId, WorkQueueType type) {
         this.queueId = id;

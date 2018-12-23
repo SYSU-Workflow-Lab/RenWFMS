@@ -8,6 +8,8 @@ import org.sysu.renCommon.enums.WorkQueueType;
 import org.sysu.renResourcing.context.ParticipantContext;
 import org.sysu.renResourcing.context.WorkQueueContainer;
 import org.sysu.renResourcing.context.WorkitemContext;
+import org.sysu.renResourcing.context.contextService.WorkQueueContainerService;
+import org.sysu.renResourcing.utility.SpringContextUtil;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -59,8 +61,9 @@ public class ShortestQueueAllocator extends RAllocator {
         int currentShortest = Integer.MAX_VALUE;
         int currentLength;
         ParticipantContext retCtx = null;
+        WorkQueueContainerService workQueueContainerService = (WorkQueueContainerService) SpringContextUtil.getBean("workQueueContainerService");
         for (ParticipantContext p : candidateSet) {
-            WorkQueueContainer container = WorkQueueContainer.GetContext(p.getWorkerId());
+            WorkQueueContainer container = workQueueContainerService.GetContext(p.getWorkerId());
             if (container.IsNullOrEmptyQueue(WorkQueueType.ALLOCATED)) {
                 return p;
             }

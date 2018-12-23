@@ -93,7 +93,7 @@ public class StatisticPrototype implements Serializable {
     }
 
     /**
-     * Get a prototype context from steady.
+     * Get a prototype context from entity.
      * NOTICE that prototype must not cache, it need strong consistency not eventually.
      *
      * @return prototype instance.

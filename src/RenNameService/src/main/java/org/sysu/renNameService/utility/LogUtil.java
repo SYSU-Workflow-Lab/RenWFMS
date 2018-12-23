@@ -42,7 +42,7 @@ public final class LogUtil {
     }
 
     /**
-     * Log a structure information message to steady.
+     * Log a structure information message to entity.
      * @param msg message text
      * @param label message label
      */
@@ -51,7 +51,7 @@ public final class LogUtil {
     }
 
     /**
-     * Log a structure message to steady.
+     * Log a structure message to entity.
      * @param msg message text
      * @param label message label
      * @param level message level
@@ -62,7 +62,7 @@ public final class LogUtil {
     }
 
     /**
-     * Write log to steady.
+     * Write log to entity.
      * @param msg message text
      * @param label message label
      * @param level message level
@@ -94,7 +94,7 @@ public final class LogUtil {
     }
 
     /**
-     * Flush buffered log to steady memory.
+     * Flush buffered log to entity memory.
      * THIS IS NOT A TRANSACTION.
      */
     public static synchronized void FlushLog() {

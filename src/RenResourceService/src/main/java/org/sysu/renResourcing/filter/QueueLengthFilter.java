@@ -11,8 +11,10 @@ import org.sysu.renResourcing.context.ParticipantContext;
 import org.sysu.renResourcing.context.WorkQueueContainer;
 import org.sysu.renResourcing.context.WorkQueueContext;
 import org.sysu.renResourcing.context.WorkitemContext;
+import org.sysu.renResourcing.context.contextService.WorkQueueContainerService;
 import org.sysu.renResourcing.plugin.evaluator.RJexlEvaluator;
 import org.sysu.renResourcing.plugin.evaluator.RJexlMapContext;
+import org.sysu.renResourcing.utility.SpringContextUtil;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -91,9 +93,10 @@ public class QueueLengthFilter extends RFilter {
     public HashSet<ParticipantContext> PerformFilter(HashSet<ParticipantContext> candidateSet, WorkitemContext context) {
         HashSet<ParticipantContext> retSet = new HashSet<>();
         RJexlMapContext tmpCtx = new RJexlMapContext();
+        WorkQueueContainerService workQueueContainerService = (WorkQueueContainerService) SpringContextUtil.getBean("workQueueContainerService");
         for (ParticipantContext p : candidateSet) {
             String workerId = p.getWorkerId();
-            WorkQueueContext offered = WorkQueueContainer.GetContext(workerId).DirectlyGetQueue(WorkQueueType.OFFERED);
+            WorkQueueContext offered = workQueueContainerService.GetContext(workerId).DirectlyGetQueue(WorkQueueType.OFFERED);
             int queueLen = offered == null ? 0 : offered.Count();
             tmpCtx.Add(QueueLengthFilter.ParameterLength, queueLen);
             Object condResult = this.conditionExprObj.evaluate((JexlContext) tmpCtx.GetInternalContext());

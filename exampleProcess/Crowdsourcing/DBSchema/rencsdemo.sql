@@ -76,10 +76,11 @@ CREATE TABLE `ren_request` (
 -- ----------------------------
 DROP TABLE IF EXISTS `ren_solution`;
 CREATE TABLE `ren_solution` (
+  `rtid` varchar(64) NOT NULL,
   `supervisor` varchar(64) NOT NULL,
   `ordinal` varchar(64) NOT NULL,
   `solution` longtext,
-  PRIMARY KEY (`supervisor`,`ordinal`)
+  PRIMARY KEY (`rtid`,`supervisor`,`ordinal`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------

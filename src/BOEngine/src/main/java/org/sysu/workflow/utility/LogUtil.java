@@ -1,10 +1,10 @@
 package org.sysu.workflow.utility;
 
-import org.hibernate.Session;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renCommon.logging.LogMessagePackage;
 import org.sysu.renCommon.utility.TimestampUtil;
 import org.sysu.workflow.GlobalContext;
+import org.sysu.workflow.dao.RenLogEntityDAO;
 import org.sysu.workflow.entity.RenLogEntity;
 
 import java.util.UUID;
@@ -38,7 +38,7 @@ public final class LogUtil {
     }
 
     /**
-     * Log a structure information message to steady.
+     * Log a structure information message to entity.
      * @param msg message text
      * @param label message label
      */
@@ -47,7 +47,7 @@ public final class LogUtil {
     }
 
     /**
-     * Log a structure message to steady.
+     * Log a structure message to entity.
      * @param msg message text
      * @param label message label
      * @param level message level
@@ -58,7 +58,7 @@ public final class LogUtil {
     }
 
     /**
-     * Write log to steady.
+     * Write log to entity.
      * @param msg message text
      * @param label message label
      * @param level message level
@@ -90,7 +90,7 @@ public final class LogUtil {
     }
 
     /**
-     * Flush buffered log to steady memory.
+     * Flush buffered log to entity memory.
      * THIS IS NOT A TRANSACTION.
      */
     public static synchronized void FlushLog() {
@@ -99,7 +99,7 @@ public final class LogUtil {
             LogUtil.readWriteLock.writeLock().unlock();
             return;
         }
-        Session session = HibernateUtil.GetLocalSession();
+        RenLogEntityDAO renLogEntityDAO = (RenLogEntityDAO) SpringContextUtil.getBean("renLogEntityDAO");
         try {
             LogMessagePackage lmp;
             while ((lmp = LogUtil.logBuffer.poll()) != null) {
@@ -110,15 +110,13 @@ public final class LogUtil {
                 rnle.setMessage(lmp.Message);
                 rnle.setTimestamp(lmp.Timestamp);
                 rnle.setRtid(lmp.Rtid);
-                session.save(rnle);
+                renLogEntityDAO.saveOrUpdate(rnle);
             }
-            session.flush();
         }
         catch (Exception ex) {
             LogUtil.Echo("Flush log exception, " + ex, LogUtil.class.getName(), LogLevelType.ERROR);
         }
         finally {
-            HibernateUtil.CloseLocalSession();
             LogUtil.readWriteLock.writeLock().unlock();
         }
     }

@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Usage : This class is a cache pool for all running processes resources
  *         context. Notice that all cache will lost after RS service shut
  *         down, therefore all data stored in the cache should be flushed
- *         into steady memory, or discard as garbage.
+ *         into entity memory, or discard as garbage.
  *         For the consistency, different RS micro-service maintains its
  *         own cache and a running process only request resource service
  *         from ONE specific RS micro-service instance. In a special case

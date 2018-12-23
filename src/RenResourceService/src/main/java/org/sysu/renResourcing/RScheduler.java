@@ -4,10 +4,13 @@
  */
 package org.sysu.renResourcing;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.sysu.renCommon.context.ObservableMessage;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renResourcing.consistency.ContextCachePool;
 import org.sysu.renResourcing.context.ResourcingContext;
+import org.sysu.renResourcing.context.contextService.ResourcingContextService;
 import org.sysu.renResourcing.utility.LogUtil;
 
 import java.util.ArrayList;
@@ -24,11 +27,9 @@ import java.util.concurrent.locks.ReentrantLock;
  *         all be encapsulated as a {@code ResourcingContext}, and a {@code RTracker}
  *         will be created for controlling its lifecycle.
  */
+
+@Component
 public class RScheduler implements Observer {
-    /**
-     * Global static instance.
-     */
-    private static RScheduler syncObject = new RScheduler();
 
     /**
      * Container list of active trackers.
@@ -50,6 +51,12 @@ public class RScheduler implements Observer {
      * This field is thread safe.
      */
     private PriorityBlockingQueue<ResourcingContext> pendingQueue = new PriorityBlockingQueue<>();
+
+    /**
+     * ResourcingContext Handler.
+     */
+    @Autowired
+    private ResourcingContextService resourcingContextService;
 
     /**
      * Schedule a resourcing context.
@@ -126,7 +133,7 @@ public class RScheduler implements Observer {
                     LogUtil.Log(String.format("Resourcing context(%s) is scheduled to launch.", pCtx.getRstid()),
                             RScheduler.class.getName(), LogLevelType.INFO, pCtx.getRtid());
                     pCtx.SetScheduled();
-                    ResourcingContext.SaveToSteady(pCtx);
+                    resourcingContextService.SaveToSteady(pCtx);
                     this.LaunchTracker(pCtx);
                 } else {
                     break;
@@ -152,15 +159,6 @@ public class RScheduler implements Observer {
         }
         tracker.addObserver(this);
         new Thread(tracker).start();
-    }
-
-    /**
-     * Get the global unique instance of Scheduler.
-     *
-     * @return RScheduler object.
-     */
-    public static RScheduler GetInstance() {
-        return RScheduler.syncObject;
     }
 
     /**
@@ -196,7 +194,7 @@ public class RScheduler implements Observer {
                     rCtx.setIsSucceed(0);
                     break;
             }
-            ResourcingContext.SaveToSteady(rCtx);
+            resourcingContextService.SaveToSteady(rCtx);
             ContextCachePool.Remove(ResourcingContext.class, rCtx.getRstid());
         } catch (Exception ex) {
             try {
@@ -211,10 +209,4 @@ public class RScheduler implements Observer {
             this.HandlePendingQueue();
         }
     }
-
-    /**
-     * Create a new scheduler.
-     * Private accessibility for preventing construct outside.
-     */
-    private RScheduler() { }
 }

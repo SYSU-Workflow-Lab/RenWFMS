@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 @Repository
-@CacheConfig(cacheNames = "ren_rolemap")
+@CacheConfig(cacheNames = "ns_ren_rolemap")
 public class RenRolemapEntityDAO {
 
     @Autowired

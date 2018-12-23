@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 @Repository
-@CacheConfig(cacheNames = "ren_runtimerecord")
+@CacheConfig(cacheNames = "ns_ren_runtimerecord")
 public class RenRuntimerecordEntityDAO {
 
     @Autowired

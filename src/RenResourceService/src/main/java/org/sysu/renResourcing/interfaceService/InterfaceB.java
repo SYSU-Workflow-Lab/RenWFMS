@@ -4,24 +4,31 @@
  */
 package org.sysu.renResourcing.interfaceService;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.sysu.renCommon.utility.AuthDomainHelper;
 import org.sysu.renResourcing.GlobalContext;
 import org.sysu.renCommon.enums.*;
 import org.sysu.renResourcing.consistency.ContextLockManager;
 import org.sysu.renResourcing.context.*;
-import org.sysu.renResourcing.context.steady.RenProcessEntity;
-import org.sysu.renResourcing.context.steady.RenRsparticipantEntity;
-import org.sysu.renResourcing.context.steady.RenRuntimerecordEntity;
-import org.sysu.renResourcing.context.steady.RenWorkitemEntity;
+import org.sysu.renResourcing.context.contextService.WorkQueueContainerService;
+import org.sysu.renResourcing.context.contextService.WorkQueueContextService;
+import org.sysu.renResourcing.context.contextService.WorkitemContextService;
+import org.sysu.renResourcing.entity.RenProcessEntity;
+import org.sysu.renResourcing.entity.RenRsparticipantEntity;
+import org.sysu.renResourcing.entity.RenRuntimerecordEntity;
+import org.sysu.renResourcing.entity.RenWorkitemEntity;
+import org.sysu.renResourcing.dao.RenProcessEntityDAO;
+import org.sysu.renResourcing.dao.RenRsparticipantEntityDAO;
+import org.sysu.renResourcing.dao.RenRuntimerecordEntityDAO;
 import org.sysu.renResourcing.executor.AllocateInteractionExecutor;
 import org.sysu.renResourcing.executor.OfferInteractionExecutor;
 import org.sysu.renResourcing.plugin.AgentNotifyPlugin;
 import org.sysu.renResourcing.plugin.AsyncPluginRunner;
 import org.sysu.renResourcing.principle.PrincipleParser;
 import org.sysu.renResourcing.principle.RPrinciple;
-import org.sysu.renResourcing.utility.HibernateUtil;
 import org.sysu.renResourcing.utility.LogUtil;
 import org.sysu.renCommon.utility.TimestampUtil;
 
@@ -32,53 +39,87 @@ import java.util.*;
  * Author: Rinkako
  * Date  : 2018/2/9
  * Usage : Implementation of Interface B of Resource Service.
- *         Interface B is responsible for control workitems life-cycle, and provide
- *         workqueue operations for participants.
+ * Interface B is responsible for control workitems life-cycle, and provide
+ * workqueue operations for participants.
  */
+
+@Service
 public class InterfaceB {
+
+    @Autowired
+    private AssistantService assistantService;
+
+    @Autowired
+    private InterfaceA interfaceA;
+
+    @Autowired
+    private InterfaceE interfaceE;
+
+    @Autowired
+    private InterfaceO interfaceO;
+
+    @Autowired
+    private InterfaceX interfaceX;
+
+    @Autowired
+    private RenRuntimerecordEntityDAO renRuntimerecordEntityDAO;
+
+    @Autowired
+    private RenRsparticipantEntityDAO renRsparticipantEntityDAO;
+
+    @Autowired
+    private RenProcessEntityDAO renProcessEntityDAO;
+
+    /**
+     * WorkitemContext Handler.
+     */
+    @Autowired
+    private WorkitemContextService workitemContextService;
+
+    /**
+     * WorkQueueContext Handler.
+     */
+    @Autowired
+    private WorkQueueContextService workQueueContextService;
+
+    /**
+     * WorkQueueContainer Handler.
+     */
+    @Autowired
+    private WorkQueueContainerService workQueueContainerService;
 
     /**
      * Handle perform submit task.
      *
      * @param ctx rs context
      */
-    public static void PerformEngineSubmitTask(ResourcingContext ctx) throws Exception {
+    public void PerformEngineSubmitTask(ResourcingContext ctx) throws Exception {
         LinkedHashMap mapTaskCtx = (LinkedHashMap) ctx.getArgs().get("taskContext");
         String nodeId = (String) ctx.getArgs().get("nodeId");
         TaskContext taskContext = TaskContext.ParseHashMap(mapTaskCtx);
+
         // use runtime record to get the admin auth name for admin queue identifier
-        RenRuntimerecordEntity runtimeRecord;
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
-        try {
-            runtimeRecord = session.get(RenRuntimerecordEntity.class, ctx.getRtid());
-            transaction.commit();
-        } catch (Exception ex) {
-            transaction.rollback();
-            LogUtil.Log("PerformEngineSubmitTask get Runtime record failed. " + ex,
-                    InterfaceB.class.getName(), LogLevelType.ERROR, ctx.getRtid());
-            throw ex;
-        } finally {
-            HibernateUtil.CloseLocalSession();
-        }
+        RenRuntimerecordEntity runtimeRecord = assistantService.IBfindRuntimerecordEntityByRtid(ctx.getRtid());
         String domain = AuthDomainHelper.GetDomainByRTID(runtimeRecord.getRtid());
+
         // generate workitem
-        WorkitemContext workitem = WorkitemContext.GenerateContext(taskContext, ctx.getRtid(), (HashMap) ctx.getArgs().get("taskArgumentsVector"), nodeId);
+        WorkitemContext workitem = workitemContextService.GenerateContext(taskContext, ctx.getRtid(), (HashMap) ctx.getArgs().get("taskArgumentsVector"), nodeId);
+
         // parse resourcing principle
         RPrinciple principle = PrincipleParser.Parse(taskContext.getPrinciple());
         if (principle == null) {
             LogUtil.Log(String.format("Cannot parse principle %s", taskContext.getPrinciple()), InterfaceB.class.getName(),
                     LogLevelType.ERROR, ctx.getRtid());
-            InterfaceX.PrincipleParseFailedRedirectToDomainPool(workitem);
+            interfaceX.PrincipleParseFailedRedirectToDomainPool(workitem);
             return;
         }
         // get valid resources
-        HashSet<ParticipantContext> validParticipants = InterfaceO.GetParticipantByBRole(ctx.getRtid(), taskContext.getBrole());
+        HashSet<ParticipantContext> validParticipants = interfaceO.GetParticipantByBRole(ctx.getRtid(), taskContext.getBrole());
         if (validParticipants.isEmpty()) {
             LogUtil.Log("A task cannot be allocated to any valid resources, so it will be put into admin unoffered queue.",
                     InterfaceB.class.getName(), LogLevelType.WARNING, ctx.getRtid());
             // move workitem to admin unoffered queue
-            WorkQueueContainer adminContainer = WorkQueueContainer.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + domain);
+            WorkQueueContainer adminContainer = workQueueContainerService.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + domain);
             adminContainer.AddToQueue(workitem, WorkQueueType.UNOFFERED);
             return;
         }
@@ -92,15 +133,15 @@ public class InterfaceB {
                 // do allocate to select a participant for handle this workitem
                 ParticipantContext chosenOne = allocateInteraction.PerformAllocation(validParticipants, workitem);
                 // put workitem to the chosen participant allocated queue
-                WorkQueueContainer container = WorkQueueContainer.GetContext(chosenOne.getWorkerId());
+                WorkQueueContainer container = workQueueContainerService.GetContext(chosenOne.getWorkerId());
                 container.AddToQueue(workitem, WorkQueueType.ALLOCATED);
                 // change workitem status
                 workitem.getEntity().setFiringTime(TimestampUtil.GetCurrentTimestamp());
-                InterfaceB.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Allocated, null);
+                this.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Allocated, null);
                 // notify if agent
                 if (chosenOne.getWorkerType() == WorkerType.Agent) {
                     AgentNotifyPlugin allocateAnp = new AgentNotifyPlugin();
-                    HashMap<String, String> allocateNotifyMap = new HashMap<>(WorkitemContext.GenerateResponseWorkitem(workitem));
+                    HashMap<String, String> allocateNotifyMap = new HashMap<>(workitemContextService.GenerateResponseWorkitem(workitem));
                     allocateAnp.AddNotification(chosenOne, allocateNotifyMap, ctx.getRtid());
                     AsyncPluginRunner.AsyncRun(allocateAnp);
                 }
@@ -115,9 +156,9 @@ public class InterfaceB {
                 Set<ParticipantContext> chosenSet = offerInteraction.PerformOffer(validParticipants, workitem);
                 // put workitem to chosen participants offered queue
                 AgentNotifyPlugin offerAnp = new AgentNotifyPlugin();
-                HashMap<String, String> offerNotifyMap = new HashMap<>(WorkitemContext.GenerateResponseWorkitem(workitem));
+                HashMap<String, String> offerNotifyMap = new HashMap<>(workitemContextService.GenerateResponseWorkitem(workitem));
                 for (ParticipantContext oneInSet : chosenSet) {
-                    WorkQueueContainer oneInSetContainer = WorkQueueContainer.GetContext(oneInSet.getWorkerId());
+                    WorkQueueContainer oneInSetContainer = workQueueContainerService.GetContext(oneInSet.getWorkerId());
                     oneInSetContainer.AddToQueue(workitem, WorkQueueType.OFFERED);
                     // notify if agent
                     if (oneInSet.getWorkerType() == WorkerType.Agent) {
@@ -126,12 +167,12 @@ public class InterfaceB {
                 }
                 // change workitem status
                 workitem.getEntity().setFiringTime(TimestampUtil.GetCurrentTimestamp());
-                InterfaceB.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Offered, null);
+                this.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Offered, null);
                 // do notify
                 if (offerAnp.Count(ctx.getRtid()) > 0) {
                     AsyncPluginRunner.AsyncRun(offerAnp);
                 }
-               break;
+                break;
             case AutoAllocateIfOfferFailed:
                 // todo not implementation
                 break;
@@ -145,37 +186,37 @@ public class InterfaceB {
      *
      * @param ctx rs context
      */
-    public static void PerformEngineFinishProcess(ResourcingContext ctx) {
+    @Transactional(rollbackFor = Exception.class)
+    public void PerformEngineFinishProcess(ResourcingContext ctx) {
         String rtid = (String) ctx.getArgs().get("rtid");
         String successFlag = (String) ctx.getArgs().get("successFlag");
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
         try {
-            RenRuntimerecordEntity rre = session.get(RenRuntimerecordEntity.class, rtid);
+            RenRuntimerecordEntity rre = renRuntimerecordEntityDAO.findByRtid(rtid);
             rre.setFinishTimestamp(TimestampUtil.GetCurrentTimestamp());
             rre.setIsSucceed(Integer.parseInt(successFlag));
+            renRuntimerecordEntityDAO.saveOrUpdate(rre);
             String participantCache = rre.getParticipantCache();
             String[] participantItem = participantCache.split(",");
             for (String participantGid : participantItem) {
                 // Gid is in pattern of "WorkerGlobalId:BRoleName"
                 String workerId = participantGid.split(":")[0];
-                RenRsparticipantEntity rpe = session.get(RenRsparticipantEntity.class, workerId);
+                RenRsparticipantEntity rpe = renRsparticipantEntityDAO.findByWorkerGid(workerId);
                 if (rpe != null) {
                     rpe.setReferenceCounter(rpe.getReferenceCounter() - 1);
                     if (rpe.getReferenceCounter() <= 0) {
-                        session.delete(rpe);
+                        renRsparticipantEntityDAO.delete(rpe);
+                    } else {
+                        renRsparticipantEntityDAO.saveOrUpdate(rpe);
                     }
                 }
             }
-            RenProcessEntity processEntity = session.get(RenProcessEntity.class, rre.getProcessId());
+            RenProcessEntity processEntity = renProcessEntityDAO.findByPid(rre.getProcessId());
             processEntity.setSuccessCount(processEntity.getSuccessCount() + 1);
-            transaction.commit();
+            renProcessEntityDAO.saveOrUpdate(processEntity);
         } catch (Exception ex) {
-            transaction.rollback();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             LogUtil.Log("PerformEngineFinishProcess but exception occurred, " + ex, InterfaceB.class.getName(),
                     LogLevelType.ERROR, rtid);
-        } finally {
-            HibernateUtil.CloseLocalSession();
         }
     }
 
@@ -188,24 +229,24 @@ public class InterfaceB {
      * @param payload     payload in JSON encoded string
      * @return true for a successful workitem accept
      */
-    public static boolean AcceptOfferedWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload, InitializationByType initType) {
+    public boolean AcceptOfferedWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload, InitializationByType initType) {
         // remove from all queue
-        WorkQueueContext.RemoveFromAllQueue(workitem);
+        workQueueContextService.RemoveFromAllQueue(workitem);
         // if internal call, means accept and start
         if (initType == InitializationByType.SYSTEM_INITIATED) {
             // write an allocated event without notification
-            InterfaceB.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Allocated, payload, false);
-            boolean result = InterfaceB.StartWorkitem(participant, workitem, payload);
+            this.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Allocated, payload, false);
+            boolean result = this.StartWorkitem(participant, workitem, payload);
             if (!result) {
-                InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "AcceptOffered by System but failed to start");
+                interfaceX.FailedRedirectToLauncherDomainPool(workitem, "AcceptOffered by System but failed to start");
                 return false;
             }
         }
         // otherwise workitem should be put to allocated queue
         else {
-            WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
+            WorkQueueContainer container = workQueueContainerService.GetContext(participant.getWorkerId());
             container.MoveOfferedToAllocated(workitem);
-            InterfaceB.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Allocated, payload);
+            this.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Allocated, payload);
         }
         // todo notify if agent
         return true;
@@ -219,15 +260,15 @@ public class InterfaceB {
      * @param payload     payload in JSON encoded string
      * @return true for a successful workitem deallocate
      */
-    public static boolean DeallocateWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
-        if (InterfaceO.CheckPrivilege(participant, workitem, PrivilegeType.CAN_DEALLOCATE)) {
+    public boolean DeallocateWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
+        if (interfaceO.CheckPrivilege(participant, workitem, PrivilegeType.CAN_DEALLOCATE)) {
             try {
-                WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
+                WorkQueueContainer container = workQueueContainerService.GetContext(participant.getWorkerId());
                 container.MoveAllocatedToOffered(workitem);
-                InterfaceB.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Offered, payload);
+                this.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Offered, payload);
                 return true;
             } catch (Exception ex) {
-                InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Deallocate but exception occurred: " + ex);
+                interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Deallocate but exception occurred: " + ex);
                 return false;
             }
         } else {
@@ -245,45 +286,33 @@ public class InterfaceB {
      * @param payload     payload in JSON encoded string
      * @return true for a successful workitem start
      */
-    public static boolean StartWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
+    @Transactional(rollbackFor = Exception.class)
+    public boolean StartWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
         try {
-            WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
+            WorkQueueContainer container = workQueueContainerService.GetContext(participant.getWorkerId());
             container.MoveAllocatedToStarted(workitem);
             RenWorkitemEntity rwe = workitem.getEntity();
             rwe.setLatestStartTime(TimestampUtil.GetCurrentTimestamp());
             rwe.setStartTime(TimestampUtil.GetCurrentTimestamp());
             rwe.setStartedBy(participant.getWorkerId());
-            WorkitemContext.SaveToSteady(workitem);
+            workitemContextService.SaveToSteady(workitem);
             // already started
             if (workitem.getEntity().getStatus().equals(WorkitemStatusType.Executing.name())) {
-                InterfaceB.WorkitemChanged(workitem, WorkitemStatusType.Executing, WorkitemResourcingStatusType.Started, payload);
+                this.WorkitemChanged(workitem, WorkitemStatusType.Executing, WorkitemResourcingStatusType.Started, payload);
                 return true;
             }
             // start by admin
             if (workitem.getEntity().getResourceStatus().equals(WorkitemResourcingStatusType.Unoffered.name())) {
-                RenRuntimerecordEntity runtimeRecord;
-                Session session = HibernateUtil.GetLocalSession();
-                Transaction transaction = session.beginTransaction();
-                try {
-                    runtimeRecord = session.get(RenRuntimerecordEntity.class, workitem.getEntity().getRtid());
-                    assert runtimeRecord != null;
-                    transaction.commit();
-                } catch (Exception ex2) {
-                    transaction.rollback();
-                    LogUtil.Log("ParticipantStart get Runtime record failed. " + ex2,
-                            InterfaceB.class.getName(), LogLevelType.ERROR, workitem.getEntity().getRtid());
-                    return false;
-                } finally {
-                    HibernateUtil.CloseLocalSession();
-                }
+                RenRuntimerecordEntity runtimeRecord = assistantService.IBfindRuntimerecordEntityByRtid(workitem.getEntity().getRtid());
                 // get admin queue for this auth user
                 String adminQueuePostfix = runtimeRecord.getSessionId().split("_")[1];
-                WorkQueueContainer adminContainer = WorkQueueContainer.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + adminQueuePostfix);
+                WorkQueueContainer adminContainer = workQueueContainerService.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + adminQueuePostfix);
                 adminContainer.RemoveFromQueue(workitem, WorkQueueType.UNOFFERED);
             }
-            InterfaceB.WorkitemChanged(workitem, WorkitemStatusType.Executing, WorkitemResourcingStatusType.Started, payload);
+            this.WorkitemChanged(workitem, WorkitemStatusType.Executing, WorkitemResourcingStatusType.Started, payload);
             return true;
         } catch (Exception ex) {
+            ex.printStackTrace();
             LogUtil.Log("ParticipantStart get Runtime record failed. " + ex,
                     InterfaceB.class.getName(), LogLevelType.ERROR, workitem.getEntity().getRtid());
             return false;
@@ -298,15 +327,15 @@ public class InterfaceB {
      * @param payload     payload in JSON encoded string
      * @return true for a successful workitem reallocate
      */
-    public static boolean ReallocateWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
-        if (InterfaceO.CheckPrivilege(participant, workitem, PrivilegeType.CAN_REALLOCATE)) {
+    public boolean ReallocateWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
+        if (interfaceO.CheckPrivilege(participant, workitem, PrivilegeType.CAN_REALLOCATE)) {
             try {
-                WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
+                WorkQueueContainer container = workQueueContainerService.GetContext(participant.getWorkerId());
                 container.MoveStartedToAllocated(workitem);
-                InterfaceB.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Allocated, payload);
+                this.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Allocated, payload);
                 return true;
             } catch (Exception ex) {
-                InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Reallocate but exception occurred: " + ex);
+                interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Reallocate but exception occurred: " + ex);
                 return false;
             }
         } else {
@@ -324,15 +353,15 @@ public class InterfaceB {
      * @param payload     payload in JSON encoded string
      * @return true for a successful workitem suspend
      */
-    public static boolean SuspendWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
-        if (InterfaceO.CheckPrivilege(participant, workitem, PrivilegeType.CAN_SUSPEND)) {
+    public boolean SuspendWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
+        if (interfaceO.CheckPrivilege(participant, workitem, PrivilegeType.CAN_SUSPEND)) {
             try {
-                WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
+                WorkQueueContainer container = workQueueContainerService.GetContext(participant.getWorkerId());
                 container.MoveStartedToSuspend(workitem);
-                InterfaceB.WorkitemChanged(workitem, WorkitemStatusType.Suspended, WorkitemResourcingStatusType.Suspended, payload);
+                this.WorkitemChanged(workitem, WorkitemStatusType.Suspended, WorkitemResourcingStatusType.Suspended, payload);
                 return true;
             } catch (Exception ex) {
-                InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Suspend but exception occurred: " + ex);
+                interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Suspend but exception occurred: " + ex);
                 return false;
             }
         } else {
@@ -350,14 +379,14 @@ public class InterfaceB {
      * @param payload     payload in JSON encoded string
      * @return true for a successful workitem unsuspend
      */
-    public static boolean UnsuspendWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
+    public boolean UnsuspendWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
         try {
-            WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
+            WorkQueueContainer container = workQueueContainerService.GetContext(participant.getWorkerId());
             container.MoveSuspendToStarted(workitem);
-            InterfaceB.WorkitemChanged(workitem, WorkitemStatusType.Executing, WorkitemResourcingStatusType.Started, payload);
+            this.WorkitemChanged(workitem, WorkitemStatusType.Executing, WorkitemResourcingStatusType.Started, payload);
             return true;
         } catch (Exception ex) {
-            InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Unsuspend but exception occurred: " + ex);
+            interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Unsuspend but exception occurred: " + ex);
             return false;
         }
     }
@@ -370,16 +399,16 @@ public class InterfaceB {
      * @param payload     payload in JSON encoded string
      * @return true for a successful workitem skip
      */
-    public static boolean SkipWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
-        if (InterfaceO.CheckPrivilege(participant, workitem, PrivilegeType.CAN_SKIP)) {
+    public boolean SkipWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
+        if (interfaceO.CheckPrivilege(participant, workitem, PrivilegeType.CAN_SKIP)) {
             try {
-                WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
+                WorkQueueContainer container = workQueueContainerService.GetContext(participant.getWorkerId());
                 container.RemoveFromQueue(workitem, WorkQueueType.ALLOCATED);
-                InterfaceB.WorkitemChanged(workitem, WorkitemStatusType.ForcedComplete, WorkitemResourcingStatusType.Skipped, payload);
-                InterfaceE.WriteLog(workitem, participant.getWorkerId(), RSEventType.skip);
+                this.WorkitemChanged(workitem, WorkitemStatusType.ForcedComplete, WorkitemResourcingStatusType.Skipped, payload);
+                interfaceE.WriteLog(workitem, participant.getWorkerId(), RSEventType.skip);
                 return true;
             } catch (Exception ex) {
-                InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Skip but exception occurred: " + ex);
+                interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Skip but exception occurred: " + ex);
                 return false;
             }
         } else {
@@ -397,7 +426,7 @@ public class InterfaceB {
      * @param payload     payload in JSON encoded string
      * @return true for a successful workitem complete
      */
-    public static boolean CompleteWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
+    public boolean CompleteWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
         try {
             RenWorkitemEntity rwe = workitem.getEntity();
             Timestamp currentTS = TimestampUtil.GetCurrentTimestamp();
@@ -405,14 +434,14 @@ public class InterfaceB {
             rwe.setExecuteTime(currentTS.getTime() - startTS.getTime());
             rwe.setCompletionTime(currentTS);
             rwe.setCompletedBy(participant.getWorkerId());
-            WorkitemContext.SaveToSteady(workitem);
-            WorkQueueContainer container = WorkQueueContainer.GetContext(participant.getWorkerId());
+            workitemContextService.SaveToSteady(workitem);
+            WorkQueueContainer container = workQueueContainerService.GetContext(participant.getWorkerId());
             container.RemoveFromQueue(workitem, WorkQueueType.STARTED);
-            InterfaceB.WorkitemChanged(workitem, WorkitemStatusType.Complete, WorkitemResourcingStatusType.Completed, payload);
-            InterfaceE.WriteLog(workitem, participant.getWorkerId(), RSEventType.complete);
+            this.WorkitemChanged(workitem, WorkitemStatusType.Complete, WorkitemResourcingStatusType.Completed, payload);
+            interfaceE.WriteLog(workitem, participant.getWorkerId(), RSEventType.complete);
             return true;
         } catch (Exception ex) {
-            InterfaceX.FailedRedirectToLauncherDomainPool(workitem, "Complete but exception occurred: " + ex);
+            interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Complete but exception occurred: " + ex);
             return false;
         }
     }
@@ -426,11 +455,11 @@ public class InterfaceB {
      * @param postStatus destination status
      * @param payload    payload in JSON encoded string
      */
-    public static void WorkitemStatusChanged(WorkitemContext workitem, WorkitemStatusType preStatus, WorkitemStatusType postStatus, String payload) {
+    public void WorkitemStatusChanged(WorkitemContext workitem, WorkitemStatusType preStatus, WorkitemStatusType postStatus, String payload) {
         if (preStatus == postStatus) {
             return;
         }
-        InterfaceB.WorkitemChanged(workitem, postStatus, null, payload);
+        this.WorkitemChanged(workitem, postStatus, null, payload);
     }
 
     /**
@@ -442,11 +471,11 @@ public class InterfaceB {
      * @param postStatus destination status
      * @param payload    payload in JSON encoded string
      */
-    public static void WorkitemResourcingStatusChanged(WorkitemContext workitem, WorkitemResourcingStatusType preStatus, WorkitemResourcingStatusType postStatus, String payload) {
+    public void WorkitemResourcingStatusChanged(WorkitemContext workitem, WorkitemResourcingStatusType preStatus, WorkitemResourcingStatusType postStatus, String payload) {
         if (preStatus == postStatus) {
             return;
         }
-        InterfaceB.WorkitemChanged(workitem, null, postStatus, payload);
+        this.WorkitemChanged(workitem, null, postStatus, payload);
     }
 
     /**
@@ -457,8 +486,8 @@ public class InterfaceB {
      * @param toResourcingStatus destination resourcing status
      * @param payload            payload in JSON encoded string
      */
-    private static void WorkitemChanged(WorkitemContext workitem, WorkitemStatusType toStatus, WorkitemResourcingStatusType toResourcingStatus, String payload) {
-        InterfaceB.WorkitemChanged(workitem, toStatus, toResourcingStatus, payload, true);
+    private void WorkitemChanged(WorkitemContext workitem, WorkitemStatusType toStatus, WorkitemResourcingStatusType toResourcingStatus, String payload) {
+        this.WorkitemChanged(workitem, toStatus, toResourcingStatus, payload, true);
     }
 
     /**
@@ -470,8 +499,8 @@ public class InterfaceB {
      * @param payload            payload in JSON encoded string
      * @param notify             whether need to process callback and hook
      */
-    private static void WorkitemChanged(WorkitemContext workitem, WorkitemStatusType toStatus, WorkitemResourcingStatusType toResourcingStatus, String payload, boolean notify) {
-        // refresh changed to steady
+    private void WorkitemChanged(WorkitemContext workitem, WorkitemStatusType toStatus, WorkitemResourcingStatusType toResourcingStatus, String payload, boolean notify) {
+        // refresh changed to entity
         ContextLockManager.WriteLock(workitem.getClass(), workitem.getEntity().getWid());
         try {
             if (toStatus != null) {
@@ -480,18 +509,18 @@ public class InterfaceB {
             if (toResourcingStatus != null) {
                 workitem.getEntity().setResourceStatus(toResourcingStatus.name());
             }
-            WorkitemContext.SaveToSteady(workitem);
+            workitemContextService.SaveToSteady(workitem);
         } finally {
             ContextLockManager.WriteUnLock(workitem.getClass(), workitem.getEntity().getWid());
         }
         // handle callbacks and hooks
         if (notify) {
             try {
-                InterfaceA.HandleCallbackAndHook(toStatus, workitem, workitem.getTaskContext(), payload);
+                interfaceA.HandleCallbackAndHook(toStatus, workitem, workitem.getTaskContext(), payload);
             } catch (Exception ex) {
                 LogUtil.Log(String.format("Workitem(%s) status changed but failed to handle callbacks and hooks, %s", workitem.getEntity().getWid(), ex),
                         InterfaceB.class.getName(), LogLevelType.ERROR, workitem.getEntity().getRtid());
-                InterfaceX.NotifyException(workitem);
+                interfaceX.NotifyException(workitem);
             }
         }
     }

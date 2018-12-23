@@ -4,16 +4,16 @@
  */
 package org.sysu.renResourcing.interfaceService;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renCommon.enums.PrivilegeType;
 import org.sysu.renCommon.enums.ResourceBindingType;
 import org.sysu.renResourcing.context.ParticipantContext;
 import org.sysu.renResourcing.context.WorkitemContext;
-import org.sysu.renResourcing.context.steady.RenRuntimerecordEntity;
+import org.sysu.renResourcing.entity.RenRuntimerecordEntity;
 import org.sysu.renCommon.utility.CommonUtil;
-import org.sysu.renResourcing.utility.HibernateUtil;
+import org.sysu.renResourcing.dao.RenRuntimerecordEntityDAO;
 import org.sysu.renResourcing.utility.LogUtil;
 
 import java.util.HashSet;
@@ -25,11 +25,16 @@ import java.util.HashSet;
  *         Interface O is responsible for resources managements. In RenWFMS, we defined
  *         resources in COrgan, and register involved resources to Participant in Name
  *         Service. Therefore we assert when Resource Service need to refer a RESOURCE,
- *         it has already been registered in steady memory as a PARTICIPANT. So, this
+ *         it has already been registered in entity memory as a PARTICIPANT. So, this
  *         interface just for involved resources information retrieving and participants
  *         privileges management.
  */
+
+@Service
 public class InterfaceO {
+
+    @Autowired
+    private RenRuntimerecordEntityDAO renRuntimerecordEntityDAO;
 
     /**
      * Get current valid participant context set.
@@ -38,16 +43,11 @@ public class InterfaceO {
      * @param rtid process rtid
      * @return a Hash set for current valid participant context
      */
-    public static HashSet<ParticipantContext> GetCurrentValidParticipant(String rtid) {
+    public HashSet<ParticipantContext> GetCurrentValidParticipant(String rtid) {
         HashSet<ParticipantContext> retSet = new HashSet<>();
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
-        boolean cmtFlag = false;
         try {
-            RenRuntimerecordEntity runtimeCtx = session.get(RenRuntimerecordEntity.class, rtid);
+            RenRuntimerecordEntity runtimeCtx = renRuntimerecordEntityDAO.findByRtid(rtid);
             String participants = runtimeCtx.getParticipantCache();
-            transaction.commit();
-            cmtFlag = true;
             if (CommonUtil.IsNullOrEmpty(participants)) {
                 return retSet;
             }
@@ -59,13 +59,7 @@ public class InterfaceO {
             return retSet;
         }
         catch (Exception ex) {
-            if (!cmtFlag) {
-                transaction.rollback();
-            }
             throw ex;
-        }
-        finally {
-            HibernateUtil.CloseLocalSession();
         }
     }
 
@@ -75,16 +69,11 @@ public class InterfaceO {
      * @param brole business role name
      * @return a Hash set for current valid participant context of a business role
      */
-    public static HashSet<ParticipantContext> GetParticipantByBRole(String rtid, String brole) {
+    public HashSet<ParticipantContext> GetParticipantByBRole(String rtid, String brole) {
         HashSet<ParticipantContext> retSet = new HashSet<>();
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
-        boolean cmtFlag = false;
         try {
-            RenRuntimerecordEntity runtimeCtx = session.get(RenRuntimerecordEntity.class, rtid);
+            RenRuntimerecordEntity runtimeCtx = renRuntimerecordEntityDAO.findByRtid(rtid);
             String participants = runtimeCtx.getParticipantCache();
-            transaction.commit();
-            cmtFlag = true;
             if (CommonUtil.IsNullOrEmpty(participants)) {
                 return retSet;
             }
@@ -98,13 +87,7 @@ public class InterfaceO {
             return retSet;
         }
         catch (Exception ex) {
-            if (!cmtFlag) {
-                transaction.rollback();
-            }
             throw ex;
-        }
-        finally {
-            HibernateUtil.CloseLocalSession();
         }
     }
 
@@ -115,26 +98,19 @@ public class InterfaceO {
      * @param privilege privilege enum
      * @return true if participant has the privilege
      */
-    public static boolean CheckPrivilege(ParticipantContext participant, WorkitemContext workitem, PrivilegeType privilege) {
+    public boolean CheckPrivilege(ParticipantContext participant, WorkitemContext workitem, PrivilegeType privilege) {
         // todo
         return true;
     }
 
     /**
-     * This method is called when sensed participant in steady is changed.
+     * This method is called when sensed participant in entity is changed.
      * @param rtid process rtid
      * @return is fail-fast when organization data changed
      */
-    public static boolean SenseParticipantDataChanged(String rtid) {
-        LogUtil.Log("Sensed binding resources changed.", InterfaceO.class.getName(),
-                LogLevelType.INFO, rtid);
-        Session session = HibernateUtil.GetLocalSession();
-        try {
-            RenRuntimerecordEntity rre = session.get(RenRuntimerecordEntity.class, rtid);
-            return rre.getResourceBindingType() == ResourceBindingType.FastFail.ordinal();
-        }
-        finally {
-            HibernateUtil.CloseLocalSession();
-        }
+    public boolean SenseParticipantDataChanged(String rtid) {
+        LogUtil.Log("Sensed binding resources changed.", InterfaceO.class.getName(), LogLevelType.INFO, rtid);
+        RenRuntimerecordEntity rre = renRuntimerecordEntityDAO.findByRtid(rtid);
+        return rre.getResourceBindingType() == ResourceBindingType.FastFail.ordinal();
     }
 }

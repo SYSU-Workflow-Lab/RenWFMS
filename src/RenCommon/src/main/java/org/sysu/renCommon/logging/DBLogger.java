@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 /**
  * Author: Rinkako
  * Date  : 2018/2/28
- * Usage : Logger for logging events into steady DB with Hibernate.
+ * Usage : Logger for logging events into entity DB with Hibernate.
  */
 public class DBLogger extends RInternalLogger {
     /**
@@ -39,7 +39,7 @@ public class DBLogger extends RInternalLogger {
     }
 
     /**
-     * Log a structure information message to steady.
+     * Log a structure information message to entity.
      * @param msg message text
      * @param label message label
      */
@@ -48,7 +48,7 @@ public class DBLogger extends RInternalLogger {
     }
 
     /**
-     * Log a structure message to steady.
+     * Log a structure message to entity.
      * @param msg message text
      * @param label message label
      * @param level message level
@@ -59,7 +59,7 @@ public class DBLogger extends RInternalLogger {
     }
 
     /**
-     * Write log to steady.
+     * Write log to entity.
      * @param msg message text
      * @param label message label
      * @param level message level
@@ -91,7 +91,7 @@ public class DBLogger extends RInternalLogger {
     }
 
     /**
-     * Flush buffered log to steady memory.
+     * Flush buffered log to entity memory.
      * THIS IS NOT A TRANSACTION.
      */
     public synchronized void FlushLog() {

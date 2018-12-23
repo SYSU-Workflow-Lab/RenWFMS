@@ -21,7 +21,7 @@ import java.util.UUID;
 public class TransactionCreator {
 
     /**
-     * Create a name service transaction package and save to steady.
+     * Create a name service transaction package and save to entity.
      * @param type transaction type
      * @param action action name
      * @param args argument dictionary

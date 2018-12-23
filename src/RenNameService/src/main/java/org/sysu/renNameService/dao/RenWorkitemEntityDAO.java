@@ -12,7 +12,7 @@ import org.sysu.renNameService.repository.RenWorkitemEntityRepository;
  */
 
 @Repository
-@CacheConfig(cacheNames = "ren_workitem")
+@CacheConfig(cacheNames = "ns_ren_workitem")
 public class RenWorkitemEntityDAO {
 
     @Autowired

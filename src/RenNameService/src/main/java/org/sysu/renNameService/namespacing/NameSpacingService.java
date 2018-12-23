@@ -92,7 +92,7 @@ public class NameSpacingService {
             String boid = "BO_" + UUID.randomUUID().toString();
             boolean cmtFlag = assistantService.newBo(boid, pid, name, content);
             if (!cmtFlag) {
-                throw new Exception("Error in creating a new bo");
+                throw new RuntimeException("Error in creating a new bo");
             }
             // send to engine for get business role
             HashMap<String, String> args = new HashMap<>();
@@ -288,7 +288,7 @@ public class NameSpacingService {
         try {
             boolean cmtFlag = assistantService.startProcess(rtid);
             if (!cmtFlag) {
-                throw new Exception("Error in starting the process");
+                throw new RuntimeException("Error in starting the process");
             }
             // interaction with BO Engine
             HashMap<String, String> args = new HashMap<>();

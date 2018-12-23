@@ -4,15 +4,14 @@
  */
 package org.sysu.renResourcing.context;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.sysu.renCommon.enums.AgentReentrantType;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renCommon.enums.WorkerType;
 import org.sysu.renResourcing.consistency.ContextCachePool;
-import org.sysu.renResourcing.context.steady.RenRsparticipantEntity;
-import org.sysu.renResourcing.utility.HibernateUtil;
+import org.sysu.renResourcing.entity.RenRsparticipantEntity;
+import org.sysu.renResourcing.dao.RenRsparticipantEntityDAO;
 import org.sysu.renResourcing.utility.LogUtil;
+import org.sysu.renResourcing.utility.SpringContextUtil;
 
 import java.io.Serializable;
 
@@ -73,27 +72,18 @@ public class ParticipantContext implements Serializable, RCacheablesContext {
         if (cachedCtx != null && !forceReload) {
             return cachedCtx;
         }
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
         boolean cmtFlag = false;
         try {
-            RenRsparticipantEntity rre = session.get(RenRsparticipantEntity.class, workerId);
-            transaction.commit();
-            cmtFlag = true;
+            RenRsparticipantEntityDAO renRsparticipantEntityDAO = (RenRsparticipantEntityDAO) SpringContextUtil.getBean("renRsparticipantEntityDAO");
+            RenRsparticipantEntity rre = renRsparticipantEntityDAO.findByWorkerGid(workerId);
             ParticipantContext retCtx = ParticipantContext.GenerateParticipantContext(rre);
             ContextCachePool.AddOrUpdate(workerId, retCtx);
             return retCtx;
         }
         catch (Exception ex) {
-            if (!cmtFlag) {
-                transaction.rollback();
-            }
             LogUtil.Log("When json serialization exception occurred, transaction rollback. " + ex,
                     TaskContext.class.getName(), LogLevelType.ERROR, rtid);
             return null;
-        }
-        finally {
-            HibernateUtil.CloseLocalSession();
         }
     }
 
@@ -138,7 +128,7 @@ public class ParticipantContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Generate a participant context by a steady entity.
+     * Generate a participant context by a entity entity.
      * @param rsparticipantEntity RS participant entity
      * @return equivalent participant context.
      */

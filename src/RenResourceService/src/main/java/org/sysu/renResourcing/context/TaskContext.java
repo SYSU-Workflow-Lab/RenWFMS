@@ -4,22 +4,13 @@
  */
 package org.sysu.renResourcing.context;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renCommon.enums.WorkitemStatusType;
-import org.sysu.renResourcing.consistency.ContextCachePool;
-import org.sysu.renResourcing.context.steady.RenBoEntity;
-import org.sysu.renResourcing.context.steady.RenRstaskEntity;
-import org.sysu.renResourcing.context.steady.RenRuntimerecordEntity;
+import org.sysu.renResourcing.entity.RenRstaskEntity;
 import org.sysu.renCommon.utility.CommonUtil;
-import org.sysu.renResourcing.utility.HibernateUtil;
-import org.sysu.renResourcing.utility.LogUtil;
 import org.sysu.renCommon.utility.SerializationUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -110,61 +101,6 @@ public class TaskContext implements Serializable, RCacheablesContext {
         tc.callbacks = (HashMap<String, ArrayList<String>>) mapObj.get("callbackEvents");
         tc.parameters = (ArrayList<String>) mapObj.get("parameters");
         return tc;
-    }
-
-    /**
-     * Get a task context by its name and belonging BO name of one runtime.
-     * @param rtid runtime record id
-     * @param boName belong to BO id
-     * @param taskName task name
-     * @return Task resourcing context, null if exception occurred or assertion error
-     */
-    public static TaskContext GetContext(String rtid, String boName, String taskName) {
-        return TaskContext.GetContext(rtid, boName, taskName, false);
-    }
-
-    /**
-     * Get a task context by its name and belonging BO name of one runtime.
-     * @param rtid runtime record id
-     * @param boName belong to BO id
-     * @param taskName task name
-     * @return Task resourcing context, null if exception occurred or assertion error
-     */
-    public static TaskContext GetContext(String rtid, String boName, String taskName, boolean forceReload) {
-        String taskCtxId = String.format("%s_%s_%s", rtid, boName, taskName);
-        TaskContext cachedCtx = ContextCachePool.Retrieve(TaskContext.class, taskCtxId);
-        // fetch cache
-        if (cachedCtx != null && !forceReload) {
-            return cachedCtx;
-        }
-        Session session = HibernateUtil.GetLocalSession();
-        Transaction transaction = session.beginTransaction();
-        boolean cmtFlag = false;
-        try {
-            RenRuntimerecordEntity rre = session.get(RenRuntimerecordEntity.class, rtid);
-            assert rre != null;
-            String pid = rre.getProcessId();
-            RenBoEntity rbe = (RenBoEntity) session.createQuery(String.format("FROM RenBoEntity WHERE pid = '%s' AND boName = '%s'", pid, boName)).uniqueResult();
-            assert rbe != null;
-            RenRstaskEntity taskEntity = (RenRstaskEntity) session.createQuery(String.format("FROM RenRstaskEntity WHERE boid = '%s' AND polymorphismName = '%s'", rbe.getBoid(), taskName)).uniqueResult();
-            assert taskEntity != null;
-            transaction.commit();
-            cmtFlag = true;
-            TaskContext generatedCtx = TaskContext.GenerateTaskContext(taskEntity, pid);
-            ContextCachePool.AddOrUpdate(taskCtxId, generatedCtx);
-            return generatedCtx;
-        }
-        catch (Exception ex) {
-            if (!cmtFlag) {
-                transaction.rollback();
-            }
-            LogUtil.Log("When json serialization exception occurred, transaction rollback. " + ex,
-                    TaskContext.class.getName(), LogLevelType.ERROR, rtid);
-            return null;
-        }
-        finally {
-            HibernateUtil.CloseLocalSession();
-        }
     }
 
     /**
@@ -277,7 +213,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Parse hooks by a descriptor in steady.
+     * Parse hooks by a descriptor in entity.
      * @param hookJSONDescriptor JSON descriptor
      */
     @SuppressWarnings("unchecked")
@@ -290,7 +226,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Parse callback events by a descriptor in steady.
+     * Parse callback events by a descriptor in entity.
      * @param callbackJSONDescriptor JSON descriptor
      */
     @SuppressWarnings("unchecked")
@@ -303,7 +239,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Parse parameter vector by a descriptor in steady.
+     * Parse parameter vector by a descriptor in entity.
      * @param parametersDescriptor parameter string descriptor
      */
     @SuppressWarnings("unchecked")
@@ -314,12 +250,12 @@ public class TaskContext implements Serializable, RCacheablesContext {
     }
 
     /**
-     * Generate a task context by a steady entity.
+     * Generate a task context by a entity entity.
      * @param rstaskEntity RS task entity
      * @param pid Belong to process global id
      * @return equivalent task context.
      */
-    private static TaskContext GenerateTaskContext(RenRstaskEntity rstaskEntity, String pid) {
+    public static TaskContext GenerateTaskContext(RenRstaskEntity rstaskEntity, String pid) {
         assert rstaskEntity != null;
         TaskContext context = new TaskContext(rstaskEntity.getPolymorphismId(), rstaskEntity.getPolymorphismName(),
                 rstaskEntity.getBrole(), pid, rstaskEntity.getBoid(),

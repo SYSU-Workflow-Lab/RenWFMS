@@ -12,7 +12,7 @@ import java.util.Objects;
  * Usage :
  */
 @Entity
-@Table(name = "ren_authuser", schema = "renboengine", catalog = "")
+@Table(name = "ren_authuser", schema = "renboengine")
 @IdClass(RenAuthuserEntityMKC.class)
 public class RenAuthuserEntity {
     private String username;

@@ -4,9 +4,8 @@
  */
 package org.sysu.workflow.model.extend;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.sysu.renCommon.enums.LogLevelType;
+import org.sysu.workflow.dao.RenBoEntityDAO;
 import org.sysu.workflow.env.MultiStateMachineDispatcher;
 import org.sysu.workflow.instanceTree.InstanceManager;
 import org.sysu.workflow.instanceTree.RTreeNode;
@@ -16,10 +15,9 @@ import org.sysu.workflow.io.BOXMLReader;
 import org.sysu.workflow.*;
 import org.sysu.workflow.model.*;
 import org.sysu.workflow.entity.RenBoEntity;
-import org.sysu.workflow.stateless.RuntimeManagementService;
-import org.sysu.workflow.utility.HibernateUtil;
 import org.sysu.workflow.utility.LogUtil;
 import org.sysu.workflow.utility.SerializationUtil;
+import org.sysu.workflow.utility.SpringContextUtil;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -155,30 +153,20 @@ public class NewBO extends NamelistHolder implements PathResolverHolder {
             //read BO from database
             if (!GlobalContext.IsLocalDebug) {
                 //Ariana:get the serialized BO from the database and deserialize it into SCXML object
-                Session session = HibernateUtil.GetLocalSession();
-                Transaction transaction = session.beginTransaction();
-                boolean cmtFlag = false;
                 try {
                     byte[] serializedBO = null;
-                    List boList = session.createQuery(String.format("FROM RenBoEntity WHERE pid = '%s'", currentExecutionContext.Pid)).list();
-                    for (Object bo : boList) {
-                        RenBoEntity boEntity = (RenBoEntity) bo;
-                        if (boEntity.getBoName().equalsIgnoreCase(boName)) {
-                            serializedBO = boEntity.getSerialized();
+                    RenBoEntityDAO renBoEntityDAO = (RenBoEntityDAO) SpringContextUtil.getBean("renBoEntityDAO");
+                    List<RenBoEntity> boList = renBoEntityDAO.findRenBoEntitiesByPid(currentExecutionContext.Pid);
+                    for (RenBoEntity bo : boList) {
+                        if (bo.getBoName().equalsIgnoreCase(boName)) {
+                            serializedBO = bo.getSerialized();
                             break;
                         }
                     }
-                    transaction.commit();
-                    cmtFlag = true;
                     scxml = SerializationUtil.DeserializationSCXMLByByteArray(serializedBO);
                 } catch (Exception e) {
-                    if (!cmtFlag) {
-                        transaction.rollback();
-                    }
                     LogUtil.Log("When read bo by rtid, exception occurred, " + e.toString() + ", service rollback",
-                            RuntimeManagementService.class.getName(), LogLevelType.ERROR, currentExecutionContext.Rtid);
-                } finally {
-                    HibernateUtil.CloseLocalSession();
+                            NewBO.class.getName(), LogLevelType.ERROR, currentExecutionContext.Rtid);
                 }
             }
             else {

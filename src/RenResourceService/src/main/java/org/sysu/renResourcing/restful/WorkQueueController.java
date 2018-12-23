@@ -4,12 +4,14 @@
  */
 package org.sysu.renResourcing.restful;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.sysu.renCommon.dto.ReturnModel;
 import org.sysu.renCommon.dto.StatusCode;
 import org.sysu.renCommon.enums.RServiceType;
 import org.sysu.renResourcing.RScheduler;
 import org.sysu.renResourcing.context.ResourcingContext;
+import org.sysu.renResourcing.context.contextService.ResourcingContextService;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -26,6 +28,18 @@ import java.util.List;
 public class WorkQueueController {
 
     /**
+     * Main scheduler reference.
+     */
+    @Autowired
+    private RScheduler rScheduler;
+
+    /**
+     * ResourcingContext Handler.
+     */
+    @Autowired
+    private ResourcingContextService resourcingContextService;
+
+    /**
      * Get a specific work queue of a worker.
      * @param rtid process rtid
      * @param workerId worker global id
@@ -34,7 +48,6 @@ public class WorkQueueController {
      */
     @RequestMapping(value = "/get", produces = { "application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetWorkQueue(@RequestParam(value="rtid", required = false)String rtid,
                                     @RequestParam(value="workerId", required = false)String workerId,
                                     @RequestParam(value="type", required = false)String type) {
@@ -53,8 +66,8 @@ public class WorkQueueController {
             args.put("type", type);
             args.put("rtid", rtid);
             args.put("workerId", workerId);
-            ResourcingContext rCtx = ResourcingContext.GetContext(null, rtid, RServiceType.GetQueue, args);
-            String jsonifyResult = RScheduler.GetInstance().ScheduleSync(rCtx);
+            ResourcingContext rCtx = resourcingContextService.GetContext(null, rtid, RServiceType.GetQueue, args);
+            String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -72,7 +85,6 @@ public class WorkQueueController {
      */
     @RequestMapping(value = "/getlist", produces = { "application/json"})
     @ResponseBody
-    @Transactional
     public ReturnModel GetWorkQueueList(@RequestParam(value="rtid", required = false)String rtid,
                                         @RequestParam(value="workerIdList", required = false)String workerIdList,
                                         @RequestParam(value="type", required = false)String type) {
@@ -91,8 +103,8 @@ public class WorkQueueController {
             args.put("rtid", rtid);
             args.put("type", type);
             args.put("workerIdList", workerIdList);
-            ResourcingContext rCtx = ResourcingContext.GetContext(null, rtid, RServiceType.GetQueueList, args);
-            String jsonifyResult = RScheduler.GetInstance().ScheduleSync(rCtx);
+            ResourcingContext rCtx = resourcingContextService.GetContext(null, rtid, RServiceType.GetQueueList, args);
+            String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
