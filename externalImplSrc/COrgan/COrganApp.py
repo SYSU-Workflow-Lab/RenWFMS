@@ -18,7 +18,7 @@ from functools import wraps
 from flask import Flask, render_template, redirect, url_for, request, session
 from Restful import restfulBp
 
-app = Flask(__name__, template_folder='templates', static_folder='./../StaticAssets')
+app = Flask(__name__, template_folder='templates', static_folder='./assets')
 core = CController.CControllerCore
 
 
@@ -1001,4 +1001,4 @@ if __name__ == '__main__':
     app.secret_key = GlobalConfigContext.RAPPKEY
     app.debug = True
     app.register_blueprint(restfulBp)
-    app.run(host='127.0.0.1', port=10235)
+    app.run(host='0.0.0.0', port=10235)

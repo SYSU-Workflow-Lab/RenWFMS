@@ -538,12 +538,9 @@ public class RoleMappingService {
      * @param nsid  transaction id for signature
      * @return a list of connection json string
      */
-    @Transactional(rollbackFor = Exception.class)
     public String GetDataVersionAndGidFromCOrgan(String renid, String nsid) {
-        boolean cmtFlag = false;
         try {
             RenDomainEntity rae = renDomainEntityDAO.findByName(AuthDomainHelper.GetDomainByAuthName(renid));
-            cmtFlag = true;
             assert rae != null;
             String corganUrl = rae.getCorganGateway();
             if (corganUrl == null || corganUrl.equals("")) {
@@ -561,9 +558,6 @@ public class RoleMappingService {
         } catch (Exception ex) {
             LogUtil.Log("When GetDataVersionFromCOrgan role map service, exception occurred, " + ex.toString(),
                     RoleMappingService.class.getName(), LogUtil.LogLevelType.ERROR, "");
-            if (!cmtFlag) {
-                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            }
             return "";
         }
     }
