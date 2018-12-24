@@ -343,12 +343,9 @@ public class RoleMappingService {
      * @param groupName group name
      * @return a list of [human, agent, group, position, capability] json string
      */
-    @Transactional(rollbackFor = Exception.class)
     public String GetWorkerInGroupFromCOrgan(String renid, String rtid, String nsid, String groupName) {
-        boolean cmtFlag = false;
         try {
             RenDomainEntity rae = renDomainEntityDAO.findByName(AuthDomainHelper.GetDomainByAuthName(renid));
-            cmtFlag = true;
             assert rae != null;
             String corganUrl = rae.getCorganGateway();
             if (corganUrl == null || corganUrl.equals("")) {
@@ -367,9 +364,6 @@ public class RoleMappingService {
         } catch (Exception ex) {
             LogUtil.Log("When GetWorkerInGroupFromCOrgan role map service, exception occurred, " + ex.toString(),
                     RoleMappingService.class.getName(), LogUtil.LogLevelType.ERROR, rtid);
-            if (!cmtFlag) {
-                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            }
             return "";
         }
     }
@@ -383,12 +377,9 @@ public class RoleMappingService {
      * @param gids  organizable global id
      * @return a list of workers json string
      */
-    @Transactional(rollbackFor = Exception.class)
     public String GetWorkerEntityFromCOrgan(String renid, String rtid, String nsid, String gids) {
-        boolean cmtFlag = false;
         try {
             RenDomainEntity rae = renDomainEntityDAO.findByName(AuthDomainHelper.GetDomainByAuthName(renid));
-            cmtFlag = true;
             assert rae != null;
             String corganUrl = rae.getCorganGateway();
             if (corganUrl == null || corganUrl.equals("")) {
@@ -407,9 +398,6 @@ public class RoleMappingService {
         } catch (Exception ex) {
             LogUtil.Log("When GetWorkerEntityFromCOrgan role map service, exception occurred, " + ex.toString(),
                     RoleMappingService.class.getName(), LogUtil.LogLevelType.ERROR, rtid);
-            if (!cmtFlag) {
-                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            }
             return "";
         }
     }
@@ -423,12 +411,9 @@ public class RoleMappingService {
      * @param gid   organizable global id
      * @return a list of workers json string
      */
-    @Transactional(rollbackFor = Exception.class)
     public String GetWorkerInOrganizableFromCOrgan(String renid, String rtid, String nsid, String gid) {
-        boolean cmtFlag = false;
         try {
             RenDomainEntity rae = renDomainEntityDAO.findByName(AuthDomainHelper.GetDomainByAuthName(renid));
-            cmtFlag = true;
             assert rae != null;
             String corganUrl = rae.getCorganGateway();
             if (corganUrl == null || corganUrl.equals("")) {
@@ -447,9 +432,6 @@ public class RoleMappingService {
         } catch (Exception ex) {
             LogUtil.Log("When GetWorkerInPositionFromCOrgan role map service, exception occurred, " + ex.toString(),
                     RoleMappingService.class.getName(), LogUtil.LogLevelType.ERROR, rtid);
-            if (!cmtFlag) {
-                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            }
             return "";
         }
     }
@@ -463,12 +445,9 @@ public class RoleMappingService {
      * @param nsid  transaction id for signature
      * @return a list of [human, agent, group, position, capability] json string
      */
-    @Transactional(rollbackFor = Exception.class)
     public String GetAllResourceFromCOrgan(String renid, String rtid, String nsid) {
-        boolean cmtFlag = false;
         try {
             RenDomainEntity rae = renDomainEntityDAO.findByName(AuthDomainHelper.GetDomainByAuthName(renid));
-            cmtFlag = true;
             assert rae != null;
             String corganUrl = rae.getCorganGateway();
             if (corganUrl == null || corganUrl.equals("")) {
@@ -486,9 +465,6 @@ public class RoleMappingService {
         } catch (Exception ex) {
             LogUtil.Log("When GetAllResourceFromCOrgan role map service, exception occurred, " + ex.toString(),
                     RoleMappingService.class.getName(), LogUtil.LogLevelType.ERROR, rtid);
-            if (!cmtFlag) {
-                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            }
             return "";
         }
     }
@@ -501,12 +477,9 @@ public class RoleMappingService {
      * @param nsid  transaction id for signature
      * @return a list of connection json string
      */
-    @Transactional(rollbackFor = Exception.class)
     public String GetAllConnectionFromCOrgan(String renid, String rtid, String nsid) {
-        boolean cmtFlag = false;
         try {
             RenDomainEntity rae = renDomainEntityDAO.findByName(AuthDomainHelper.GetDomainByAuthName(renid));
-            cmtFlag = true;
             assert rae != null;
             String corganUrl = rae.getCorganGateway();
             if (corganUrl == null || corganUrl.equals("")) {
@@ -524,9 +497,6 @@ public class RoleMappingService {
         } catch (Exception ex) {
             LogUtil.Log("When GetAllConnectionFromCOrgan role map service, exception occurred, " + ex.toString(),
                     RoleMappingService.class.getName(), LogUtil.LogLevelType.ERROR, rtid);
-            if (!cmtFlag) {
-                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            }
             return "";
         }
     }
