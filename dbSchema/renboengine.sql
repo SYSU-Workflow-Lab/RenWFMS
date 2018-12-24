@@ -105,8 +105,8 @@ CREATE TABLE `ren_domain` (
 -- ----------------------------
 -- Records of ren_domain
 -- ----------------------------
-INSERT INTO `ren_domain` VALUES ('admin', '2', '0', '2018-02-01 22:57:23', 'http://localhost:10235/api/', 'PrUpNw1dM3zRH6j3eviklCHE9Zbvk9NavGcJ_CibW19h50Yvr-ZZYZqn5Gi_SG1cPVQEIZf2wAJgBmq4dhNj7w7t9wUEz2pcGhn-6kIRO--QqWy121gksPE8B103RtMzuOsQDcErk4LriRQRO7-Xqks-RtpBUnpInnS_lkkajQs');
-INSERT INTO `ren_domain` VALUES ('sysu', '0', '0', '2018-06-01 16:33:24', 'http://localhost:10235/sysuapi', 'ejRqaEUStwk3L-UhrMRBM0qPjO860GwRDDbBhFENGv4v0rq3By5vu9DWck9SZxOW6B4EJMdRMvLdm9_DRxgerv5OnwBWeK2LMqi3SBrH79xw4ncq_86xSSvIrSUfSTLxIRBx8NxxwBdP-GI4DTGBojOZZu0atHstx1qP4Qt-rcA');
+INSERT INTO `ren_domain` VALUES ('admin', '2', '0', '2018-02-01 22:57:23', 'http://222.200.180.59:10235/api/', 'PrUpNw1dM3zRH6j3eviklCHE9Zbvk9NavGcJ_CibW19h50Yvr-ZZYZqn5Gi_SG1cPVQEIZf2wAJgBmq4dhNj7w7t9wUEz2pcGhn-6kIRO--QqWy121gksPE8B103RtMzuOsQDcErk4LriRQRO7-Xqks-RtpBUnpInnS_lkkajQs');
+INSERT INTO `ren_domain` VALUES ('sysu', '0', '0', '2018-06-01 16:33:24', 'http://222.200.180.59:10235/sysuapi', 'ejRqaEUStwk3L-UhrMRBM0qPjO860GwRDDbBhFENGv4v0rq3By5vu9DWck9SZxOW6B4EJMdRMvLdm9_DRxgerv5OnwBWeK2LMqi3SBrH79xw4ncq_86xSSvIrSUfSTLxIRBx8NxxwBdP-GI4DTGBojOZZu0atHstx1qP4Qt-rcA');
 
 -- ----------------------------
 -- Table structure for `ren_domainpay`
