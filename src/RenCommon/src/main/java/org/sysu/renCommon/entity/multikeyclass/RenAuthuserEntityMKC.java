@@ -1,4 +1,4 @@
-package org.sysu.renNameService.entity.multikeyclass;
+package org.sysu.renCommon.entity.multikeyclass;
 
 import javax.persistence.Column;
 import javax.persistence.Id;

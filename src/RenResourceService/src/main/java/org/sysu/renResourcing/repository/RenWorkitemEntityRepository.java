@@ -2,7 +2,7 @@ package org.sysu.renResourcing.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.sysu.renResourcing.entity.RenWorkitemEntity;
+import org.sysu.renCommon.entity.RenWorkitemEntity;
 
 import java.util.List;
 

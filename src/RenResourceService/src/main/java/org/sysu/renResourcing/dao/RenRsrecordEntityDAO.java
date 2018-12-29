@@ -5,7 +5,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
-import org.sysu.renResourcing.entity.RenRsrecordEntity;
+import org.sysu.renCommon.entity.RenRsrecordEntity;
 import org.sysu.renResourcing.repository.RenRsrecordEntityRepository;
 
 /**
@@ -13,7 +13,7 @@ import org.sysu.renResourcing.repository.RenRsrecordEntityRepository;
  */
 
 @Repository
-@CacheConfig(cacheNames = "rs_ren_rsrecord")
+@CacheConfig(cacheNames = "ren_rsrecord")
 public class RenRsrecordEntityDAO {
 
     @Autowired

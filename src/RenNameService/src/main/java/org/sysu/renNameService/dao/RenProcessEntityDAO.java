@@ -5,7 +5,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
-import org.sysu.renNameService.entity.RenProcessEntity;
+import org.sysu.renCommon.entity.RenProcessEntity;
 import org.sysu.renNameService.repository.RenProcessEntityRepository;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 @Repository
-@CacheConfig(cacheNames = "ns_ren_process")
+@CacheConfig(cacheNames = "ren_process")
 public class RenProcessEntityDAO {
 
     @Autowired

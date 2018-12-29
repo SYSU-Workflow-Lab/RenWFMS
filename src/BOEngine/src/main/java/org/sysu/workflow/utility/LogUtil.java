@@ -5,7 +5,7 @@ import org.sysu.renCommon.logging.LogMessagePackage;
 import org.sysu.renCommon.utility.TimestampUtil;
 import org.sysu.workflow.GlobalContext;
 import org.sysu.workflow.dao.RenLogEntityDAO;
-import org.sysu.workflow.entity.RenLogEntity;
+import org.sysu.renCommon.entity.RenLogEntity;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;

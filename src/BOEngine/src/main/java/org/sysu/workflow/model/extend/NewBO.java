@@ -14,7 +14,7 @@ import org.sysu.workflow.env.SimpleErrorReporter;
 import org.sysu.workflow.io.BOXMLReader;
 import org.sysu.workflow.*;
 import org.sysu.workflow.model.*;
-import org.sysu.workflow.entity.RenBoEntity;
+import org.sysu.renCommon.entity.RenBoEntity;
 import org.sysu.workflow.utility.LogUtil;
 import org.sysu.workflow.utility.SerializationUtil;
 import org.sysu.workflow.utility.SpringContextUtil;

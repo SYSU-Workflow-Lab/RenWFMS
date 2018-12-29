@@ -5,7 +5,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Repository;
-import org.sysu.renNameService.entity.RenRolemapEntity;
+import org.sysu.renCommon.entity.RenRolemapEntity;
 import org.sysu.renNameService.repository.RenRolemapEntityRepository;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 @Repository
-@CacheConfig(cacheNames = "ns_ren_rolemap")
+@CacheConfig(cacheNames = "ren_rolemap")
 public class RenRolemapEntityDAO {
 
     @Autowired

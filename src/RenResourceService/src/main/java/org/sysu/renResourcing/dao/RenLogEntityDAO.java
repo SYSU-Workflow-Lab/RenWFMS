@@ -2,7 +2,7 @@ package org.sysu.renResourcing.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.sysu.renResourcing.entity.RenLogEntity;
+import org.sysu.renCommon.entity.RenLogEntity;
 import org.sysu.renResourcing.repository.RenLogEntityRepository;
 
 /**

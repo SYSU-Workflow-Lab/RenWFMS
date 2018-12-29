@@ -2,7 +2,7 @@ package org.sysu.workflow.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.sysu.workflow.entity.RenRuntimerecordEntity;
+import org.sysu.renCommon.entity.RenRuntimerecordEntity;
 
 import java.util.List;
 

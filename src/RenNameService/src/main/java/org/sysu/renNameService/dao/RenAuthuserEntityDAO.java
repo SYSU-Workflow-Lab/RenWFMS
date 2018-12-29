@@ -2,8 +2,8 @@ package org.sysu.renNameService.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.sysu.renNameService.entity.RenAuthuserEntity;
-import org.sysu.renNameService.entity.multikeyclass.RenAuthuserEntityMKC;
+import org.sysu.renCommon.entity.RenAuthuserEntity;
+import org.sysu.renCommon.entity.multikeyclass.RenAuthuserEntityMKC;
 import org.sysu.renNameService.repository.RenAuthuserEntityRepository;
 
 import java.util.List;

@@ -4,7 +4,7 @@
  */
 package org.sysu.renNameService;
 
-import org.sysu.renNameService.entity.*;
+import org.sysu.renCommon.entity.*;
 import org.sysu.renNameService.namespacing.NameSpacingService;
 import org.sysu.renNameService.rolemapping.RoleMappingService;
 import org.sysu.renNameService.transaction.NameServiceTransaction;

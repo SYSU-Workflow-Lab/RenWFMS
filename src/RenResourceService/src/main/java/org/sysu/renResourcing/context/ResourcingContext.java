@@ -4,7 +4,7 @@ import org.sysu.renCommon.utility.CommonUtil;
 import org.sysu.renCommon.utility.SerializationUtil;
 import org.sysu.renCommon.utility.TimestampUtil;
 import org.sysu.renCommon.enums.RServiceType;
-import org.sysu.renResourcing.entity.RenRsrecordEntity;
+import org.sysu.renCommon.entity.RenRsrecordEntity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;

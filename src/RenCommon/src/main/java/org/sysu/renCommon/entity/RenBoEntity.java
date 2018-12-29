@@ -1,18 +1,9 @@
-/*
- * Project Ren @ 2018
- * Rinkako, Ariana, Gordan. SYSU SDCS.
- */
-package org.sysu.renNameService.entity;
+package org.sysu.renCommon.entity;
 
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Objects;
 
-/**
- * Author: Rinkako
- * Date  : 2018/1/30
- * Usage :
- */
 @Entity
 @Table(name = "ren_bo", schema = "renboengine")
 public class RenBoEntity {

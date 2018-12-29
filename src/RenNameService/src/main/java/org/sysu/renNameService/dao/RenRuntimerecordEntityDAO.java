@@ -5,7 +5,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
-import org.sysu.renNameService.entity.RenRuntimerecordEntity;
+import org.sysu.renCommon.entity.RenRuntimerecordEntity;
 import org.sysu.renNameService.repository.RenRuntimerecordEntityRepository;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 @Repository
-@CacheConfig(cacheNames = "ns_ren_runtimerecord")
+@CacheConfig(cacheNames = "ren_runtimerecord")
 public class RenRuntimerecordEntityDAO {
 
     @Autowired

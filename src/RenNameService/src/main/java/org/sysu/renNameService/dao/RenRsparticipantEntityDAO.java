@@ -6,7 +6,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
-import org.sysu.renNameService.entity.RenRsparticipantEntity;
+import org.sysu.renCommon.entity.RenRsparticipantEntity;
 import org.sysu.renNameService.repository.RenRsparticipantEntityRepository;
 
 /**
@@ -14,7 +14,7 @@ import org.sysu.renNameService.repository.RenRsparticipantEntityRepository;
  */
 
 @Repository
-@CacheConfig(cacheNames = "ns_ren_rsparticipant")
+@CacheConfig(cacheNames = "ren_rsparticipant")
 public class RenRsparticipantEntityDAO {
 
     @Autowired

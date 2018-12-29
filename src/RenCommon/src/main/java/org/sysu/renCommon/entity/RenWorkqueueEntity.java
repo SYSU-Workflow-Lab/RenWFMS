@@ -2,7 +2,7 @@
  * Project Ren @ 2018
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
-package org.sysu.renResourcing.entity;
+package org.sysu.renCommon.entity;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -30,7 +30,7 @@ public class RenWorkqueueEntity {
     }
 
     @Basic
-    @Column(name = "ownerId", nullable = true, length = 64)
+    @Column(name = "ownerId", length = 64)
     public String getOwnerId() {
         return ownerId;
     }

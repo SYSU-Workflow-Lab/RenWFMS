@@ -2,7 +2,7 @@ package org.sysu.renResourcing.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.sysu.renResourcing.entity.RenRseventlogEntity;
+import org.sysu.renCommon.entity.RenRseventlogEntity;
 
 import java.util.List;
 

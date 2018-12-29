@@ -5,7 +5,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
-import org.sysu.workflow.entity.RenRstaskEntity;
+import org.sysu.renCommon.entity.RenRstaskEntity;
 import org.sysu.workflow.repository.RenRstaskEntityRepository;
 
 /**
@@ -13,7 +13,7 @@ import org.sysu.workflow.repository.RenRstaskEntityRepository;
  */
 
 @Repository
-@CacheConfig(cacheNames = "be_ren_rstask")
+@CacheConfig(cacheNames = "ren_rstask")
 public class RenRstaskEntityDAO {
 
     @Autowired

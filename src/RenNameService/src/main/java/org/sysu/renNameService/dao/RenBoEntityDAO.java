@@ -5,7 +5,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
-import org.sysu.renNameService.entity.RenBoEntity;
+import org.sysu.renCommon.entity.RenBoEntity;
 import org.sysu.renNameService.repository.RenBoEntityRepository;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 @Repository
-@CacheConfig(cacheNames = "ns_ren_bo")
+@CacheConfig(cacheNames = "ren_bo")
 public class RenBoEntityDAO {
 
     @Autowired

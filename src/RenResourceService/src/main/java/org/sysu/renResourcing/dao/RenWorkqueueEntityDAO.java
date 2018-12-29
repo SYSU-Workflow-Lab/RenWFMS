@@ -3,7 +3,7 @@ package org.sysu.renResourcing.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Repository;
-import org.sysu.renResourcing.entity.RenWorkqueueEntity;
+import org.sysu.renCommon.entity.RenWorkqueueEntity;
 import org.sysu.renResourcing.repository.RenWorkqueueEntityRepository;
 
 /**

@@ -3,7 +3,7 @@ package org.sysu.renResourcing.statistics;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renCommon.utility.CommonUtil;
 import org.sysu.renResourcing.dao.RenRseventlogEntityDAO;
-import org.sysu.renResourcing.entity.RenRseventlogEntity;
+import org.sysu.renCommon.entity.RenRseventlogEntity;
 import org.sysu.renResourcing.utility.LogUtil;
 import org.sysu.renResourcing.utility.SpringContextUtil;
 

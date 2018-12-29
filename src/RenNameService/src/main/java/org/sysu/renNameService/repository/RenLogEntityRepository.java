@@ -1,7 +1,7 @@
 package org.sysu.renNameService.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.sysu.renNameService.entity.RenLogEntity;
+import org.sysu.renCommon.entity.RenLogEntity;
 
 import java.util.List;
 

@@ -5,7 +5,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
-import org.sysu.renResourcing.entity.RenExitemEntity;
+import org.sysu.renCommon.entity.RenExitemEntity;
 import org.sysu.renResourcing.repository.RenExitemEntityRepository;
 
 /**
@@ -13,7 +13,7 @@ import org.sysu.renResourcing.repository.RenExitemEntityRepository;
  */
 
 @Repository
-@CacheConfig(cacheNames = "rs_ren_exitem")
+@CacheConfig(cacheNames = "ren_exitem")
 public class RenExitemEntityDAO {
 
     @Autowired

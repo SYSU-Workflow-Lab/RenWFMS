@@ -3,7 +3,7 @@
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
 package org.sysu.renNameService.rolemapping;
-import org.sysu.renNameService.entity.RenRolemapEntity;
+import org.sysu.renCommon.entity.RenRolemapEntity;
 import java.util.ArrayList;
 
 /**

@@ -1,8 +1,8 @@
 package org.sysu.renNameService.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.sysu.renNameService.entity.RenAuthuserEntity;
-import org.sysu.renNameService.entity.multikeyclass.RenAuthuserEntityMKC;
+import org.sysu.renCommon.entity.RenAuthuserEntity;
+import org.sysu.renCommon.entity.multikeyclass.RenAuthuserEntityMKC;
 
 import java.util.List;
 

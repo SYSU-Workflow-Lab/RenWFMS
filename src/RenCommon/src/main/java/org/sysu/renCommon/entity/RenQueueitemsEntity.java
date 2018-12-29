@@ -2,11 +2,11 @@
  * Project Ren @ 2018
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
-package org.sysu.renResourcing.entity.multikeyclass;
+package org.sysu.renCommon.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import java.io.Serializable;
+import org.sysu.renCommon.entity.multikeyclass.RenQueueitemsEntityMKC;
+
+import javax.persistence.*;
 import java.util.Objects;
 
 /**
@@ -14,12 +14,15 @@ import java.util.Objects;
  * Date  : 2018/2/8
  * Usage :
  */
-public class RenQueueitemsEntityMKC implements Serializable {
+@Entity
+@Table(name = "ren_queueitems", schema = "renboengine")
+@IdClass(RenQueueitemsEntityMKC.class)
+public class RenQueueitemsEntity {
     private String workqueueId;
     private String workitemId;
 
-    @Column(name = "workqueueId", nullable = false, length = 64)
     @Id
+    @Column(name = "workqueueId", nullable = false, length = 64)
     public String getWorkqueueId() {
         return workqueueId;
     }
@@ -28,8 +31,8 @@ public class RenQueueitemsEntityMKC implements Serializable {
         this.workqueueId = workqueueId;
     }
 
-    @Column(name = "workitemId", nullable = false, length = 64)
     @Id
+    @Column(name = "workitemId", nullable = false, length = 64)
     public String getWorkitemId() {
         return workitemId;
     }
@@ -42,7 +45,7 @@ public class RenQueueitemsEntityMKC implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RenQueueitemsEntityMKC that = (RenQueueitemsEntityMKC) o;
+        RenQueueitemsEntity that = (RenQueueitemsEntity) o;
         return Objects.equals(workqueueId, that.workqueueId) &&
                 Objects.equals(workitemId, that.workitemId);
     }

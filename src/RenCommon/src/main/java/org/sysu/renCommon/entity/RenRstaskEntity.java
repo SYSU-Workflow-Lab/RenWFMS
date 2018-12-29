@@ -1,9 +1,10 @@
-package org.sysu.workflow.entity;
+package org.sysu.renCommon.entity;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
-@Table(name = "ren_rstask", schema = "renboengine", catalog = "")
+@Table(name = "ren_rstask", schema = "renboengine")
 public class RenRstaskEntity {
     private String taskid;
     private String boid;
@@ -120,40 +121,22 @@ public class RenRstaskEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         RenRstaskEntity that = (RenRstaskEntity) o;
-
-        if (taskid != null ? !taskid.equals(that.taskid) : that.taskid != null) return false;
-        if (boid != null ? !boid.equals(that.boid) : that.boid != null) return false;
-        if (polymorphismName != null ? !polymorphismName.equals(that.polymorphismName) : that.polymorphismName != null)
-            return false;
-        if (polymorphismId != null ? !polymorphismId.equals(that.polymorphismId) : that.polymorphismId != null)
-            return false;
-        if (brole != null ? !brole.equals(that.brole) : that.brole != null) return false;
-        if (principle != null ? !principle.equals(that.principle) : that.principle != null) return false;
-        if (eventdescriptor != null ? !eventdescriptor.equals(that.eventdescriptor) : that.eventdescriptor != null)
-            return false;
-        if (hookdescriptor != null ? !hookdescriptor.equals(that.hookdescriptor) : that.hookdescriptor != null)
-            return false;
-        if (documentation != null ? !documentation.equals(that.documentation) : that.documentation != null)
-            return false;
-        if (parameters != null ? !parameters.equals(that.parameters) : that.parameters != null) return false;
-
-        return true;
+        return Objects.equals(taskid, that.taskid) &&
+                Objects.equals(boid, that.boid) &&
+                Objects.equals(polymorphismName, that.polymorphismName) &&
+                Objects.equals(polymorphismId, that.polymorphismId) &&
+                Objects.equals(brole, that.brole) &&
+                Objects.equals(principle, that.principle) &&
+                Objects.equals(eventdescriptor, that.eventdescriptor) &&
+                Objects.equals(hookdescriptor, that.hookdescriptor) &&
+                Objects.equals(documentation, that.documentation) &&
+                Objects.equals(parameters, that.parameters);
     }
 
     @Override
     public int hashCode() {
-        int result = taskid != null ? taskid.hashCode() : 0;
-        result = 31 * result + (boid != null ? boid.hashCode() : 0);
-        result = 31 * result + (polymorphismName != null ? polymorphismName.hashCode() : 0);
-        result = 31 * result + (polymorphismId != null ? polymorphismId.hashCode() : 0);
-        result = 31 * result + (brole != null ? brole.hashCode() : 0);
-        result = 31 * result + (principle != null ? principle.hashCode() : 0);
-        result = 31 * result + (eventdescriptor != null ? eventdescriptor.hashCode() : 0);
-        result = 31 * result + (hookdescriptor != null ? hookdescriptor.hashCode() : 0);
-        result = 31 * result + (documentation != null ? documentation.hashCode() : 0);
-        result = 31 * result + (parameters != null ? parameters.hashCode() : 0);
-        return result;
+
+        return Objects.hash(taskid, boid, polymorphismName, polymorphismId, brole, principle, eventdescriptor, hookdescriptor, documentation, parameters);
     }
 }
