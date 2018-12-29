@@ -15,10 +15,10 @@ import org.sysu.renNameService.GlobalContext;
 import org.sysu.renNameService.dao.RenAuthuserEntityDAO;
 import org.sysu.renNameService.dao.RenDomainEntityDAO;
 import org.sysu.renNameService.dao.RenWorkitemEntityDAO;
-import org.sysu.renNameService.entity.RenAuthuserEntity;
-import org.sysu.renNameService.entity.multikeyclass.RenAuthuserEntityMKC;
-import org.sysu.renNameService.entity.RenDomainEntity;
-import org.sysu.renNameService.entity.RenWorkitemEntity;
+import org.sysu.renCommon.entity.RenAuthuserEntity;
+import org.sysu.renCommon.entity.multikeyclass.RenAuthuserEntityMKC;
+import org.sysu.renCommon.entity.RenDomainEntity;
+import org.sysu.renCommon.entity.RenWorkitemEntity;
 import org.sysu.renNameService.utility.*;
 
 import java.sql.Timestamp;

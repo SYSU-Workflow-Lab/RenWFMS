@@ -5,7 +5,7 @@
 package org.sysu.renNameService.transaction;
 import org.springframework.stereotype.Service;
 import org.sysu.renNameService.GlobalContext;
-import org.sysu.renNameService.entity.RenNsTransactionEntity;
+import org.sysu.renCommon.entity.RenNsTransactionEntity;
 import org.sysu.renCommon.utility.TimestampUtil;
 
 import java.util.HashMap;

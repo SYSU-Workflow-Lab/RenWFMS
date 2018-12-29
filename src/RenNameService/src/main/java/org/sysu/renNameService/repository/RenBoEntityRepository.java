@@ -2,7 +2,7 @@ package org.sysu.renNameService.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.sysu.renNameService.entity.RenBoEntity;
+import org.sysu.renCommon.entity.RenBoEntity;
 
 import java.util.List;
 

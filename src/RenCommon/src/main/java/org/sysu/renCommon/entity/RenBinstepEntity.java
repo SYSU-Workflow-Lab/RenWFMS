@@ -1,4 +1,4 @@
-package org.sysu.workflow.entity;
+package org.sysu.renCommon.entity;
 
 import javax.persistence.*;
 import java.util.Arrays;

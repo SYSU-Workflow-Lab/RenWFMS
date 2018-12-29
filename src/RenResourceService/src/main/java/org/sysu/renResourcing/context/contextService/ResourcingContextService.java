@@ -13,7 +13,7 @@ import org.sysu.renResourcing.consistency.ContextCachePool;
 import org.sysu.renResourcing.context.ResourcingContext;
 import org.sysu.renResourcing.context.TaskContext;
 import org.sysu.renResourcing.dao.RenRsrecordEntityDAO;
-import org.sysu.renResourcing.entity.RenRsrecordEntity;
+import org.sysu.renCommon.entity.RenRsrecordEntity;
 import org.sysu.renResourcing.utility.LogUtil;
 
 import java.util.Hashtable;

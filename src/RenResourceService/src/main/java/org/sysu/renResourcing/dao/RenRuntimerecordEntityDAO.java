@@ -5,17 +5,15 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
-import org.sysu.renResourcing.entity.RenRuntimerecordEntity;
+import org.sysu.renCommon.entity.RenRuntimerecordEntity;
 import org.sysu.renResourcing.repository.RenRuntimerecordEntityRepository;
-
-import java.util.List;
 
 /**
  * Created by Skye on 2018/12/5.
  */
 
 @Repository
-@CacheConfig(cacheNames = "rs_ren_runtimerecord")
+@CacheConfig(cacheNames = "ren_runtimerecord")
 public class RenRuntimerecordEntityDAO {
 
     @Autowired

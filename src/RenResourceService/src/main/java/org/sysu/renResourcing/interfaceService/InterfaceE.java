@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.sysu.renResourcing.GlobalContext;
 import org.sysu.renCommon.enums.RSEventType;
 import org.sysu.renResourcing.context.WorkitemContext;
-import org.sysu.renResourcing.entity.RenRseventlogEntity;
+import org.sysu.renCommon.entity.RenRseventlogEntity;
 import org.sysu.renResourcing.plugin.AsyncPluginRunner;
 import org.sysu.renResourcing.plugin.EventLogWriterPlugin;
 import org.sysu.renCommon.utility.TimestampUtil;

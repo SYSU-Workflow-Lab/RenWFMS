@@ -3,10 +3,9 @@
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
 package org.sysu.renNameService.transaction;
-import org.sysu.renNameService.entity.RenNsTransactionEntity;
+import org.sysu.renCommon.entity.RenNsTransactionEntity;
 
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 /**

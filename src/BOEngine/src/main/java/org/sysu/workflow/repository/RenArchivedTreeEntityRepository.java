@@ -1,7 +1,7 @@
 package org.sysu.workflow.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.sysu.workflow.entity.RenArchivedTreeEntity;
+import org.sysu.renCommon.entity.RenArchivedTreeEntity;
 
 /**
  * Created by Skye on 2018/12/23.

@@ -5,7 +5,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
-import org.sysu.workflow.entity.RenArchivedTreeEntity;
+import org.sysu.renCommon.entity.RenArchivedTreeEntity;
 import org.sysu.workflow.repository.RenArchivedTreeEntityRepository;
 
 /**
@@ -13,7 +13,7 @@ import org.sysu.workflow.repository.RenArchivedTreeEntityRepository;
  */
 
 @Repository
-@CacheConfig(cacheNames = "be_ren_archived_tree")
+@CacheConfig(cacheNames = "ren_archived_tree")
 public class RenArchivedTreeEntityDAO {
 
     @Autowired

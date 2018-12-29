@@ -11,7 +11,7 @@ import org.sysu.renResourcing.context.WorkQueueContext;
 import org.sysu.renResourcing.context.WorkitemContext;
 import org.sysu.renResourcing.dao.RenQueueitemsEntityDAO;
 import org.sysu.renResourcing.dao.RenWorkqueueEntityDAO;
-import org.sysu.renResourcing.entity.RenWorkqueueEntity;
+import org.sysu.renCommon.entity.RenWorkqueueEntity;
 import org.sysu.renResourcing.utility.LogUtil;
 
 /**

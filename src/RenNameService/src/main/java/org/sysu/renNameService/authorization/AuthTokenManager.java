@@ -3,8 +3,6 @@
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
 package org.sysu.renNameService.authorization;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,9 +12,9 @@ import org.sysu.renCommon.utility.TimestampUtil;
 import org.sysu.renNameService.GlobalContext;
 import org.sysu.renNameService.dao.RenAuthuserEntityDAO;
 import org.sysu.renNameService.dao.RenSessionEntityDAO;
-import org.sysu.renNameService.entity.RenAuthuserEntity;
-import org.sysu.renNameService.entity.multikeyclass.RenAuthuserEntityMKC;
-import org.sysu.renNameService.entity.RenSessionEntity;
+import org.sysu.renCommon.entity.RenAuthuserEntity;
+import org.sysu.renCommon.entity.multikeyclass.RenAuthuserEntityMKC;
+import org.sysu.renCommon.entity.RenSessionEntity;
 import org.sysu.renNameService.utility.LogUtil;
 
 import java.sql.Timestamp;

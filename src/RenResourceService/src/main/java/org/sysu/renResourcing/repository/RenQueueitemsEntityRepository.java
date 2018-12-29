@@ -1,9 +1,8 @@
 package org.sysu.renResourcing.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.sysu.renResourcing.entity.RenQueueitemsEntity;
-import org.sysu.renResourcing.entity.multikeyclass.RenQueueitemsEntityMKC;
+import org.sysu.renCommon.entity.RenQueueitemsEntity;
+import org.sysu.renCommon.entity.multikeyclass.RenQueueitemsEntityMKC;
 
 import java.util.List;
 

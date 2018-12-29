@@ -6,7 +6,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
-import org.sysu.workflow.entity.RenBinstepEntity;
+import org.sysu.renCommon.entity.RenBinstepEntity;
 import org.sysu.workflow.repository.RenBinstepEntityRepository;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
  * Created by Skye on 2018/12/23.
  */
 @Repository
-@CacheConfig(cacheNames = "be_ren_binstep")
+@CacheConfig(cacheNames = "ren_binstep")
 public class RenBinstepEntityDAO {
 
     @Autowired

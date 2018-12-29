@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Repository;
-import org.sysu.renNameService.entity.RenRolemapArchivedEntity;
+import org.sysu.renCommon.entity.RenRolemapArchivedEntity;
 import org.sysu.renNameService.repository.RenRolemapArchivedEntityRepository;
 
 /**
@@ -12,7 +12,7 @@ import org.sysu.renNameService.repository.RenRolemapArchivedEntityRepository;
  */
 
 @Repository
-@CacheConfig(cacheNames = "ns_ren_rolemap_archived")
+@CacheConfig(cacheNames = "ren_rolemap_archived")
 public class RenRolemapArchivedEntityDAO {
 
     @Autowired

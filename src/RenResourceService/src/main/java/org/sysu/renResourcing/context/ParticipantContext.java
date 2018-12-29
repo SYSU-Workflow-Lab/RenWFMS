@@ -4,11 +4,11 @@
  */
 package org.sysu.renResourcing.context;
 
+import org.sysu.renCommon.entity.RenRsparticipantEntity;
 import org.sysu.renCommon.enums.AgentReentrantType;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renCommon.enums.WorkerType;
 import org.sysu.renResourcing.consistency.ContextCachePool;
-import org.sysu.renResourcing.entity.RenRsparticipantEntity;
 import org.sysu.renResourcing.dao.RenRsparticipantEntityDAO;
 import org.sysu.renResourcing.utility.LogUtil;
 import org.sysu.renResourcing.utility.SpringContextUtil;

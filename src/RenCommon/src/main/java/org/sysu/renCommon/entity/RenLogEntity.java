@@ -1,4 +1,4 @@
-package org.sysu.renResourcing.entity;
+package org.sysu.renCommon.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

@@ -2,7 +2,7 @@
  * Project Ren @ 2018
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
-package org.sysu.renNameService.entity;
+package org.sysu.renCommon.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

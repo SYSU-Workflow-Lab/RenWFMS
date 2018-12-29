@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.sysu.renCommon.entity.*;
 import org.sysu.renNameService.GlobalContext;
 import org.sysu.renNameService.dao.*;
-import org.sysu.renNameService.entity.*;
 import org.sysu.renNameService.utility.*;
 import org.sysu.renCommon.utility.AuthDomainHelper;
 

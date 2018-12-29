@@ -11,7 +11,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.workflow.*;
 import org.sysu.workflow.dao.*;
-import org.sysu.workflow.entity.*;
+import org.sysu.renCommon.entity.*;
 import org.sysu.workflow.env.MultiStateMachineDispatcher;
 import org.sysu.workflow.env.SimpleErrorReporter;
 import org.sysu.workflow.instanceTree.InstanceManager;
@@ -143,6 +143,7 @@ public class RuntimeManagementService {
                     rrte.setParameters(t.GenerateParamDescriptor());
                     renRstaskEntityDAO.saveOrUpdate(rrte);
                 }
+                renBoEntityDAO.saveOrUpdate(rbe);
             }
             return retSet;
         } catch (Exception ex) {

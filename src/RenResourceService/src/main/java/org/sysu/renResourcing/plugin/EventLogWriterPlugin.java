@@ -5,7 +5,7 @@
 package org.sysu.renResourcing.plugin;
 
 import org.sysu.renCommon.enums.LogLevelType;
-import org.sysu.renResourcing.entity.RenRseventlogEntity;
+import org.sysu.renCommon.entity.RenRseventlogEntity;
 import org.sysu.renResourcing.dao.RenRseventlogEntityDAO;
 import org.sysu.renResourcing.utility.LogUtil;
 import org.sysu.renResourcing.utility.SpringContextUtil;

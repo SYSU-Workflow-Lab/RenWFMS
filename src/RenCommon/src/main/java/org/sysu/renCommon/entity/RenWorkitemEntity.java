@@ -2,7 +2,7 @@
  * Project Ren @ 2018
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
-package org.sysu.renResourcing.entity;
+package org.sysu.renCommon.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /**
  * Author: Rinkako
- * Date  : 2018/3/5
+ * Date  : 2018/3/1
  * Usage :
  */
 @Entity
@@ -89,7 +89,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "taskid", nullable = false, length = -1)
+    @Column(name = "taskid", nullable = false)
     public String getTaskid() {
         return taskid;
     }
@@ -99,7 +99,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "task_polymorphism_id", nullable = false, length = -1)
+    @Column(name = "task_polymorphism_id", nullable = false)
     public String getTaskPolymorphismId() {
         return taskPolymorphismId;
     }
@@ -108,8 +108,9 @@ public class RenWorkitemEntity {
         this.taskPolymorphismId = taskPolymorphismId;
     }
 
-    @Basic
-    @Column(name = "arguments", nullable = true, length = -1)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "arguments", columnDefinition = "Text")
     public String getArguments() {
         return arguments;
     }
@@ -119,7 +120,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "firing_time", nullable = true)
+    @Column(name = "firing_time")
     public Timestamp getFiringTime() {
         return firingTime;
     }
@@ -129,7 +130,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "enablement_time", nullable = true)
+    @Column(name = "enablement_time")
     public Timestamp getEnablementTime() {
         return enablementTime;
     }
@@ -139,7 +140,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "start_time", nullable = true)
+    @Column(name = "start_time")
     public Timestamp getStartTime() {
         return startTime;
     }
@@ -149,7 +150,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "completion_time", nullable = true)
+    @Column(name = "completion_time")
     public Timestamp getCompletionTime() {
         return completionTime;
     }
@@ -159,7 +160,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "status", nullable = true, length = 128)
+    @Column(name = "status", length = 128)
     public String getStatus() {
         return status;
     }
@@ -169,7 +170,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "resource_status", nullable = true, length = 128)
+    @Column(name = "resource_status", length = 128)
     public String getResourceStatus() {
         return resourceStatus;
     }
@@ -179,7 +180,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "started_by", nullable = true, length = 64)
+    @Column(name = "started_by", length = 64)
     public String getStartedBy() {
         return startedBy;
     }
@@ -189,7 +190,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "completed_by", nullable = true, length = 64)
+    @Column(name = "completed_by", length = 64)
     public String getCompletedBy() {
         return completedBy;
     }
@@ -199,7 +200,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "timertrigger", nullable = true, length = 64)
+    @Column(name = "timertrigger", length = 64)
     public String getTimertrigger() {
         return timertrigger;
     }
@@ -209,7 +210,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "timerexpiry", nullable = true, length = 64)
+    @Column(name = "timerexpiry", length = 64)
     public String getTimerexpiry() {
         return timerexpiry;
     }
@@ -219,7 +220,7 @@ public class RenWorkitemEntity {
     }
 
     @Basic
-    @Column(name = "latest_start_time", nullable = true)
+    @Column(name = "latest_start_time")
     public Timestamp getLatestStartTime() {
         return latestStartTime;
     }

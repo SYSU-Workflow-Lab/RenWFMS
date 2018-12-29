@@ -1,7 +1,7 @@
 package org.sysu.renNameService.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.sysu.renNameService.entity.RenDomainEntity;
+import org.sysu.renCommon.entity.RenDomainEntity;
 
 /**
  * Created by Skye on 2018/12/7.

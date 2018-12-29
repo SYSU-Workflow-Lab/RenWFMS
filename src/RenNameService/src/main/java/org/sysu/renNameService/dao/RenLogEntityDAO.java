@@ -2,7 +2,7 @@ package org.sysu.renNameService.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.sysu.renNameService.entity.RenLogEntity;
+import org.sysu.renCommon.entity.RenLogEntity;
 import org.sysu.renNameService.repository.RenLogEntityRepository;
 
 import java.util.List;

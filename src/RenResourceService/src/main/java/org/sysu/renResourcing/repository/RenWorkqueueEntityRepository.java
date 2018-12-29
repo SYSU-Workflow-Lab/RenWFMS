@@ -1,7 +1,7 @@
 package org.sysu.renResourcing.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.sysu.renResourcing.entity.RenWorkqueueEntity;
+import org.sysu.renCommon.entity.RenWorkqueueEntity;
 
 /**
  * Created by Skye on 2018/12/22.

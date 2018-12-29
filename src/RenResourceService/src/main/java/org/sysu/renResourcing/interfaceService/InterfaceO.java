@@ -6,12 +6,12 @@ package org.sysu.renResourcing.interfaceService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.sysu.renCommon.entity.RenRuntimerecordEntity;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renCommon.enums.PrivilegeType;
 import org.sysu.renCommon.enums.ResourceBindingType;
 import org.sysu.renResourcing.context.ParticipantContext;
 import org.sysu.renResourcing.context.WorkitemContext;
-import org.sysu.renResourcing.entity.RenRuntimerecordEntity;
 import org.sysu.renCommon.utility.CommonUtil;
 import org.sysu.renResourcing.dao.RenRuntimerecordEntityDAO;
 import org.sysu.renResourcing.utility.LogUtil;

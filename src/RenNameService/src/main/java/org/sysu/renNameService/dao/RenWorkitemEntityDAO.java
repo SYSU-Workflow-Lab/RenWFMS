@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
-import org.sysu.renNameService.entity.RenWorkitemEntity;
+import org.sysu.renCommon.entity.RenWorkitemEntity;
 import org.sysu.renNameService.repository.RenWorkitemEntityRepository;
 
 /**
@@ -12,7 +12,7 @@ import org.sysu.renNameService.repository.RenWorkitemEntityRepository;
  */
 
 @Repository
-@CacheConfig(cacheNames = "ns_ren_workitem")
+@CacheConfig(cacheNames = "ren_workitem")
 public class RenWorkitemEntityDAO {
 
     @Autowired

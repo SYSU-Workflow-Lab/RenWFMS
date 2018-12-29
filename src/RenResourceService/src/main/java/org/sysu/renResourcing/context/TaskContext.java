@@ -4,8 +4,8 @@
  */
 package org.sysu.renResourcing.context;
 
+import org.sysu.renCommon.entity.RenRstaskEntity;
 import org.sysu.renCommon.enums.WorkitemStatusType;
-import org.sysu.renResourcing.entity.RenRstaskEntity;
 import org.sysu.renCommon.utility.CommonUtil;
 import org.sysu.renCommon.utility.SerializationUtil;
 

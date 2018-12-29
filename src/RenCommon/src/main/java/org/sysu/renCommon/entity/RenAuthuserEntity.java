@@ -1,6 +1,6 @@
-package org.sysu.renNameService.entity;
+package org.sysu.renCommon.entity;
 
-import org.sysu.renNameService.entity.multikeyclass.RenAuthuserEntityMKC;
+import org.sysu.renCommon.entity.multikeyclass.RenAuthuserEntityMKC;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

@@ -4,10 +4,10 @@
  */
 package org.sysu.renResourcing.utility;
 
+import org.sysu.renCommon.entity.RenLogEntity;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renCommon.utility.TimestampUtil;
 import org.sysu.renResourcing.GlobalContext;
-import org.sysu.renResourcing.entity.RenLogEntity;
 import org.sysu.renResourcing.dao.RenLogEntityDAO;
 
 import java.util.UUID;

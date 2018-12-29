@@ -4,8 +4,8 @@
  */
 package org.sysu.renResourcing.context;
 
+import org.sysu.renCommon.entity.RenWorkitemEntity;
 import org.sysu.renCommon.enums.WorkitemResourcingStatusType;
-import org.sysu.renResourcing.entity.RenWorkitemEntity;
 
 import java.io.Serializable;
 import java.util.HashMap;

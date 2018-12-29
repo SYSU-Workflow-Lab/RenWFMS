@@ -1,7 +1,7 @@
 package org.sysu.workflow.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.sysu.workflow.entity.RenBinstepEntity;
+import org.sysu.renCommon.entity.RenBinstepEntity;
 
 import java.util.List;
 
