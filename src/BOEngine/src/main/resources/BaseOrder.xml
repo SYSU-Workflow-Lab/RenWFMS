@@ -5,7 +5,7 @@
  <datamodel>
   <data expr="1" id="baseData"></data>
  </datamodel>
- <tasks>
+ <operations>
   <task id="baseAdd" brole="waiter" name="addItemTask">
     <principle method="Allocate" distributor="ShortestQueue"></principle>
 	<callback on="complete" event="submit"></callback>
@@ -14,6 +14,6 @@
     <principle method="Allocate" distributor="ShortestQueue"></principle>
 	<callback on="complete" event="submit"></callback>
   </task>
- </tasks>
+ </operations>
  <final id="BaseFinal"></final>
 </businessclass>

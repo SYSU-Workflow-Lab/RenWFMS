@@ -24,7 +24,7 @@
     </datamodel>
 
     <!-- 任务模型 -->
-    <tasks>
+    <operations>
         <task id="judge" name="judgeTask" brole="judger">
             <principle method="Allocate" distributor="Round"/>
             <callback on="complete" event="judgeComplete"/>
@@ -77,7 +77,7 @@
             <callback on="complete" event="merged"/>
             <documentation>Merge task let a merger agent merge solutions of sub tasks to be a complete solution of a crowdsourcing task.</documentation>
         </task>
-    </tasks>
+    </operations>
 
 
     <!-- 生命周期模型 -->

@@ -9,7 +9,7 @@
   <data expr="0" id="finishKOCount"></data>
   <data expr="233" id="mytest"></data>
  </datamodel>
- <tasks>
+ <operations>
     <task id="addItem" brole="waiter" name="addItemTask">
 	    <principle method="Offer" distributor="QueueLength">
 			<param name="length" expr="lt 3"></param>
@@ -21,7 +21,7 @@
 		<principle method="Allocate" distributor="ShortestQueue"></principle>
 		<callback on="complete" event="updateDeliTimeComplete"></callback>
     </task>
- </tasks>
+ </operations>
  <state id="Initial">
   <transition target="Dining"></transition>
  </state>

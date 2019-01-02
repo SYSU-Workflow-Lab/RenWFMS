@@ -4,6 +4,7 @@ package org.sysu.workflow;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.sysu.workflow.io.BOXMLReader;
 import org.sysu.workflow.model.extend.InheritableContext;
@@ -24,6 +25,7 @@ import java.io.*;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 
 
 /**
@@ -31,6 +33,7 @@ import java.security.NoSuchAlgorithmException;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@TestPropertySource(locations = "classpath:application-test.properties")
 public class SCXMLReaderTest {
 
     @Before
@@ -137,10 +140,10 @@ public class SCXMLReaderTest {
                 "produced", null, "", 0);
         System.out.println("send produced");
 
-        EventDataPackage edp = new EventDataPackage();
-        edp.passed = "1";
+        HashMap<String, Object> payload = new HashMap<>();
+        payload.put("passed", "1");
         dispatcher.send("TEST_RTID", ctx.NodeId, "", MessageMode.TO_CHILD, "KitchenOrder", "", BOXMLIOProcessor.DEFAULT_EVENT_PROCESSOR,
-                "testCompleted", edp, "", 0);
+                "testCompleted", payload, "", 0);
         System.out.println("send testCompleted");
 
         dispatcher.send("TEST_RTID", ctx.NodeId, "", MessageMode.TO_CHILD, "KitchenOrder", "", BOXMLIOProcessor.DEFAULT_EVENT_PROCESSOR,

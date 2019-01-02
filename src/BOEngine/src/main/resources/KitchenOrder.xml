@@ -1,5 +1,5 @@
 <businessclass name="KitchenOrder" version="1.0" xmlns="http://www.w3.org/2005/07/scxml">
- <tasks>
+ <operations>
     <task id="produceDishes" brole="cook" name="produceDishesTask">
 		<principle method="Allocate" distributor="ShortestQueue"></principle>
 		<callback on="complete" event="produced"></callback>
@@ -16,7 +16,7 @@
 		<principle method="Allocate" distributor="Random"></principle>
 		<callback on="complete" event="archived"></callback>
     </task>
- </tasks>
+ </operations>
  <state id="Initial">
   <transition target="Producing"></transition>
  </state>
