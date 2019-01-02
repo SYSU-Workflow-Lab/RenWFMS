@@ -381,6 +381,17 @@ CREATE TABLE `ren_runtimerecord` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for ren_serviceinfo
+-- ----------------------------
+DROP TABLE IF EXISTS `ren_serviceinfo`;
+CREATE TABLE `ren_serviceinfo` (
+  `interpreter_id` varchar(64) NOT NULL,
+  `location` varchar(64) NOT NULL,
+  `is_active` int(11) NOT NULL,
+  PRIMARY KEY (`interpreter_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
 -- Table structure for `ren_session`
 -- ----------------------------
 DROP TABLE IF EXISTS `ren_session`;

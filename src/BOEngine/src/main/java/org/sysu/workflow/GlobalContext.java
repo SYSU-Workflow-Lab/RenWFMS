@@ -15,7 +15,7 @@ public class GlobalContext {
     public static boolean IsLocalDebug = false;
 
     /**
-     * Name service micro-service global id.
+     * BOEngine service micro-service global id.
      */
     public static final String ENGINE_GLOBAL_ID = String.format("WFMSComponent_Engine_%s", UUID.randomUUID().toString());
 

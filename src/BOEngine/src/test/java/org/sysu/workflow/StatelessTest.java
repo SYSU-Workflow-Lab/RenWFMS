@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.sysu.workflow.env.MultiStateMachineDispatcher;
 import org.sysu.workflow.env.SimpleErrorReporter;
@@ -28,10 +29,11 @@ import java.net.URL;
 /**
  * Author: Rinkako
  * Date  : 2018/3/6
- * Usage :
+ * Usage : You need to run separately(first phase1, then phase2), not run "StatelessTest".
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@TestPropertySource(locations = "classpath:application-test.properties")
 public class StatelessTest {
 
     @Autowired
