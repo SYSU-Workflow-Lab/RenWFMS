@@ -167,7 +167,7 @@ public class SimpleContext implements Context, Serializable {
     public void setLocal(final String name, final Object value) {
         getVars().put(name, value);
         if (log.isDebugEnabled()) {
-            log.debug(name + " = " + String.valueOf(value));
+            log.debug(name + " = " + value);
         }
     }
 

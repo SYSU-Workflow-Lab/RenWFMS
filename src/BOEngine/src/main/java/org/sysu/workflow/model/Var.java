@@ -82,7 +82,7 @@ public class Var extends Action {
         ctx.setLocal(name, varObj);
         if (exctx.getAppLog().isDebugEnabled()) {
             exctx.getAppLog().debug("<var>: Defined variable '" + name
-                    + "' with initial value '" + String.valueOf(varObj) + "'");
+                    + "' with initial value '" + varObj + "'");
         }
         TriggerEvent ev = new TriggerEvent(name + ".change", TriggerEvent.CHANGE_EVENT);
         exctx.getInternalIOProcessor().addEvent(ev);

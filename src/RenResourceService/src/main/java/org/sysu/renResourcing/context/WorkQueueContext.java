@@ -436,7 +436,7 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
                 }
             } else {
                 RenQueueitemsEntityDAO renQueueitemsEntityDAO = (RenQueueitemsEntityDAO) SpringContextUtil.getBean("renQueueitemsEntityDAO");
-                List<RenQueueitemsEntity> inSteady = (ArrayList<RenQueueitemsEntity>) renQueueitemsEntityDAO.findRenQueueitemsEntitiesByWorkqueueId(this.queueId);
+                List<RenQueueitemsEntity> inSteady = renQueueitemsEntityDAO.findRenQueueitemsEntitiesByWorkqueueId(this.queueId);
                 cmtFlag = true;
                 for (RenQueueitemsEntity rqe : inSteady) {
                     WorkitemContext workitem = workitemContextService.GetContext(rqe.getWorkitemId(), "#RS_INTERNAL_" + GlobalContext.RESOURCE_SERVICE_GLOBAL_ID);

@@ -92,8 +92,8 @@ public class SimpleDispatcher implements EventDispatcher, Serializable {
             buf.append(", target: ").append(target);
             buf.append(", type: ").append(type);
             buf.append(", event: ").append(event);
-            buf.append(", data: ").append(String.valueOf(data));
-            buf.append(", hints: ").append(String.valueOf(hints));
+            buf.append(", data: ").append(data);
+            buf.append(", hints: ").append(hints);
             buf.append(", delay: ").append(delay);
             buf.append(')');
             log.info(buf.toString());

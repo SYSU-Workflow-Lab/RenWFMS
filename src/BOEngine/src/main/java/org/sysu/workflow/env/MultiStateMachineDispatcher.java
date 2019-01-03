@@ -111,8 +111,8 @@ public class MultiStateMachineDispatcher extends SimpleDispatcher implements Ser
                     ", targetState: " + targetState +
                     ", type: " + type +
                     ", event: " + event +
-                    ", data: " + String.valueOf(data) +
-                    ", hints: " + String.valueOf(hints) +
+                    ", data: " + data +
+                    ", hints: " + hints +
                     ", delay: " + delay + ')';
             log.info(buf);
         }

@@ -23,6 +23,7 @@ import org.sysu.workflow.model.extend.Tasks;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -44,8 +45,8 @@ public class SCXMLReaderTest {
     public static synchronized String encrypt(String text)
             throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("SHA");
-        md.update(text.getBytes("UTF-8"));
-        byte raw[] = md.digest();
+        md.update(text.getBytes(StandardCharsets.UTF_8));
+        byte[] raw = md.digest();
         return new Base64(-1).encodeToString(raw);            // -1 means no line breaks
     }
 
