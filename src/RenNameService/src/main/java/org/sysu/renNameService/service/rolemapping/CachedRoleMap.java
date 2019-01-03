@@ -2,7 +2,7 @@
  * Project Ren @ 2018
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
-package org.sysu.renNameService.rolemapping;
+package org.sysu.renNameService.service.rolemapping;
 import org.sysu.renCommon.entity.RenRolemapEntity;
 import java.util.ArrayList;
 

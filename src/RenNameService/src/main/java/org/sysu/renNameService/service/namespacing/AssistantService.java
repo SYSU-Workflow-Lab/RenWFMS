@@ -1,4 +1,4 @@
-package org.sysu.renNameService.namespacing;
+package org.sysu.renNameService.service.namespacing;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

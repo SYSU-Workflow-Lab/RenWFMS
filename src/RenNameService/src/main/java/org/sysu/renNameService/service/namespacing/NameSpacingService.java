@@ -2,7 +2,7 @@
  * Project Ren @ 2018
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
-package org.sysu.renNameService.namespacing;
+package org.sysu.renNameService.service.namespacing;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +16,7 @@ import org.sysu.renCommon.interactionRouter.LocationContext;
 import org.sysu.renCommon.utility.AuthDomainHelper;
 import org.sysu.renCommon.utility.TimestampUtil;
 import org.sysu.renNameService.GlobalContext;
-import org.sysu.renNameService.dao.RenBoEntityDAO;
-import org.sysu.renNameService.dao.RenLogEntityDAO;
-import org.sysu.renNameService.dao.RenProcessEntityDAO;
-import org.sysu.renNameService.dao.RenRuntimerecordEntityDAO;
+import org.sysu.renNameService.dao.*;
 import org.sysu.renNameService.utility.*;
 
 import java.util.*;

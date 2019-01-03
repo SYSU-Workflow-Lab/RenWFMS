@@ -2,7 +2,7 @@
  * Project Ren @ 2018
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
-package org.sysu.renNameService.authorization;
+package org.sysu.renNameService.service.authorization;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
