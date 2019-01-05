@@ -1,4 +1,4 @@
-package org.sysu.renNameService.service.enginescheduler;
+package org.sysu.renNameService.service.routercheduler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import java.util.Random;
  */
 
 @Service
-public class EngineSchedulerService {
+public class RouterSchedulerService {
 
     @Autowired
     private RenServiceInfoDAO renServiceInfoDAO;
@@ -21,16 +21,18 @@ public class EngineSchedulerService {
     @Autowired
     private RenRuntimerecordEntityDAO renRuntimerecordEntityDAO;
 
-    public String getRandomBOEngine() {
-
-        List<String> allLocations = renServiceInfoDAO.findAllLocation();
-
+    public String getRandomBOEngineLocation() {
+        List<String> allLocations = renServiceInfoDAO.findAllBOEngineLocation();
         return allLocations.get(new Random().nextInt(allLocations.size()));
     }
 
     public String getBOEngineLocationByRtid(String rtid) {
         String interpreterId = renRuntimerecordEntityDAO.findInterpreterIdByRtid(rtid);
         return renServiceInfoDAO.findByInterpreterId(interpreterId).getLocation();
+    }
+
+    public String getRSLocation(){
+        return renServiceInfoDAO.findRSLocation();
     }
 
 }

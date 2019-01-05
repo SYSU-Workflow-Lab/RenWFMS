@@ -32,13 +32,17 @@ public class RenServiceInfoDAO {
         return renServiceInfoRepository.findOne(interpreterId);
     }
 
-    public List<String> findAllLocation() {
-        return renServiceInfoRepository.findAllLocation();
+    public List<String> findAllBOEngineLocation() {
+        return renServiceInfoRepository.findAllBOEngineLocation();
     }
 
     @CacheEvict(key = "#p0")
     public void deleteByInterpreterId(String interpreterId) {
         renServiceInfoRepository.delete(interpreterId);
+    }
+
+    public String findRSLocation() {
+        return renServiceInfoRepository.findRSLocation();
     }
 
 }

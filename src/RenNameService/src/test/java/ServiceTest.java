@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.sysu.renCommon.entity.RenServiceInfo;
 import org.sysu.renNameService.RenNameServiceApplication;
 import org.sysu.renNameService.dao.RenServiceInfoDAO;
-import org.sysu.renNameService.service.enginescheduler.EngineSchedulerService;
+import org.sysu.renNameService.service.routercheduler.RouterSchedulerService;
 
 /**
  * Created by Skye on 2019/1/5.
@@ -25,7 +25,7 @@ public class ServiceTest {
     private RenServiceInfoDAO renServiceInfoDAO;
 
     @Autowired
-    private EngineSchedulerService engineSchedulerService;
+    private RouterSchedulerService routerSchedulerService;
 
     @Before
     public void initData() {
@@ -36,7 +36,7 @@ public class ServiceTest {
 
     @Test
     public void test1() {
-        System.out.println(engineSchedulerService.getRandomBOEngine());
+        System.out.println(routerSchedulerService.getRandomBOEngineLocation());
     }
 
 }

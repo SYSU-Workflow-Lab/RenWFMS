@@ -1,3 +1,5 @@
+package org.sysu.workflow;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,17 +10,14 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.sysu.renCommon.entity.RenServiceInfo;
-import org.sysu.renNameService.RenNameServiceApplication;
-import org.sysu.renNameService.dao.RenServiceInfoDAO;
-
-import java.util.List;
+import org.sysu.workflow.dao.RenServiceInfoDAO;
 
 /**
  * Created by Skye on 2019/1/5.
  */
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = RenNameServiceApplication.class)
+@SpringBootTest(classes = BOEngineApplication.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @Transactional
 public class DAOTest {
@@ -28,19 +27,13 @@ public class DAOTest {
 
     @Before
     public void initData() {
-        for (int i = 1; i < 10; i++) {
-            renServiceInfoDAO.saveOrUpdate(new RenServiceInfo(String.valueOf(i), i + "." + i + "." +i + "." + i));
-        }
+        renServiceInfoDAO.saveOrUpdate(new RenServiceInfo("WFMSComponent_RS_" + 1, "1.1.1.1"));
     }
 
     @Test
     public void test1() {
-        List<String> allLocations = renServiceInfoDAO.findAllBOEngineLocation();
-        int[] index = { 1 };
-        allLocations.forEach((i) -> {
-            String temp = index[0] + "." + index[0] + "." + index[0] + "." + index[0]++;
-            Assert.assertEquals(temp, i);
-        });
+        String rsLocation = renServiceInfoDAO.findRSLocation();
+        Assert.assertEquals("1.1.1.1", rsLocation);
     }
 
 }

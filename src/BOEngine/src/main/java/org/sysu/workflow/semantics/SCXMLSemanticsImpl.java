@@ -8,6 +8,7 @@ import org.sysu.workflow.instanceTree.InstanceManager;
 import org.sysu.workflow.invoke.Invoker;
 import org.sysu.workflow.invoke.InvokerException;
 import org.sysu.workflow.model.*;
+import org.sysu.workflow.service.AssistantService;
 import org.sysu.workflow.service.SteadyStepService;
 import org.sysu.workflow.utility.LogUtil;
 import org.sysu.workflow.system.EventVariable;
@@ -207,7 +208,8 @@ public class SCXMLSemanticsImpl implements BOXMLSemantics {
                     if (!GlobalContext.IsLocalDebug) {
                         HashMap<String, String> args = new HashMap<>();
                         args.put("rtid", exctx.Rtid);
-                        GlobalContext.Interaction.Send(LocationContext.URL_RS_FINISH, args, exctx.Rtid);
+                        AssistantService assistantService = (AssistantService) SpringContextUtil.getBean("assistantService");
+                        GlobalContext.Interaction.Send(assistantService.getRSLocation() + LocationContext.URL_RS_FINISH, args, exctx.Rtid);
                     }
                 }
             } catch (Exception e) {

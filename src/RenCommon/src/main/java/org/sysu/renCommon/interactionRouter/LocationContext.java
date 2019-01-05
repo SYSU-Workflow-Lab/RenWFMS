@@ -12,16 +12,6 @@ package org.sysu.renCommon.interactionRouter;
 public class LocationContext {
 
     /**
-     * Service URL for RS submit task.
-     */
-    public static final String URL_RS_SUBMITTASK = "http://localhost:10233/internal/submitTask";
-
-    /**
-     * Service URL for RS finish life cycle of BO.
-     */
-    public static final String URL_RS_FINISH = "http://localhost:10233/internal/finRtid";
-
-    /**
      * Service URL for BO Engine Serialization BO.
      */
     public static final String URL_BOENGINE_SERIALIZEBO = "/gateway/serializeBO";
@@ -42,12 +32,22 @@ public class LocationContext {
     public static final String URL_BOENGINE_CALLBACK = "/gateway/callback";
 
     /**
+     * Service URL for RS submit task.
+     */
+    public static final String URL_RS_SUBMITTASK = "/internal/submitTask";
+
+    /**
+     * Service URL for RS finish life cycle of BO.
+     */
+    public static final String URL_RS_FINISH = "/internal/finRtid";
+
+    /**
      * Service URL gateway for RS workitem actions.
      */
-    public static final String GATEWAY_RS_WORKITEM = "http://localhost:10233/workitem/";
+    public static final String GATEWAY_RS_WORKITEM = "/workitem/";
 
     /**
      * Service URL gateway for RS workqueue actions.
      */
-    public static final String GATEWAY_RS_QUEUE = "http://localhost:10233/queue/";
+    public static final String GATEWAY_RS_QUEUE = "/queue/";
 }

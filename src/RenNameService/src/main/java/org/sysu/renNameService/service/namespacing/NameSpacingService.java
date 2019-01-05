@@ -17,7 +17,7 @@ import org.sysu.renCommon.utility.AuthDomainHelper;
 import org.sysu.renCommon.utility.TimestampUtil;
 import org.sysu.renNameService.GlobalContext;
 import org.sysu.renNameService.dao.*;
-import org.sysu.renNameService.service.enginescheduler.EngineSchedulerService;
+import org.sysu.renNameService.service.routercheduler.RouterSchedulerService;
 import org.sysu.renNameService.utility.*;
 
 import java.util.*;
@@ -47,7 +47,7 @@ public class NameSpacingService {
     private AssistantService assistantService;
 
     @Autowired
-    private EngineSchedulerService engineSchedulerService;
+    private RouterSchedulerService routerSchedulerService;
 
     /**
      * Create a new process.
@@ -97,7 +97,7 @@ public class NameSpacingService {
             // send to engine for get business role
             HashMap<String, String> args = new HashMap<>();
             args.put("boidlist", boid);
-            String involveBRs = GlobalContext.Interaction.Send(engineSchedulerService.getRandomBOEngine() + LocationContext.URL_BOENGINE_SERIALIZEBO, args, "");
+            String involveBRs = GlobalContext.Interaction.Send(routerSchedulerService.getRandomBOEngineLocation() + LocationContext.URL_BOENGINE_SERIALIZEBO, args, "");
             return new AbstractMap.SimpleEntry<>(boid, involveBRs);
         } catch (Exception ex) {
             LogUtil.Log("Upload BO but exception occurred, " + ex, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, "");
@@ -293,7 +293,7 @@ public class NameSpacingService {
             // interaction with BO Engine
             HashMap<String, String> args = new HashMap<>();
             args.put("rtid", rtid);
-            GlobalContext.Interaction.Send(engineSchedulerService.getRandomBOEngine() + LocationContext.URL_BOENGINE_START, args, rtid);
+            GlobalContext.Interaction.Send(routerSchedulerService.getRandomBOEngineLocation() + LocationContext.URL_BOENGINE_START, args, rtid);
         } catch (Exception ex) {
             LogUtil.Log("Cannot interaction with BO Engine for RTID: " + rtid, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, rtid);
             throw ex;
@@ -455,7 +455,7 @@ public class NameSpacingService {
     public Object TransshipGetSpanTree(String rtid) throws Exception {
         HashMap<String, String> argMap = new HashMap<>();
         argMap.put("rtid", rtid);
-        String ret = GlobalContext.Interaction.Send(engineSchedulerService.getBOEngineLocationByRtid(rtid) + LocationContext.URL_BOENGINE_SPANTREE, argMap, rtid);
+        String ret = GlobalContext.Interaction.Send(routerSchedulerService.getBOEngineLocationByRtid(rtid) + LocationContext.URL_BOENGINE_SPANTREE, argMap, rtid);
         Map retObj = SerializationUtil.JsonDeserialization(ret, Map.class);
         return ((Map) retObj.get("returnElement")).get("data");
     }
@@ -470,7 +470,7 @@ public class NameSpacingService {
         for (Map.Entry<String, Object> kvp : args.entrySet()) {
             argMap.put(kvp.getKey(), (String) kvp.getValue());
         }
-        return GlobalContext.Interaction.Send(engineSchedulerService.getBOEngineLocationByRtid(argMap.get("rtid")) + LocationContext.URL_BOENGINE_CALLBACK, argMap, argMap.get("rtid"));
+        return GlobalContext.Interaction.Send(routerSchedulerService.getBOEngineLocationByRtid(argMap.get("rtid")) + LocationContext.URL_BOENGINE_CALLBACK, argMap, argMap.get("rtid"));
     }
 
     /**
@@ -488,7 +488,7 @@ public class NameSpacingService {
         if (payload != null) {
             argMap.put("payload", payload);
         }
-        String ret = GlobalContext.Interaction.Send(LocationContext.GATEWAY_RS_WORKITEM + action, argMap, "");
+        String ret = GlobalContext.Interaction.Send(routerSchedulerService.getRSLocation() + LocationContext.GATEWAY_RS_WORKITEM + action, argMap, "");
         Map retObj = SerializationUtil.JsonDeserialization(ret, Map.class);
         return ((Map) retObj.get("returnElement")).get("data");
     }
@@ -506,7 +506,7 @@ public class NameSpacingService {
         argMap.put("rtid", rtid);
         argMap.put("type", type);
         argMap.put("workerId", workerId);
-        String ret = GlobalContext.Interaction.Send(LocationContext.GATEWAY_RS_QUEUE + action, argMap, rtid);
+        String ret = GlobalContext.Interaction.Send(routerSchedulerService.getRSLocation() + LocationContext.GATEWAY_RS_QUEUE + action, argMap, rtid);
         Map retObj = SerializationUtil.JsonDeserialization(ret, Map.class);
         return ((Map) retObj.get("returnElement")).get("data");
     }
@@ -519,7 +519,7 @@ public class NameSpacingService {
     public Object TransshipGetAll(String rtid) throws Exception {
         HashMap<String, String> argMap = new HashMap<>();
         argMap.put("rtid", rtid);
-        String ret = GlobalContext.Interaction.Send(LocationContext.GATEWAY_RS_WORKITEM + "getAll", argMap, rtid);
+        String ret = GlobalContext.Interaction.Send(routerSchedulerService.getRSLocation() + LocationContext.GATEWAY_RS_WORKITEM + "getAll", argMap, rtid);
         Map retObj = SerializationUtil.JsonDeserialization(ret, Map.class);
         return ((Map) retObj.get("returnElement")).get("data");
     }
@@ -532,7 +532,7 @@ public class NameSpacingService {
     public Object TransshipGetAllWorkitemsForDomain(String domain) throws Exception {
         HashMap<String, String> argMap = new HashMap<>();
         argMap.put("domain", domain);
-        String ret = GlobalContext.Interaction.Send(LocationContext.GATEWAY_RS_WORKITEM + "getAllForDomain", argMap, "");
+        String ret = GlobalContext.Interaction.Send(routerSchedulerService.getRSLocation() + LocationContext.GATEWAY_RS_WORKITEM + "getAllForDomain", argMap, "");
         Map retObj = SerializationUtil.JsonDeserialization(ret, Map.class);
         return ((Map) retObj.get("returnElement")).get("data");
     }
@@ -545,7 +545,7 @@ public class NameSpacingService {
     public Object TransshipGetAllActiveForParticipant(String workerId) throws Exception {
         HashMap<String, String> argMap = new HashMap<>();
         argMap.put("workerId", workerId);
-        String ret = GlobalContext.Interaction.Send(LocationContext.GATEWAY_RS_WORKITEM + "getAllForParticipant", argMap, "");
+        String ret = GlobalContext.Interaction.Send(routerSchedulerService.getRSLocation() + LocationContext.GATEWAY_RS_WORKITEM + "getAllForParticipant", argMap, "");
         Map retObj = SerializationUtil.JsonDeserialization(ret, Map.class);
         return ((Map) retObj.get("returnElement")).get("data");
     }
@@ -558,7 +558,7 @@ public class NameSpacingService {
     public Object TransshipGetWorkitem(String wid) throws Exception {
         HashMap<String, String> argMap = new HashMap<>();
         argMap.put("wid", wid);
-        String ret = GlobalContext.Interaction.Send(LocationContext.GATEWAY_RS_WORKITEM + "get", argMap, "");
+        String ret = GlobalContext.Interaction.Send(routerSchedulerService.getRSLocation() + LocationContext.GATEWAY_RS_WORKITEM + "get", argMap, "");
         Map retObj = SerializationUtil.JsonDeserialization(ret, Map.class);
         return ((Map) retObj.get("returnElement")).get("data");
     }

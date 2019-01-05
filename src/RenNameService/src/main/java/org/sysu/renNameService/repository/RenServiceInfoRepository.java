@@ -11,7 +11,10 @@ import java.util.List;
  */
 public interface RenServiceInfoRepository extends JpaRepository<RenServiceInfo, String> {
 
-    @Query(value = "select location from ren_serviceinfo", nativeQuery = true)
-    List<String> findAllLocation();
+    @Query(value = "select location from ren_serviceinfo where locate('WFMSComponent_Engine_', interpreter_id) > 0", nativeQuery = true)
+    List<String> findAllBOEngineLocation();
+
+    @Query(value = "select location from ren_serviceinfo where locate('WFMSComponent_RS_', interpreter_id) > 0", nativeQuery = true)
+    String findRSLocation();
 
 }

@@ -29,4 +29,8 @@ public class RenServiceInfoDAO {
         renServiceInfoRepository.delete(interpreterId);
     }
 
+    public String findRSLocation() {
+        return renServiceInfoRepository.findRSLocation();
+    }
+
 }

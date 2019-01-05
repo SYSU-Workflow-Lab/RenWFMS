@@ -27,4 +27,14 @@ public class RenServiceInfoDAO {
         return renServiceInfoRepository.findOne(interpreterId);
     }
 
+    @CachePut(key = "#p0.interpreterId")
+    public RenServiceInfo saveOrUpdate(RenServiceInfo renServiceInfo) {
+        return renServiceInfoRepository.saveAndFlush(renServiceInfo);
+    }
+
+    @CacheEvict(key = "#p0")
+    public void deleteByInterpreterId(String interpreterId) {
+        renServiceInfoRepository.delete(interpreterId);
+    }
+
 }
