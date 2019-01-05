@@ -105,7 +105,8 @@ namespace CSTester
         }
 
         public const string Signature = "PrUpNw1dM3zRH6j3eviklCHE9Zbvk9NavGcJ_CibW19h50Yvr-ZZYZqn5Gi_SG1cPVQEIZf2wAJgBmq4dhNj7w7t9wUEz2pcGhn-6kIRO--QqWy121gksPE8B103RtMzuOsQDcErk4LriRQRO7-Xqks-RtpBUnpInnS_lkkajQs";
-        
-        public const string URL_GetAllWorkitem = "http://127.0.0.1:10234/ns/workitem/getAll";
+
+        // public const string URL_GetAllWorkitem = "http://127.0.0.1:10234/ns/workitem/getAll";
+        public const string URL_GetAllWorkitem = "http://222.200.180.59:10234/ns/workitem/getAll";
     }
 }
