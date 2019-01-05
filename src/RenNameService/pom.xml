@@ -63,6 +63,8 @@
             <groupId>org.sysu</groupId>
             <artifactId>RenCommon</artifactId>
             <version>0.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/libs/RenCommon-0.1.jar</systemPath>
         </dependency>
 
         <!--Mysql Connector-->
@@ -84,6 +86,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <includeSystemScope>true</includeSystemScope>
+                </configuration>
             </plugin>
         </plugins>
     </build>

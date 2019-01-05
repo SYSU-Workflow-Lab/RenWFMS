@@ -63,8 +63,8 @@
             <groupId>org.sysu</groupId>
             <artifactId>RenCommon</artifactId>
             <version>0.1</version>
-            <!--<scope>system</scope>-->
-            <!--<systemPath>${project.basedir}/src/main/resources/libs/RenCommon-0.1.jar</systemPath>-->
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/libs/RenCommon-0.1.jar</systemPath>
         </dependency>
 
         <!--Mysql Connector-->

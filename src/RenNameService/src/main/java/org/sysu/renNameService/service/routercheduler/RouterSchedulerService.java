@@ -31,7 +31,7 @@ public class RouterSchedulerService {
         return renServiceInfoDAO.findByInterpreterId(interpreterId).getLocation();
     }
 
-    public String getRSLocation(){
+    public String getRSLocation() {
         return renServiceInfoDAO.findRSLocation();
     }
 

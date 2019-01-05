@@ -14,7 +14,7 @@ public class AssistantService {
     @Autowired
     private RenServiceInfoDAO renServiceInfoDAO;
 
-    public String getRSLocation(){
+    public String getRSLocation() {
         return renServiceInfoDAO.findRSLocation();
     }
 
