@@ -148,7 +148,6 @@ public class RuntimeManagementService {
             return retSet;
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            ex.printStackTrace();
             LogUtil.Log(String.format("When serialize BOList(%s), exception occurred, %s, service rollback", boidList, ex),
                     RuntimeManagementService.class.getName(), LogLevelType.ERROR, boidList);
         }

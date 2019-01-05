@@ -1,4 +1,4 @@
-package org.sysu.renNameService.dao;
+package org.sysu.renResourcing.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -7,7 +7,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 import org.sysu.renCommon.entity.RenServiceInfo;
-import org.sysu.renNameService.repository.RenServiceInfoRepository;
+import org.sysu.renResourcing.repository.RenServiceInfoRepository;
 
 import java.util.List;
 
@@ -22,23 +22,9 @@ public class RenServiceInfoDAO {
     @Autowired
     private RenServiceInfoRepository renServiceInfoRepository;
 
-    @CachePut(key = "#p0.interpreterId")
-    public RenServiceInfo saveOrUpdate(RenServiceInfo renServiceInfo) {
-        return renServiceInfoRepository.saveAndFlush(renServiceInfo);
-    }
-
     @Cacheable(key = "#p0")
     public RenServiceInfo findByInterpreterId(String interpreterId) {
         return renServiceInfoRepository.findOne(interpreterId);
-    }
-
-    public List<String> findAllLocation() {
-        return renServiceInfoRepository.findAllLocation();
-    }
-
-    @CacheEvict(key = "#p0")
-    public void deleteByInterpreterId(String interpreterId) {
-        renServiceInfoRepository.delete(interpreterId);
     }
 
 }

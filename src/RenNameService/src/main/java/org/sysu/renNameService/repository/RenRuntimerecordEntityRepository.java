@@ -23,4 +23,7 @@ public interface RenRuntimerecordEntityRepository extends JpaRepository<RenRunti
     List<RenRuntimerecordEntity> findRenRuntimerecordEntitiesByIsSucceedAndLaunchAuthorityId(int isSucceed, String launcher);
 
     List<RenRuntimerecordEntity> findRenRuntimerecordEntitiesByLaunchAuthorityId(String launcher);
+
+    @Query(value = "select interpreter_id from ren_runtimerecord where rtid = ?1", nativeQuery = true)
+    String findInterpreterIdByRtid(String rtid);
 }

@@ -17,6 +17,7 @@ import org.sysu.renCommon.utility.AuthDomainHelper;
 import org.sysu.renCommon.utility.TimestampUtil;
 import org.sysu.renNameService.GlobalContext;
 import org.sysu.renNameService.dao.*;
+import org.sysu.renNameService.service.enginescheduler.EngineSchedulerService;
 import org.sysu.renNameService.utility.*;
 
 import java.util.*;
@@ -44,6 +45,9 @@ public class NameSpacingService {
 
     @Autowired
     private AssistantService assistantService;
+
+    @Autowired
+    private EngineSchedulerService engineSchedulerService;
 
     /**
      * Create a new process.
@@ -93,7 +97,7 @@ public class NameSpacingService {
             // send to engine for get business role
             HashMap<String, String> args = new HashMap<>();
             args.put("boidlist", boid);
-            String involveBRs = GlobalContext.Interaction.Send(LocationContext.URL_BOENGINE_SERIALIZEBO, args, "");
+            String involveBRs = GlobalContext.Interaction.Send(engineSchedulerService.getRandomBOEngine() + LocationContext.URL_BOENGINE_SERIALIZEBO, args, "");
             return new AbstractMap.SimpleEntry<>(boid, involveBRs);
         } catch (Exception ex) {
             LogUtil.Log("Upload BO but exception occurred, " + ex, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, "");
@@ -289,7 +293,7 @@ public class NameSpacingService {
             // interaction with BO Engine
             HashMap<String, String> args = new HashMap<>();
             args.put("rtid", rtid);
-            GlobalContext.Interaction.Send(LocationContext.URL_BOENGINE_START, args, rtid);
+            GlobalContext.Interaction.Send(engineSchedulerService.getRandomBOEngine() + LocationContext.URL_BOENGINE_START, args, rtid);
         } catch (Exception ex) {
             LogUtil.Log("Cannot interaction with BO Engine for RTID: " + rtid, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, rtid);
             throw ex;
@@ -451,7 +455,7 @@ public class NameSpacingService {
     public Object TransshipGetSpanTree(String rtid) throws Exception {
         HashMap<String, String> argMap = new HashMap<>();
         argMap.put("rtid", rtid);
-        String ret = GlobalContext.Interaction.Send(LocationContext.URL_BOENGINE_SPANTREE, argMap, rtid);
+        String ret = GlobalContext.Interaction.Send(engineSchedulerService.getBOEngineLocationByRtid(rtid) + LocationContext.URL_BOENGINE_SPANTREE, argMap, rtid);
         Map retObj = SerializationUtil.JsonDeserialization(ret, Map.class);
         return ((Map) retObj.get("returnElement")).get("data");
     }
@@ -466,7 +470,7 @@ public class NameSpacingService {
         for (Map.Entry<String, Object> kvp : args.entrySet()) {
             argMap.put(kvp.getKey(), (String) kvp.getValue());
         }
-        return GlobalContext.Interaction.Send(LocationContext.URL_BOENGINE_CALLBACK, argMap, argMap.get("rtid"));
+        return GlobalContext.Interaction.Send(engineSchedulerService.getBOEngineLocationByRtid(argMap.get("rtid")) + LocationContext.URL_BOENGINE_CALLBACK, argMap, argMap.get("rtid"));
     }
 
     /**

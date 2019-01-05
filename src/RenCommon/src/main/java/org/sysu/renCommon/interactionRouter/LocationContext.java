@@ -24,22 +24,22 @@ public class LocationContext {
     /**
      * Service URL for BO Engine Serialization BO.
      */
-    public static final String URL_BOENGINE_SERIALIZEBO = "http://localhost:10232/gateway/serializeBO";
+    public static final String URL_BOENGINE_SERIALIZEBO = "/gateway/serializeBO";
 
     /**
      * Service URL for BO Engine Serialization BO.
      */
-    public static final String URL_BOENGINE_START = "http://localhost:10232/gateway/launchProcess";
+    public static final String URL_BOENGINE_START = "/gateway/launchProcess";
 
     /**
      * Service URL for BO Engine event callback.
      */
-    public static final String URL_BOENGINE_SPANTREE = "http://localhost:10232/gateway/getSpanTree";
+    public static final String URL_BOENGINE_SPANTREE = "/gateway/getSpanTree";
 
     /**
      * Service URL for BO Engine event callback.
      */
-    public static final String URL_BOENGINE_CALLBACK = "http://localhost:10232/gateway/callback";
+    public static final String URL_BOENGINE_CALLBACK = "/gateway/callback";
 
     /**
      * Service URL gateway for RS workitem actions.

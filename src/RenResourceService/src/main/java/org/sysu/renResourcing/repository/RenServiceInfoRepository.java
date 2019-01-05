@@ -1,4 +1,4 @@
-package org.sysu.renNameService.repository;
+package org.sysu.renResourcing.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

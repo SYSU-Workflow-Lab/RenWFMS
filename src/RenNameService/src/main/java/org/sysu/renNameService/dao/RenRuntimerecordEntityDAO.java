@@ -55,4 +55,8 @@ public class RenRuntimerecordEntityDAO {
         return renRuntimerecordEntityRepository.findRenRuntimerecordEntitiesByLaunchAuthorityId(launcher);
     }
 
+    public String findInterpreterIdByRtid(String rtid) {
+        return renRuntimerecordEntityRepository.findInterpreterIdByRtid(rtid);
+    }
+
 }

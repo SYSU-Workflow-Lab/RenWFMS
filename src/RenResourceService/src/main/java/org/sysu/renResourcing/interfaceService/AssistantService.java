@@ -7,7 +7,11 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.sysu.renCommon.entity.RenRuntimerecordEntity;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renResourcing.dao.RenRuntimerecordEntityDAO;
+import org.sysu.renResourcing.dao.RenServiceInfoDAO;
 import org.sysu.renResourcing.utility.LogUtil;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Skye on 2018/12/13.
@@ -19,6 +23,9 @@ public class AssistantService {
     @Autowired
     private RenRuntimerecordEntityDAO renRuntimerecordEntityDAO;
 
+    @Autowired
+    private RenServiceInfoDAO renServiceInfoDAO;
+
     @Transactional(rollbackFor = Exception.class)
     public RenRuntimerecordEntity IBfindRuntimerecordEntityByRtid(String rtid) {
         try {
@@ -29,6 +36,11 @@ public class AssistantService {
                     InterfaceB.class.getName(), LogLevelType.ERROR, rtid);
             throw ex;
         }
+    }
+
+    public String getBOEngineLocationByRtid(String rtid) {
+        String interpreterId = renRuntimerecordEntityDAO.findInterpreterIdByRtid(rtid);
+        return renServiceInfoDAO.findByInterpreterId(interpreterId).getLocation();
     }
 
 }

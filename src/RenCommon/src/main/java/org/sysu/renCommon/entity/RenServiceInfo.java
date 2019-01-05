@@ -69,4 +69,13 @@ public class RenServiceInfo {
     public int hashCode() {
         return Objects.hash(interpreterId, location, isActive);
     }
+
+    @Override
+    public String toString() {
+        return "RenServiceInfo{" +
+                "interpreterId='" + interpreterId + '\'' +
+                ", location='" + location + '\'' +
+                ", isActive=" + isActive +
+                '}';
+    }
 }
