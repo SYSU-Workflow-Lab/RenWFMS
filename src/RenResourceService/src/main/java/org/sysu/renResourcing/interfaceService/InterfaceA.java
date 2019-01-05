@@ -54,6 +54,9 @@ public class InterfaceA {
     @Autowired
     private TaskContextService taskContextService;
 
+    @Autowired
+    private AssistantService assistantService;
+
     /**
      * Handle resourcing submission request from BO Engine.
      *
@@ -120,7 +123,7 @@ public class InterfaceA {
             if (payloadJSON != null) {
                 argsMap.put("payload", payloadJSON);
             }
-            GlobalContext.Interaction.Send(LocationContext.URL_BOENGINE_CALLBACK, argsMap, rtid);
+            GlobalContext.Interaction.Send(assistantService.getBOEngineLocationByRtid(rtid) + LocationContext.URL_BOENGINE_CALLBACK, argsMap, rtid);
         }
         // hooks
         List<String> hooks = task.getCallbackHooksOfStatus(statusType);

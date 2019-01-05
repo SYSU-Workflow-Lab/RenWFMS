@@ -1,6 +1,7 @@
 package org.sysu.workflow.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.sysu.renCommon.entity.RenServiceInfo;
 import org.sysu.workflow.GlobalContext;
@@ -20,10 +21,14 @@ public class ApplicationRunningHelper {
     @Autowired
     private RenServiceInfoDAO renServiceInfoDAO;
 
+    @Autowired
+    private Environment environment;
+
+
     @PostConstruct
     public void postConstruct() {
         try {
-            renServiceInfoDAO.saveOrUpdate(new RenServiceInfo(GlobalContext.ENGINE_GLOBAL_ID, InetAddress.getLocalHost().getHostAddress()));
+            renServiceInfoDAO.saveOrUpdate(new RenServiceInfo(GlobalContext.ENGINE_GLOBAL_ID, "http://" + InetAddress.getLocalHost().getHostAddress() + ":" + environment.getProperty("server.port")));
         } catch (Exception e) {
             e.printStackTrace();
         }

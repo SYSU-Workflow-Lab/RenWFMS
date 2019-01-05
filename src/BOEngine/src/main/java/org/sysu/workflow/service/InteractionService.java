@@ -6,13 +6,13 @@ package org.sysu.workflow.service;
 
 import org.springframework.stereotype.Service;
 import org.sysu.renCommon.enums.LogLevelType;
-import org.sysu.workflow.BOXMLExecutionContext;
-import org.sysu.workflow.BOXMLIOProcessor;
-import org.sysu.workflow.env.MultiStateMachineDispatcher;
-import org.sysu.workflow.instanceTree.InstanceManager;
-import org.sysu.workflow.instanceTree.RInstanceTree;
-import org.sysu.workflow.instanceTree.RTreeNode;
-import org.sysu.workflow.model.extend.MessageMode;
+import org.sysu.workflow.core.BOXMLExecutionContext;
+import org.sysu.workflow.core.BOXMLIOProcessor;
+import org.sysu.workflow.core.env.MultiStateMachineDispatcher;
+import org.sysu.workflow.core.instanceTree.InstanceManager;
+import org.sysu.workflow.core.instanceTree.RInstanceTree;
+import org.sysu.workflow.core.instanceTree.RTreeNode;
+import org.sysu.workflow.core.model.extend.MessageMode;
 import org.sysu.workflow.utility.LogUtil;
 import org.sysu.workflow.utility.SerializationUtil;
 

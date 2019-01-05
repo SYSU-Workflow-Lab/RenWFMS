@@ -6,23 +6,25 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.sysu.workflow.io.BOXMLReader;
-import org.sysu.workflow.model.extend.InheritableContext;
-import org.sysu.workflow.env.MultiStateMachineDispatcher;
-import org.sysu.workflow.env.SimpleErrorReporter;
-import org.sysu.workflow.env.jexl.JexlEvaluator;
-import org.sysu.workflow.model.Data;
-import org.sysu.workflow.model.Datamodel;
-import org.sysu.workflow.model.SCXML;
+import org.sysu.workflow.core.*;
+import org.sysu.workflow.core.io.BOXMLReader;
+import org.sysu.workflow.core.model.extend.InheritableContext;
+import org.sysu.workflow.core.env.MultiStateMachineDispatcher;
+import org.sysu.workflow.core.env.SimpleErrorReporter;
+import org.sysu.workflow.core.env.jexl.JexlEvaluator;
+import org.sysu.workflow.core.model.Data;
+import org.sysu.workflow.core.model.Datamodel;
+import org.sysu.workflow.core.model.SCXML;
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Assert;
 import org.junit.Test;
-import org.sysu.workflow.model.extend.MessageMode;
-import org.sysu.workflow.model.extend.Task;
-import org.sysu.workflow.model.extend.Tasks;
+import org.sysu.workflow.core.model.extend.MessageMode;
+import org.sysu.workflow.core.model.extend.Task;
+import org.sysu.workflow.core.model.extend.Tasks;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -44,8 +46,8 @@ public class SCXMLReaderTest {
     public static synchronized String encrypt(String text)
             throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("SHA");
-        md.update(text.getBytes("UTF-8"));
-        byte raw[] = md.digest();
+        md.update(text.getBytes(StandardCharsets.UTF_8));
+        byte[] raw = md.digest();
         return new Base64(-1).encodeToString(raw);            // -1 means no line breaks
     }
 

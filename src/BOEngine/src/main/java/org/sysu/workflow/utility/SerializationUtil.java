@@ -5,8 +5,8 @@
 package org.sysu.workflow.utility;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.sysu.renCommon.enums.LogLevelType;
-import org.sysu.workflow.BOInstance;
-import org.sysu.workflow.model.SCXML;
+import org.sysu.workflow.core.BOInstance;
+import org.sysu.workflow.core.model.SCXML;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

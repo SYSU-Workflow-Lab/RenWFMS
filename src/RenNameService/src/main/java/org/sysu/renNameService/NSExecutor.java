@@ -5,8 +5,8 @@
 package org.sysu.renNameService;
 
 import org.sysu.renCommon.entity.*;
-import org.sysu.renNameService.namespacing.NameSpacingService;
-import org.sysu.renNameService.rolemapping.RoleMappingService;
+import org.sysu.renNameService.service.namespacing.NameSpacingService;
+import org.sysu.renNameService.service.rolemapping.RoleMappingService;
 import org.sysu.renNameService.transaction.NameServiceTransaction;
 import org.sysu.renNameService.transaction.TransactionType;
 import org.sysu.renNameService.utility.LogUtil;

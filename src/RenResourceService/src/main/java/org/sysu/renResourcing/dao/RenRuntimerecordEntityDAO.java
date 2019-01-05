@@ -29,4 +29,8 @@ public class RenRuntimerecordEntityDAO {
         return renRuntimerecordEntityRepository.saveAndFlush(renRuntimerecordEntity);
     }
 
+    public String findInterpreterIdByRtid(String rtid) {
+        return renRuntimerecordEntityRepository.findInterpreterIdByRtid(rtid);
+    }
+
 }

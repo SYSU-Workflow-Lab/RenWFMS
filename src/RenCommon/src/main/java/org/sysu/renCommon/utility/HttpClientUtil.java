@@ -11,6 +11,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -74,7 +75,7 @@ public class HttpClientUtil {
         connection.setRequestProperty("Accept", "application/json");
         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         connection.connect();
-        OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream(), "UTF-8");
+        OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream(), StandardCharsets.UTF_8);
         StringBuilder sb = new StringBuilder();
         for (Map.Entry entry : args.entrySet()) {
             String key = (String) entry.getKey();
@@ -87,7 +88,7 @@ public class HttpClientUtil {
         out.close();
         int code = connection.getResponseCode();
         InputStream is = code == 200 ? connection.getInputStream() : connection.getErrorStream();
-        BufferedReader in = new BufferedReader(new InputStreamReader(is, "utf8"));
+        BufferedReader in = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
         String line;
         StringBuilder result = new StringBuilder();
         while ((line = in.readLine()) != null) {

@@ -6,7 +6,7 @@ package org.sysu.renNameService.restful;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.sysu.renNameService.NSScheduler;
-import org.sysu.renNameService.authorization.AuthorizationService;
+import org.sysu.renNameService.service.authorization.AuthorizationService;
 import org.sysu.renCommon.dto.ReturnModel;
 import org.sysu.renCommon.dto.StatusCode;
 import org.sysu.renNameService.transaction.NameServiceTransaction;

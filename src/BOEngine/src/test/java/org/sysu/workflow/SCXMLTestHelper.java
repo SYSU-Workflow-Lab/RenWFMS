@@ -1,13 +1,14 @@
 
 package org.sysu.workflow;
 
-import org.sysu.workflow.env.SimpleDispatcher;
-import org.sysu.workflow.env.Tracer;
-import org.sysu.workflow.io.BOXMLReader;
-import org.sysu.workflow.model.CustomAction;
-import org.sysu.workflow.model.EnterableState;
-import org.sysu.workflow.model.SCXML;
-import org.sysu.workflow.model.TransitionTarget;
+import org.sysu.workflow.core.*;
+import org.sysu.workflow.core.env.SimpleDispatcher;
+import org.sysu.workflow.core.env.Tracer;
+import org.sysu.workflow.core.io.BOXMLReader;
+import org.sysu.workflow.core.model.CustomAction;
+import org.sysu.workflow.core.model.EnterableState;
+import org.sysu.workflow.core.model.SCXML;
+import org.sysu.workflow.core.model.TransitionTarget;
 import org.junit.Assert;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
