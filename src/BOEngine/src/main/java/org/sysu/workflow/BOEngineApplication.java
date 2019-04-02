@@ -21,13 +21,5 @@ public class BOEngineApplication {
         SpringApplication.run(BOEngineApplication.class, args);
     }
 
-    @Bean
-    RestTemplate restTemplate() {
-        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-        requestFactory.setConnectTimeout(1000);
-        requestFactory.setReadTimeout(1000);
-        return new RestTemplate(requestFactory);
-    }
-
 }
 

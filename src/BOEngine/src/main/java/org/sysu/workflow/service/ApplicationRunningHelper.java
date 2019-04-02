@@ -1,22 +1,21 @@
 package org.sysu.workflow.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.management.OperatingSystemMXBean;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestTemplate;
 import org.sysu.renCommon.entity.RenServiceInfo;
 import org.sysu.workflow.GlobalContext;
 import org.sysu.workflow.dao.RenServiceInfoDAO;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.io.IOException;
+import javax.management.*;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 import java.net.InetAddress;
 
 /**
@@ -32,9 +31,6 @@ public class ApplicationRunningHelper {
 
     @Autowired
     private Environment environment;
-
-    @Autowired
-    private RestTemplate restTemplate;
 
     private String URL;
 
@@ -60,28 +56,23 @@ public class ApplicationRunningHelper {
     @Scheduled(fixedRate = 10000)
     public void MonitorRunner() {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-
             // CPU Load
-            ResponseEntity<String> responseEntity = restTemplate.getForEntity(URL + "/jolokia/read/java.lang:type=OperatingSystem/ProcessCpuLoad", String.class);
-            String cpuBody = responseEntity.getBody();
-            JsonNode cpuRoot = objectMapper.readTree(cpuBody);
-            double cpuValue = cpuRoot.get("value").asDouble();
+            OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+            double cpuValue = operatingSystemMXBean.getProcessCpuLoad();
             log.info("当前CPU占用率：" + (cpuValue * 100) + "%");
 
             // Memory Usage
-            responseEntity = restTemplate.getForEntity(URL + "/jolokia/read/java.lang:type=Memory/HeapMemoryUsage", String.class);
-            String memoryBody = responseEntity.getBody();
-            JsonNode memoryRoot = objectMapper.readTree(memoryBody);
-            JsonNode memoryValue = memoryRoot.get("value");
-            double memoryResult = memoryValue.get("used").asDouble() / memoryValue.get("committed").asDouble();
+            MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+            MemoryUsage heapMemory = memoryMXBean.getHeapMemoryUsage();
+            double memoryResult = heapMemory.getUsed() * 1.0 / heapMemory.getCommitted();
             log.info("当前Memory占用率：" + (memoryResult * 100) + "%");
 
             // Tomcat Threads
-            responseEntity = restTemplate.getForEntity(URL + "/jolokia/read/Tomcat:name=\"http-nio-10232\",type=ThreadPool/currentThreadsBusy", String.class);
-            String tomcatBody = responseEntity.getBody();
-            JsonNode tomcatRoot = objectMapper.readTree(tomcatBody);
-            double tomcatValue = tomcatRoot.get("value").asDouble();
+            MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
+            ObjectName name = ObjectName.getInstance("Tomcat:name=\"http-nio-10232\",type=ThreadPool");
+            AttributeList list = mBeanServer.getAttributes(name, new String[]{"currentThreadsBusy"});
+            Attribute att = (Attribute)list.get(0);
+            Integer tomcatValue  = (Integer)att.getValue();
             double maxThreads = Double.valueOf(environment.getProperty("server.tomcat.max-threads"));
             double tomcatResult = tomcatValue / maxThreads;
             log.info("当前Tomcat并发数：" + tomcatValue);
@@ -92,9 +83,7 @@ public class ApplicationRunningHelper {
             serviceInfo.setTomcatConcurrency(tomcatResult);
             serviceInfo.updateBusiness();
             renServiceInfoDAO.saveOrUpdate(serviceInfo);
-        } catch (ResourceAccessException rae) {
-            // DO NOTHING
-        } catch (IOException e) {
+        } catch (MalformedObjectNameException | InstanceNotFoundException | ReflectionException e) {
             e.printStackTrace();
         }
     }
