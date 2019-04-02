@@ -221,14 +221,18 @@ public class SCXML implements Serializable, Observable, NamespacePrefixesHolder 
      *
      * @return Returns the task list.
      */
-    public final Tasks getTasks() { return tasks; }
+    public final Tasks getTasks() {
+        return tasks;
+    }
 
     /**
      * Set the task list at document root.
      *
      * @param tasks The tasks object to set.
      */
-    public final void setTasks(final Tasks tasks) { this.tasks = tasks; }
+    public final void setTasks(final Tasks tasks) {
+        this.tasks = tasks;
+    }
 
     /**
      * Get the immediate child targets of the SCXML root.

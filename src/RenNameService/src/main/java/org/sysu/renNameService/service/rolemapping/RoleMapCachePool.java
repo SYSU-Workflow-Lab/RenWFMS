@@ -3,13 +3,14 @@
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
 package org.sysu.renNameService.service.rolemapping;
+
 import java.util.Hashtable;
 
 /**
  * Author: Rinkako
  * Date  : 2018/1/16
  * Usage : This class is a static class for caching the role maps of running processes.
- *         Only mapping transaction using `RepeatableRead` isolation type will be stored.
+ * Only mapping transaction using `RepeatableRead` isolation type will be stored.
  */
 final class RoleMapCachePool {
     /**
@@ -19,7 +20,8 @@ final class RoleMapCachePool {
 
     /**
      * Add a role map package to the cache.
-     * @param rtid process rtid
+     *
+     * @param rtid    process rtid
      * @param roleMap role map package
      * @return Whether replace exist item
      */
@@ -29,6 +31,7 @@ final class RoleMapCachePool {
 
     /**
      * Retrieve a cached role map.
+     *
      * @param rtid process rtid
      * @return Cached role map package instance, null if not exist
      */
@@ -38,6 +41,7 @@ final class RoleMapCachePool {
 
     /**
      * Remove a cached role map.
+     *
      * @param rtid process rtid
      * @return Whether key exist before being removed
      */

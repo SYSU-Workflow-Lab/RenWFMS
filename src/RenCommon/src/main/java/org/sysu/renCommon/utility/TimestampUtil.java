@@ -13,6 +13,7 @@ public class TimestampUtil {
 
     /**
      * Get timestamp in pattern of `yyyy-MM-dd HH:mm:ss`
+     *
      * @return timestamp in string
      */
     public static String GetTimestampString() {
@@ -21,6 +22,7 @@ public class TimestampUtil {
 
     /**
      * Get current timestamp.
+     *
      * @return Timestamp instance of current moment
      */
     public static Timestamp GetCurrentTimestamp() {

@@ -64,9 +64,9 @@ public class QueueLengthFilter extends RFilter {
     /**
      * Create a new filter.
      *
-     * @param id          unique id for selector fetching
-     * @param type        type name string
-     * @param args        parameter dictionary in HashMap
+     * @param id   unique id for selector fetching
+     * @param type type name string
+     * @param args parameter dictionary in HashMap
      */
     public QueueLengthFilter(String id, String type, HashMap<String, String> args) {
         super(id, type, QueueLengthFilter.Descriptor, args);
@@ -76,6 +76,7 @@ public class QueueLengthFilter extends RFilter {
      * Set the filter condition.
      * Expression should contain variable `length` for getting queue length.
      * A valid expression example: "length lt 10" means queue length less than 10
+     *
      * @param conditionExpr condition expression in JLex
      */
     private void SetCondition(String conditionExpr) {

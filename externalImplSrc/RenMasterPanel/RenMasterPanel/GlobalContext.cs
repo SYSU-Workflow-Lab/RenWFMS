@@ -6,8 +6,8 @@ namespace RenMasterPanel
 {
     internal static class GlobalContext
     {
-        // public static readonly string URL_NS = "http://localhost";
-        public static readonly string URL_NS = "http://222.200.180.59";
+         public static readonly string URL_NS = "http://localhost";
+        //public static readonly string URL_NS = "http://222.200.180.59";
 
         public static readonly string URL_Auth_Connect = URL_NS + ":10234/auth/connect";
         

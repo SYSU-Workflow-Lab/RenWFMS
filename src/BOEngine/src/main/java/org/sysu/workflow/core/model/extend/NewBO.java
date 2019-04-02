@@ -169,8 +169,7 @@ public class NewBO extends NamelistHolder implements PathResolverHolder {
                     LogUtil.Log("When read bo by rtid, exception occurred, " + e.toString() + ", service rollback",
                             NewBO.class.getName(), LogLevelType.ERROR, currentExecutionContext.Rtid);
                 }
-            }
-            else {
+            } else {
                 //read local BO
                 // get resource file url
                 //final URL url = this.getClass().getClassLoader().getResource(getSrc());
@@ -213,7 +212,7 @@ public class NewBO extends NamelistHolder implements PathResolverHolder {
                     boolean existFlag = false;
                     for (Data parameter : dm.getData()) {
                         if (parameter.getId().equals(argument.getName())) {
-                           parameter.setExpr(argument.getExpr());
+                            parameter.setExpr(argument.getExpr());
                             existFlag = true;
                             break;
                         }

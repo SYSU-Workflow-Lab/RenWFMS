@@ -62,14 +62,15 @@ public class Tasks implements Serializable {
 
     /**
      * Get all the process children of this tasks container.
+     *
      * @return return the process list
      */
-    public final List<SubProcess> getProcessList(){
+    public final List<SubProcess> getProcessList() {
         return this.processList;
     }
 
-    public final void addProcess(final SubProcess process){
-        if(process != null)
+    public final void addProcess(final SubProcess process) {
+        if (process != null)
             this.processList.add(process);
     }
 }

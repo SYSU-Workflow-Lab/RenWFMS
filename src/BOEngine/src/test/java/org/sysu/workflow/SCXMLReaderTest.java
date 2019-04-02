@@ -56,12 +56,10 @@ public class SCXMLReaderTest {
         if (defText == null) defText = text;
         try {
             return encrypt(text);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return defText;
         }
     }
-
 
 
     @Test
@@ -83,12 +81,12 @@ public class SCXMLReaderTest {
 //        String str = "YAWL";
 //        String tt = encrypt(str);
 
-        long startTime=System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         URL url = SCXMLTestHelper.getResource("GuestOrder.xml");
         //URL url = new URL("file", "", "E:\\Documents\\GitProject\\BOOWorkflow\\BOWorkflow\\target\\classes\\GuestOrder.xml");
         SCXML scxml = new BOXMLReader().read(url);
-        long endTime=System.currentTimeMillis();
-        System.out.println("COST TIME： " + (endTime-startTime) + "ms");
+        long endTime = System.currentTimeMillis();
+        System.out.println("COST TIME： " + (endTime - startTime) + "ms");
 
 //        startTime=System.currentTimeMillis();
 //        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -108,19 +106,19 @@ public class SCXMLReaderTest {
 
         Datamodel dm = scxml.getDatamodel();
         System.out.println("## guest order的data");
-        for(Data data:dm.getData()){
+        for (Data data : dm.getData()) {
             System.out.println(data.getId() + ":" + data.getExpr());
         }
 
         InheritableContext inheritableContext = scxml.getInheritedContext();
         Tasks tasks = inheritableContext.getInheritedTasks();
         System.out.println("## guest order的可继承上下文的tasks");
-        for(Task task:tasks.getTaskList()){
-            System.out.println(task.getName()+":"+task.getId());
+        for (Task task : tasks.getTaskList()) {
+            System.out.println(task.getName() + ":" + task.getId());
         }
         System.out.println("## guest order本身的tasks");
-        for(Task task:scxml.getTasks().getTaskList()){
-            System.out.println(task.getName()+":"+task.getId());
+        for (Task task : scxml.getTasks().getTaskList()) {
+            System.out.println(task.getName() + ":" + task.getId());
         }
 
         Evaluator evaluator = new JexlEvaluator();
@@ -129,7 +127,6 @@ public class SCXMLReaderTest {
         executor.setStateMachine(scxml);
         executor.setRtid("TEST_RTID");
         executor.go();
-
 
 
         BOXMLExecutionContext ctx = executor.getExctx();

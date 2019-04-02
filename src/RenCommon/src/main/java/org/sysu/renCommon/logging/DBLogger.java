@@ -20,7 +20,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class DBLogger extends RInternalLogger {
     /**
      * Show a structure information message.
-     * @param msg message text
+     *
+     * @param msg   message text
      * @param label message label
      */
     public void Echo(String msg, String label) {
@@ -29,7 +30,8 @@ public class DBLogger extends RInternalLogger {
 
     /**
      * Show a structure message.
-     * @param msg message text
+     *
+     * @param msg   message text
      * @param label message label
      * @param level message level
      */
@@ -40,7 +42,8 @@ public class DBLogger extends RInternalLogger {
 
     /**
      * Log a structure information message to entity.
-     * @param msg message text
+     *
+     * @param msg   message text
      * @param label message label
      */
     public void Log(String msg, String label, String rtid) {
@@ -49,10 +52,11 @@ public class DBLogger extends RInternalLogger {
 
     /**
      * Log a structure message to entity.
-     * @param msg message text
+     *
+     * @param msg   message text
      * @param label message label
      * @param level message level
-     * @param rtid process rtid
+     * @param rtid  process rtid
      */
     public void Log(String msg, String label, LogLevelType level, String rtid) {
         this.ActualLog(msg, label, level, rtid, 0);
@@ -60,7 +64,8 @@ public class DBLogger extends RInternalLogger {
 
     /**
      * Write log to entity.
-     * @param msg message text
+     *
+     * @param msg   message text
      * @param label message label
      * @param level message level
      * @param depth exception depth
@@ -76,12 +81,10 @@ public class DBLogger extends RInternalLogger {
             LogMessagePackage lmp = new LogMessagePackage(rtid, msg, label, level,
                     TimestampUtil.GetCurrentTimestamp());
             this.logBuffer.add(lmp);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             this.ActualLog("When logging, exception occurred" + ex, DBLogger.class.getName(),
                     LogLevelType.ERROR, rtid, depth + 1);
-        }
-        finally {
+        } finally {
             boolean flushFlag = this.logBuffer.size() >= GlobalConfigContext.LOG_BUFFER_SIZE;
             this.readWriteLock.readLock().unlock();
             if (flushFlag) {

@@ -145,6 +145,7 @@ public class InterfaceB {
                     allocateAnp.AddNotification(chosenOne, allocateNotifyMap, ctx.getRtid());
                     AsyncPluginRunner.AsyncRun(allocateAnp);
                 }
+                assistantService.increaseWorkitemCountByRtid(ctx.getRtid());
                 break;
             case Offer:
                 // create a filter interaction
@@ -172,6 +173,7 @@ public class InterfaceB {
                 if (offerAnp.Count(ctx.getRtid()) > 0) {
                     AsyncPluginRunner.AsyncRun(offerAnp);
                 }
+                assistantService.increaseWorkitemCountByRtid(ctx.getRtid());
                 break;
             case AutoAllocateIfOfferFailed:
                 // todo not implementation
@@ -266,6 +268,7 @@ public class InterfaceB {
                 WorkQueueContainer container = workQueueContainerService.GetContext(participant.getWorkerId());
                 container.MoveAllocatedToOffered(workitem);
                 this.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Offered, payload);
+                assistantService.decreaseWorkitemCountByRtid(workitem.getEntity().getRtid());
                 return true;
             } catch (Exception ex) {
                 interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Deallocate but exception occurred: " + ex);
@@ -406,6 +409,7 @@ public class InterfaceB {
                 container.RemoveFromQueue(workitem, WorkQueueType.ALLOCATED);
                 this.WorkitemChanged(workitem, WorkitemStatusType.ForcedComplete, WorkitemResourcingStatusType.Skipped, payload);
                 interfaceE.WriteLog(workitem, participant.getWorkerId(), RSEventType.skip);
+                assistantService.decreaseWorkitemCountByRtid(workitem.getEntity().getRtid());
                 return true;
             } catch (Exception ex) {
                 interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Skip but exception occurred: " + ex);
@@ -439,6 +443,7 @@ public class InterfaceB {
             container.RemoveFromQueue(workitem, WorkQueueType.STARTED);
             this.WorkitemChanged(workitem, WorkitemStatusType.Complete, WorkitemResourcingStatusType.Completed, payload);
             interfaceE.WriteLog(workitem, participant.getWorkerId(), RSEventType.complete);
+            assistantService.decreaseWorkitemCountByRtid(workitem.getEntity().getRtid());
             return true;
         } catch (Exception ex) {
             interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Complete but exception occurred: " + ex);

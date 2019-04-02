@@ -28,6 +28,7 @@ public class RInstanceTree {
 
     /**
      * Set root of this tree, it should be called when creating root BO.
+     *
      * @param root reference of root BO tree node
      */
     public void SetRoot(RTreeNode root) {
@@ -36,6 +37,7 @@ public class RInstanceTree {
 
     /**
      * Fetch a tree node by its global id.
+     *
      * @param gid node unique global id
      * @return fetching result node reference
      */
@@ -60,6 +62,7 @@ public class RInstanceTree {
 
     /**
      * Fetch a tree node by its name.
+     *
      * @param targetName target BO name
      * @return vector of flattened fetching result by DFS
      */
@@ -84,6 +87,7 @@ public class RInstanceTree {
 
     /**
      * Fetch the whole tree and get all nodes.
+     *
      * @return vector of flattened fetching result by DFS
      */
     public ArrayList<RTreeNode> GetAllNodeVector() {
@@ -97,6 +101,7 @@ public class RInstanceTree {
 
     /**
      * Fetch a tree node and its offsprings by its global id.
+     *
      * @param gid node unique global id
      * @return vector of flattened fetching result by DFS
      */
@@ -112,6 +117,7 @@ public class RInstanceTree {
 
     /**
      * Fetch a tree node then get its offsprings without itself by its global id.
+     *
      * @param gid node unique global id
      * @return vector of flattened fetching result by DFS
      */
@@ -135,6 +141,7 @@ public class RInstanceTree {
 
     /**
      * Fetch a tree and return all nodes with notifiableId.
+     *
      * @param notifiableId notifiable id string
      * @return vector of flattened fetching result by DFS
      */
@@ -151,7 +158,8 @@ public class RInstanceTree {
 
     /**
      * Fetch a tree node then get its offsprings which BO name is target and without itself by its global id.
-     * @param gid node unique global id
+     *
+     * @param gid    node unique global id
      * @param target target BO name
      * @return vector of flattened fetching result by DFS
      */
@@ -177,7 +185,8 @@ public class RInstanceTree {
 
     /**
      * Fetch a tree node then get its children which BO name is target and without itself by its global id.
-     * @param gid node unique global id
+     *
+     * @param gid    node unique global id
      * @param target target BO name
      * @return vector of flattened fetching result by DFS
      */
@@ -196,16 +205,17 @@ public class RInstanceTree {
 
     /**
      * Fetch a tree node then get its ancestors which BO name is target and without itself by its global id.
-     * @param gid node unique global id
+     *
+     * @param gid    node unique global id
      * @param target target BO name
      * @return vector of flattened fetching result
      */
     public ArrayList<RTreeNode> GetAncestorsVectorByTarget(String gid, String target) {
-        ArrayList<RTreeNode>  ancestors = new ArrayList<RTreeNode>();
+        ArrayList<RTreeNode> ancestors = new ArrayList<RTreeNode>();
         RTreeNode currentNode = this.GetNodeById(gid);
-        while(currentNode != null && currentNode.Parent != null) {
+        while (currentNode != null && currentNode.Parent != null) {
             currentNode = currentNode.Parent;
-            if(currentNode.getName().equals(target)){
+            if (currentNode.getName().equals(target)) {
                 ancestors.add(currentNode);
             }
         }
@@ -214,19 +224,20 @@ public class RInstanceTree {
 
     /**
      * Fetch a tree node then get its siblings without itself by its global id.
+     *
      * @param gid node unique global id
      * @return vector of flattened fetching result
      */
     public ArrayList<RTreeNode> GetSiblingsVector(String gid) {
-        ArrayList<RTreeNode>  siblings = new ArrayList<RTreeNode>();
+        ArrayList<RTreeNode> siblings = new ArrayList<RTreeNode>();
         RTreeNode currentNode = this.GetNodeById(gid);
         ArrayList<RTreeNode> children = new ArrayList<>();
-        if(currentNode != null && currentNode.Parent != null) {
+        if (currentNode != null && currentNode.Parent != null) {
             children = currentNode.Parent.Children;
         }
-        if(children.size() > 1) {
-            for(RTreeNode node : children) {
-                if(!node.getGlobalId().equals(gid)) {
+        if (children.size() > 1) {
+            for (RTreeNode node : children) {
+                if (!node.getGlobalId().equals(gid)) {
                     siblings.add(node);
                 }
             }
@@ -236,20 +247,21 @@ public class RInstanceTree {
 
     /**
      * Fetch a tree node then get its siblings which BO name is target and without itself by its global id.
-     * @param gid node unique global id
+     *
+     * @param gid    node unique global id
      * @param target target BO name
      * @return vector of flattened fetching result
      */
     public ArrayList<RTreeNode> GetSiblingsVectorByTarget(String gid, String target) {
-        ArrayList<RTreeNode>  siblings = new ArrayList<RTreeNode>();
+        ArrayList<RTreeNode> siblings = new ArrayList<RTreeNode>();
         RTreeNode currentNode = this.GetNodeById(gid);
         ArrayList<RTreeNode> children = new ArrayList<>();
-        if(currentNode != null && currentNode.Parent != null) {
+        if (currentNode != null && currentNode.Parent != null) {
             children = currentNode.Parent.Children;
         }
-        if(children.size() > 1) {
-            for(RTreeNode node : children) {
-                if(!node.getGlobalId().equals(gid) && node.getName().equals(target)) {
+        if (children.size() > 1) {
+            for (RTreeNode node : children) {
+                if (!node.getGlobalId().equals(gid) && node.getName().equals(target)) {
                     siblings.add(node);
                 }
             }
@@ -259,13 +271,14 @@ public class RInstanceTree {
 
     /**
      * Fetch a tree node then get its ancestors without itself by its global id.
+     *
      * @param gid node unique global id
      * @return vector of flattened fetching result
      */
     public ArrayList<RTreeNode> GetAncestorsVector(String gid) {
-        ArrayList<RTreeNode>  ancestors = new ArrayList<RTreeNode>();
+        ArrayList<RTreeNode> ancestors = new ArrayList<RTreeNode>();
         RTreeNode currentNode = this.GetNodeById(gid);
-        while(currentNode != null && currentNode.Parent != null) {
+        while (currentNode != null && currentNode.Parent != null) {
             currentNode = currentNode.Parent;
             ancestors.add(currentNode);
         }

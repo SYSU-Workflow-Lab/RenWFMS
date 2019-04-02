@@ -171,8 +171,7 @@ public class RuntimeManagementService {
             RenArchivedTreeEntity rate = null;
             try {
                 rate = renArchivedTreeEntityDAO.findByRtid(rtid);
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             }
             if (rate == null) {
@@ -189,7 +188,7 @@ public class RuntimeManagementService {
      * Recursively handle span the user-friendly package tree of a specific instance tree.
      * This method is to commemorate a girl devoted her love to guard the happiness of who she loved and his lover. -RK
      *
-     * @param node current span root node
+     * @param node  current span root node
      * @param fNode user-friendly package node of current span node
      */
     private void Nephren(@NotNull RTreeNode node, @NotNull FriendlyTreeNode fNode) {
@@ -213,8 +212,8 @@ public class RuntimeManagementService {
      * execute the main bo of the current process
      *
      * @param scxml scxml instance
-     * @param rtid process rtid
-     * @param pid process global id
+     * @param rtid  process rtid
+     * @param pid   process global id
      */
     private void ExecuteBO(SCXML scxml, String rtid, String pid) {
         try {

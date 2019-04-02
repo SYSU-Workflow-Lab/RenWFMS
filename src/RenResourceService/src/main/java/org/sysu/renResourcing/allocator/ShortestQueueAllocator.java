@@ -41,9 +41,9 @@ public class ShortestQueueAllocator extends RAllocator {
      * Create a new allocator.
      * Allocator should not be created directly, use {@code AllocateInteractionExecutor} instead.
      *
-     * @param id          unique id for selector fetching
-     * @param type        type name string
-     * @param args        parameter dictionary in HashMap
+     * @param id   unique id for selector fetching
+     * @param type type name string
+     * @param args parameter dictionary in HashMap
      */
     public ShortestQueueAllocator(String id, String type, HashMap<String, String> args) {
         super(id, type, ShortestQueueAllocator.Descriptor, args);
@@ -53,7 +53,7 @@ public class ShortestQueueAllocator extends RAllocator {
      * Perform allocation on the candidate set.
      *
      * @param candidateSet candidate participant set
-     * @param context workitem context
+     * @param context      workitem context
      * @return selected participant
      */
     @Override
@@ -66,8 +66,7 @@ public class ShortestQueueAllocator extends RAllocator {
             WorkQueueContainer container = workQueueContainerService.GetContext(p.getWorkerId());
             if (container.IsNullOrEmptyQueue(WorkQueueType.ALLOCATED)) {
                 return p;
-            }
-            else {
+            } else {
                 currentLength = container.DirectlyGetQueue(WorkQueueType.ALLOCATED).Count();
             }
             if (currentLength < currentShortest) {

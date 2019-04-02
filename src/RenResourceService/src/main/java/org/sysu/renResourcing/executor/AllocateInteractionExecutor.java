@@ -28,8 +28,9 @@ public class AllocateInteractionExecutor extends InteractionExecutor {
 
     /**
      * Create a new allocate interaction executor.
+     *
      * @param ownerTaskId id of task to create this
-     * @param type type of service invoker type
+     * @param type        type of service invoker type
      */
     public AllocateInteractionExecutor(String ownerTaskId, InitializationByType type) {
         super(ownerTaskId, type);
@@ -37,6 +38,7 @@ public class AllocateInteractionExecutor extends InteractionExecutor {
 
     /**
      * Get the binding allocator.
+     *
      * @return get allocator instance.
      */
     public RAllocator GetAllocator() {
@@ -45,8 +47,9 @@ public class AllocateInteractionExecutor extends InteractionExecutor {
 
     /**
      * Use allocator to handle allocation service.
+     *
      * @param candidateSet candidate participant set
-     * @param workitem workitem context
+     * @param workitem     workitem context
      * @return Allocated Participant context.
      */
     public ParticipantContext PerformAllocation(HashSet<ParticipantContext> candidateSet, WorkitemContext workitem) {
@@ -60,6 +63,7 @@ public class AllocateInteractionExecutor extends InteractionExecutor {
 
     /**
      * Binding a allocator to this executor by the principle of task.
+     *
      * @param principle allocation principle
      */
     public void BindingAllocator(RPrinciple principle, String rstid, String rtid) throws Exception {

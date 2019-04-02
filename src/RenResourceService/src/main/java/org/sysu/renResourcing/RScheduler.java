@@ -23,9 +23,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * Author: Rinkako
  * Date  : 2018/2/5
  * Usage : This class is a global singleton class, which is responsible for engine
- *         service request handle scheduling. All type of resourcing services will
- *         all be encapsulated as a {@code ResourcingContext}, and a {@code RTracker}
- *         will be created for controlling its lifecycle.
+ * service request handle scheduling. All type of resourcing services will
+ * all be encapsulated as a {@code ResourcingContext}, and a {@code RTracker}
+ * will be created for controlling its lifecycle.
  */
 
 @Component

@@ -25,7 +25,7 @@ public class StatisticHelper {
     public static double GetAverage(List<Long> longList) {
         double curAvg = 0;
         for (int i = 0; i < longList.size(); i++) {
-            curAvg += (longList.get(i) - curAvg) / (double)i;
+            curAvg += (longList.get(i) - curAvg) / (double) i;
         }
         return curAvg;
     }

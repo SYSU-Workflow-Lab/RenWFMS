@@ -35,9 +35,9 @@ public class RoundAllocator extends RAllocator {
      * Create a new allocator.
      * Allocator should not be created directly, use {@code AllocateInteractionExecutor} instead.
      *
-     * @param id          unique id for selector fetching
-     * @param type        type name string
-     * @param args        parameter dictionary in HashMap
+     * @param id   unique id for selector fetching
+     * @param type type name string
+     * @param args parameter dictionary in HashMap
      */
     public RoundAllocator(String id, String type, HashMap<String, String> args) {
         super(id, type, RandomAllocator.Descriptor, args);

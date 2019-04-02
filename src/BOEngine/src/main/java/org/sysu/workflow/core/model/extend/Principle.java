@@ -42,6 +42,7 @@ public class Principle extends ParamsContainer implements Serializable {
 
     /**
      * Add a new constraint to this principle.
+     *
      * @param constraint constraint instance
      */
     public void AddConstraint(Constraint constraint) {
@@ -50,6 +51,7 @@ public class Principle extends ParamsContainer implements Serializable {
 
     /**
      * Generate descriptor for this principle.
+     *
      * @return string descriptor
      */
     public String GenerateDescriptor() throws Exception {

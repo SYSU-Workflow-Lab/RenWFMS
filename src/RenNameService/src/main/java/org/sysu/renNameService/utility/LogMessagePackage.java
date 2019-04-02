@@ -3,6 +3,7 @@
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
 package org.sysu.renNameService.utility;
+
 import java.sql.Timestamp;
 
 /**
@@ -12,11 +13,12 @@ import java.sql.Timestamp;
 final class LogMessagePackage {
     /**
      * Create a new log message package.
-     * @param rtid process rtid
-     * @param msg message text
+     *
+     * @param rtid  process rtid
+     * @param msg   message text
      * @param label message label
-     * @param type message type
-     * @param ts timestamp
+     * @param type  message type
+     * @param ts    timestamp
      */
     LogMessagePackage(String rtid, String msg, String label, LogUtil.LogLevelType type, Timestamp ts) {
         this.Rtid = rtid;

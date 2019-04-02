@@ -19,10 +19,12 @@ public class LoggerFactory {
     /**
      * Private constructor.
      */
-    private LoggerFactory() { }
+    private LoggerFactory() {
+    }
 
     /**
      * Get logger for this thread.
+     *
      * @return logger instance
      */
     @SuppressWarnings("unchecked")

@@ -19,7 +19,7 @@ import java.util.Map;
 /**
  * A simple {@link Invoker} for SCXML documents. Invoked SCXML document
  * may not contain external namespace elements, further invokes etc.
- *
+ * <p>
  * 一个简单的SCXML会话调用器，调用SCXML文档，may not包含外部命名空间元素
  */
 public class SimpleSCXMLInvoker implements Invoker, Serializable {
@@ -88,7 +88,7 @@ public class SimpleSCXMLInvoker implements Invoker, Serializable {
      * 开始调用了，
      * 有很多东西（ executor = new BOXMLExecutor(parentSCXMLExecutor);）
      * 语义，求值器，事件分发器，错误报告都是直接利用父状态机的内容
-     *
+     * <p>
      * {@inheritDoc}.
      */
 

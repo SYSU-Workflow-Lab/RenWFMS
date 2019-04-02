@@ -21,9 +21,9 @@ import java.util.Observer;
  * Author: Rinkako
  * Date  : 2018/2/2
  * Usage : A tracker is used to trace its binding resourcing service
- *         executing situation and control the service life-cycle.
- *         Tracker is running asynchronously, and when it is needed,
- *         it will notify the main scheduler about the changes.
+ * executing situation and control the service life-cycle.
+ * Tracker is running asynchronously, and when it is needed,
+ * it will notify the main scheduler about the changes.
  */
 public class RTracker extends Observable implements Observer, Runnable {
 

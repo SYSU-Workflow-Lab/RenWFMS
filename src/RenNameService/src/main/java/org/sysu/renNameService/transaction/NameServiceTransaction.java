@@ -3,6 +3,7 @@
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
 package org.sysu.renNameService.transaction;
+
 import org.sysu.renCommon.entity.RenNsTransactionEntity;
 
 import java.util.HashMap;
@@ -12,7 +13,7 @@ import java.util.Map;
  * Author: Rinkako
  * Date  : 2018/1/17
  * Usage : All requests sent to Name service engine will be packaged
- *         by this class instance before being processed.
+ * by this class instance before being processed.
  */
 public final class NameServiceTransaction implements Comparable {
     /**

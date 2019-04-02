@@ -3,7 +3,9 @@
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
 package org.sysu.renNameService.service.rolemapping;
+
 import org.sysu.renCommon.entity.RenRolemapEntity;
+
 import java.util.ArrayList;
 
 /**
@@ -26,6 +28,7 @@ final class CachedRoleMap {
 
     /**
      * Add cache item to the cache map.
+     *
      * @param entity RenRolemapEntity instance to be cached
      */
     public void addCacheItem(RenRolemapEntity entity) {
@@ -34,6 +37,7 @@ final class CachedRoleMap {
 
     /**
      * Get the cached role maps.
+     *
      * @return ArrayList of cached RenRolemapEntity instances
      */
     public ArrayList<RenRolemapEntity> getCacheList() {
@@ -42,6 +46,7 @@ final class CachedRoleMap {
 
     /**
      * Get the cached specific business role maps.
+     *
      * @param bRole business role name
      * @return ArrayList of cached RenRolemapEntity instances with a specific business role
      */
@@ -57,6 +62,7 @@ final class CachedRoleMap {
 
     /**
      * Get the cached specific mapped gid role maps.
+     *
      * @param gid global id
      * @return ArrayList of cached RenRolemapEntity instances with a specific global id
      */

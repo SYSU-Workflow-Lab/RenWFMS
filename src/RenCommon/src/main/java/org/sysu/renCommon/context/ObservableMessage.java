@@ -38,6 +38,7 @@ public final class ObservableMessage implements Serializable {
 
     /**
      * Create a new observable notification message.
+     *
      * @param code notification code string
      */
     public ObservableMessage(String code) {
@@ -46,7 +47,8 @@ public final class ObservableMessage implements Serializable {
 
     /**
      * Add notification payload.
-     * @param key payload fetching key
+     *
+     * @param key   payload fetching key
      * @param value payload object
      */
     public void AddPayload(String key, Object value) {
@@ -55,6 +57,7 @@ public final class ObservableMessage implements Serializable {
 
     /**
      * Get notification code.
+     *
      * @return code string defined in {@code GlobalContext}
      */
     public String getCode() {
@@ -63,6 +66,7 @@ public final class ObservableMessage implements Serializable {
 
     /**
      * Get payload dictionary.
+     *
      * @return Hash table contains payloads
      */
     public HashMap<String, Object> getRetDict() {
@@ -71,6 +75,7 @@ public final class ObservableMessage implements Serializable {
 
     /**
      * Get notification created timestamp.
+     *
      * @return this message constructed timestamp
      */
     public Timestamp getTimestamp() {

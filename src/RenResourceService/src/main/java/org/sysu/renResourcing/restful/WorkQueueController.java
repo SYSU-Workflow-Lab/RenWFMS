@@ -41,16 +41,17 @@ public class WorkQueueController {
 
     /**
      * Get a specific work queue of a worker.
-     * @param rtid process rtid
+     *
+     * @param rtid     process rtid
      * @param workerId worker global id
-     * @param type queue type name
+     * @param type     queue type name
      * @return response package
      */
-    @RequestMapping(value = "/get", produces = { "application/json"})
+    @RequestMapping(value = "/get", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel GetWorkQueue(@RequestParam(value="rtid", required = false)String rtid,
-                                    @RequestParam(value="workerId", required = false)String workerId,
-                                    @RequestParam(value="type", required = false)String type) {
+    public ReturnModel GetWorkQueue(@RequestParam(value = "rtid", required = false) String rtid,
+                                    @RequestParam(value = "workerId", required = false) String workerId,
+                                    @RequestParam(value = "type", required = false) String type) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -78,16 +79,17 @@ public class WorkQueueController {
 
     /**
      * Get a specific work queue of a list of workers.
-     * @param rtid process rtid
+     *
+     * @param rtid         process rtid
      * @param workerIdList worker global id list, split by `,`
-     * @param type queue type name
+     * @param type         queue type name
      * @return response package
      */
-    @RequestMapping(value = "/getlist", produces = { "application/json"})
+    @RequestMapping(value = "/getlist", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel GetWorkQueueList(@RequestParam(value="rtid", required = false)String rtid,
-                                        @RequestParam(value="workerIdList", required = false)String workerIdList,
-                                        @RequestParam(value="type", required = false)String type) {
+    public ReturnModel GetWorkQueueList(@RequestParam(value = "rtid", required = false) String rtid,
+                                        @RequestParam(value = "workerIdList", required = false) String workerIdList,
+                                        @RequestParam(value = "type", required = false) String type) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params

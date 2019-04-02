@@ -64,6 +64,7 @@ public class Task extends ParamsContainer implements Serializable {
 
     /**
      * Generate descriptor for this constraint.
+     *
      * @return string descriptor
      */
     public String GenerateParamDescriptor() throws Exception {
@@ -82,6 +83,7 @@ public class Task extends ParamsContainer implements Serializable {
 
     /**
      * Generate callback descriptors.
+     *
      * @return a entry of (HookDescriptor, EventDescriptor)
      */
     public AbstractMap.SimpleEntry<String, String> GenerateCallbackDescriptor() {
@@ -125,6 +127,7 @@ public class Task extends ParamsContainer implements Serializable {
 
     /**
      * Add a callback to this task.
+     *
      * @param callback callback package
      */
     public void AddCallback(Callback callback) {
@@ -140,6 +143,7 @@ public class Task extends ParamsContainer implements Serializable {
 
     /**
      * Set id.
+     *
      * @param id Task id
      */
     public void setId(String id) {
@@ -155,6 +159,7 @@ public class Task extends ParamsContainer implements Serializable {
 
     /**
      * Set name.
+     *
      * @param name Task name
      */
     public void setName(String name) {
@@ -170,6 +175,7 @@ public class Task extends ParamsContainer implements Serializable {
 
     /**
      * Set agent.
+     *
      * @param brole Task Business Role name
      */
     public void setBrole(String brole) {
@@ -185,6 +191,7 @@ public class Task extends ParamsContainer implements Serializable {
 
     /**
      * Set event.
+     *
      * @param event callback event name
      */
     public void setEvent(String event) {
@@ -200,6 +207,7 @@ public class Task extends ParamsContainer implements Serializable {
 
     /**
      * Set principle.
+     *
      * @param principle resourcing principle
      */
     public void setPrinciple(Principle principle) {
@@ -220,6 +228,7 @@ public class Task extends ParamsContainer implements Serializable {
 
     /**
      * Execute when encounter.
+     *
      * @param exctx execution context
      */
     @Override

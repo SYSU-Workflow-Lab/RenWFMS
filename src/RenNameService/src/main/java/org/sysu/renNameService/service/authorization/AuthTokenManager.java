@@ -3,6 +3,7 @@
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
 package org.sysu.renNameService.service.authorization;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +40,7 @@ public class AuthTokenManager {
 
     /**
      * Request for a auth token by authorization user info.
+     *
      * @param username user unique id, with domain name
      * @param password password
      * @return a token if authorization success, otherwise a string start with `#` for failure reason
@@ -60,8 +62,7 @@ public class AuthTokenManager {
 
             if (rae == null || rae.getStatus() != 0) {
                 return "#user_not_valid";
-            }
-            else if (!rae.getPassword().equals(encryptedPassword)) {
+            } else if (!rae.getPassword().equals(encryptedPassword)) {
                 return "#password_invalid";
             }
             // check if active session exist, ban it
@@ -86,8 +87,7 @@ public class AuthTokenManager {
             }
             renSessionEntityDAO.saveOrUpdate(rse);
             return tokenId;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             LogUtil.Log(String.format("Request for auth but exception occurred (%s), service rollback, %s", username, ex),
                     AuthTokenManager.class.getName(), LogUtil.LogLevelType.ERROR, "");
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -97,6 +97,7 @@ public class AuthTokenManager {
 
     /**
      * Get domain of a token.
+     *
      * @param token auth token
      * @return domain name, null if invalid
      */
@@ -114,6 +115,7 @@ public class AuthTokenManager {
 
     /**
      * Destroy a token.
+     *
      * @param token auth token
      */
     @Transactional(rollbackFor = Exception.class)
@@ -125,8 +127,7 @@ public class AuthTokenManager {
             }
             rse.setDestroyTimestamp(TimestampUtil.GetCurrentTimestamp());
             renSessionEntityDAO.saveOrUpdate(rse);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             LogUtil.Log(String.format("Destroy auth but exception occurred (%s), service rollback, %s", token, ex),
                     AuthTokenManager.class.getName(), LogUtil.LogLevelType.ERROR, "");
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -135,6 +136,7 @@ public class AuthTokenManager {
 
     /**
      * Check if a token is valid.
+     *
      * @param token auth token to be checked
      * @return whether token is valid
      */
@@ -148,11 +150,10 @@ public class AuthTokenManager {
         try {
             RenSessionEntity rse = renSessionEntityDAO.findByToken(token);
             if (rse == null || rse.getDestroyTimestamp() != null ||
-                rse.getUntilTimestamp().before(TimestampUtil.GetCurrentTimestamp())) {
+                    rse.getUntilTimestamp().before(TimestampUtil.GetCurrentTimestamp())) {
                 retFlag = false;
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             LogUtil.Log(String.format("Check auth validation but exception occurred (%s), service rollback, %s", token, ex),
                     AuthTokenManager.class.getName(), LogUtil.LogLevelType.ERROR, "");
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -163,6 +164,7 @@ public class AuthTokenManager {
 
     /**
      * Check if a token is valid and get level.
+     *
      * @param token auth token to be checked
      * @return token level, -1 if token is invalid
      */
@@ -178,12 +180,10 @@ public class AuthTokenManager {
             if (rse == null || rse.getDestroyTimestamp() != null ||
                     rse.getUntilTimestamp().before(TimestampUtil.GetCurrentTimestamp())) {
                 retVal = -1;
-            }
-            else {
+            } else {
                 retVal = rse.getLevel();
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             LogUtil.Log(String.format("Check auth validation but exception occurred (%s), service rollback, %s", token, ex),
                     AuthTokenManager.class.getName(), LogUtil.LogLevelType.ERROR, "");
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

@@ -114,8 +114,7 @@ public class Call extends ParamsContainer implements Serializable {
                         for (Param p : this.getParams()) {
                             try {
                                 sb.append(p.GenerateDescriptor(scxmlExecContext.getEvaluator(), ctx)).append(",");
-                            }
-                            catch (Exception ex) {
+                            } catch (Exception ex) {
                                 LogUtil.Log(ex.toString(), Call.class.getName(), LogLevelType.ERROR, scxmlExecContext.Rtid);
                             }
                         }
@@ -164,8 +163,7 @@ public class Call extends ParamsContainer implements Serializable {
                         for (Param p : this.getParams()) {
                             try {
                                 sb.append(p.GenerateDescriptor(scxmlExecContext.getEvaluator(), ctx)).append(",");
-                            }
-                            catch (Exception ex) {
+                            } catch (Exception ex) {
                                 LogUtil.Log(ex.toString(), Call.class.getName(), LogLevelType.ERROR, scxmlExecContext.Rtid);
                             }
                         }

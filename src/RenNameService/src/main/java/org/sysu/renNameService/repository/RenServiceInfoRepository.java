@@ -14,6 +14,12 @@ public interface RenServiceInfoRepository extends JpaRepository<RenServiceInfo, 
     @Query(value = "select location from ren_serviceinfo where locate('WFMSComponent_Engine_', interpreter_id) > 0", nativeQuery = true)
     List<String> findAllBOEngineLocation();
 
+    @Query(value = "select location from ren_serviceinfo where business < ?1 order by business desc limit 1", nativeQuery = true)
+    List<String> findBOEngineLocationByBusiness(double threshold);
+
+    @Query(value = "select location from ren_serviceinfo order by tomcat_concurrency asc limit 1", nativeQuery = true)
+    List<String> findBOEngineLocationByTomcatConcurrency();
+
     @Query(value = "select location from ren_serviceinfo where locate('WFMSComponent_RS_', interpreter_id) > 0", nativeQuery = true)
     String findRSLocation();
 

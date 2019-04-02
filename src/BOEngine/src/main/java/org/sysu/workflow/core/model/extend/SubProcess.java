@@ -58,15 +58,17 @@ public class SubProcess extends Action implements Serializable {
     }
 
     /**
-     *一个顺序流程对应一组可能的反馈事件
+     * 一个顺序流程对应一组可能的反馈事件
+     *
      * @param events
      */
     public void setEvent(String events) {
         String[] possibleEvents = events.split(",");
-        for(String event : possibleEvents){
+        for (String event : possibleEvents) {
             this.events.add(event);
         }
     }
+
     public String getId() {
         return id;
     }
@@ -100,7 +102,6 @@ public class SubProcess extends Action implements Serializable {
     }
 
     /**
-     *
      * @param exctx The ActionExecutionContext for this execution instance
      * @throws ModelException
      * @throws SCXMLExpressionException

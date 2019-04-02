@@ -34,13 +34,13 @@ public class InheritableContext implements Serializable {
 
     /**
      * Update inherited data model.
+     *
      * @param dm data model to add to inheritable context.
      */
     public void UpdateDataModel(Datamodel dm) {
         if (this.InheritedDatamodel == null) {
             this.InheritedDatamodel = dm;
-        }
-        else {
+        } else {
             List<Data> data = dm.getData();
             List<Data> orgData = this.InheritedDatamodel.getData();
             for (Data d : data) {
@@ -54,13 +54,13 @@ public class InheritableContext implements Serializable {
                     }
                 }
                 // 否则将新data插入到可继承上下文的datamodel中
-                if(!temp){
+                if (!temp) {
                     orgData.add(d);
                 }
             }
             // 使用新的orgData更新可继承上下文的datamodel
             Datamodel datamodel = new Datamodel();
-            for(Data d:orgData){
+            for (Data d : orgData) {
                 datamodel.addData(d);
             }
             this.InheritedDatamodel = datamodel;
@@ -69,13 +69,13 @@ public class InheritableContext implements Serializable {
 
     /**
      * Update inherited task list.
+     *
      * @param ts Tasks to add to inheritable context.
      */
     public void UpdateTasks(Tasks ts) {
         if (this.InheritedTasks == null) {
             this.InheritedTasks = ts;
-        }
-        else {
+        } else {
             List<Task> taskList = ts.getTaskList();
             List<Task> orgTaskList = this.InheritedTasks.getTaskList();
             for (Task t : taskList) {
@@ -89,7 +89,7 @@ public class InheritableContext implements Serializable {
                     }
                 }
                 //否则将新task插入到可继承上下文的tasks中。
-                if(!temp){
+                if (!temp) {
                     orgTaskList.add(t);
                 }
             }
@@ -107,17 +107,17 @@ public class InheritableContext implements Serializable {
                     }
                 }
                 //否则将新subprocess插入到可继承上下文的subprocess中。
-                if(!temp){
+                if (!temp) {
                     orgProcList.add(p);
                 }
             }
 
             //更新可继承上下文的tasks
             Tasks tasks = new Tasks();
-            for(Task t:orgTaskList){
+            for (Task t : orgTaskList) {
                 tasks.addTask(t);
             }
-            for(SubProcess p:orgProcList){
+            for (SubProcess p : orgProcList) {
                 tasks.addProcess(p);
             }
             this.InheritedTasks = tasks;
@@ -126,6 +126,7 @@ public class InheritableContext implements Serializable {
 
     /**
      * Get inherited data model.
+     *
      * @return Datamodel
      */
     public Datamodel getInheritedDatamodel() {
@@ -134,6 +135,7 @@ public class InheritableContext implements Serializable {
 
     /**
      * Get inherited data model.
+     *
      * @param inheritedDatamodel Datamodel to be set
      */
     public void setInheritedDatamodel(Datamodel inheritedDatamodel) {
@@ -142,6 +144,7 @@ public class InheritableContext implements Serializable {
 
     /**
      * Get inheritable tasks.
+     *
      * @return Tasks
      */
     public Tasks getInheritedTasks() {
@@ -150,6 +153,7 @@ public class InheritableContext implements Serializable {
 
     /**
      * Set inheritable tasks.
+     *
      * @param inheritedTasks Tasks to be set
      */
     public void setInheritedTasks(Tasks inheritedTasks) {

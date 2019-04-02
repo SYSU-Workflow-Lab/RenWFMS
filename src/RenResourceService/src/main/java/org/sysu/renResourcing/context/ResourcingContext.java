@@ -14,7 +14,7 @@ import java.util.Hashtable;
  * Author: Rinkako
  * Date  : 2017/2/5
  * Usage : Task context is an encapsulation of RenRsrecordEntity in a
- *         convenient way for resourcing service.
+ * convenient way for resourcing service.
  */
 public class ResourcingContext implements Comparable<ResourcingContext>, Serializable, RCacheablesContext {
     /**
@@ -79,6 +79,7 @@ public class ResourcingContext implements Comparable<ResourcingContext>, Seriali
 
     /**
      * Get the resourcing request global id.
+     *
      * @return resourcing record id string
      */
     public String getRstid() {
@@ -87,6 +88,7 @@ public class ResourcingContext implements Comparable<ResourcingContext>, Seriali
 
     /**
      * Get process runtime record global id.
+     *
      * @return process rtid string
      */
     public String getRtid() {
@@ -96,6 +98,7 @@ public class ResourcingContext implements Comparable<ResourcingContext>, Seriali
     /**
      * Get the priority of resourcing request.
      * Bigger schedule faster.
+     *
      * @return priority int, default `0`
      */
     public int getPriority() {
@@ -104,6 +107,7 @@ public class ResourcingContext implements Comparable<ResourcingContext>, Seriali
 
     /**
      * Get service enum type of this request.
+     *
      * @return service enum type
      */
     public RServiceType getService() {
@@ -112,6 +116,7 @@ public class ResourcingContext implements Comparable<ResourcingContext>, Seriali
 
     /**
      * Get argument dict of this request.
+     *
      * @return argument HashTable
      */
     public Hashtable<String, Object> getArgs() {
@@ -120,6 +125,7 @@ public class ResourcingContext implements Comparable<ResourcingContext>, Seriali
 
     /**
      * Get the execution time span in MS.
+     *
      * @return execution time span ms long integer
      */
     public long getExecutionTimespan() {
@@ -128,6 +134,7 @@ public class ResourcingContext implements Comparable<ResourcingContext>, Seriali
 
     /**
      * Set the execution time span in MS.
+     *
      * @param executionTimespan time span ms long integer
      */
     public void setExecutionTimespan(long executionTimespan) {
@@ -136,6 +143,7 @@ public class ResourcingContext implements Comparable<ResourcingContext>, Seriali
 
     /**
      * Get request received timestamp.
+     *
      * @return timestamp
      */
     public Timestamp getReceivedTimestamp() {
@@ -144,6 +152,7 @@ public class ResourcingContext implements Comparable<ResourcingContext>, Seriali
 
     /**
      * Get request scheduled timestamp.
+     *
      * @return timestamp
      */
     public Timestamp getScheduledTimestamp() {
@@ -152,6 +161,7 @@ public class ResourcingContext implements Comparable<ResourcingContext>, Seriali
 
     /**
      * Get request finish timestamp.
+     *
      * @return timestamp
      */
     public Timestamp getFinishTimestamp() {
@@ -175,6 +185,7 @@ public class ResourcingContext implements Comparable<ResourcingContext>, Seriali
 
     /**
      * Set success flag.
+     *
      * @param isSucceed 1 for succeed, 0 for failed
      */
     public void setIsSucceed(int isSucceed) {
@@ -183,6 +194,7 @@ public class ResourcingContext implements Comparable<ResourcingContext>, Seriali
 
     /**
      * Get the execution result.
+     *
      * @return result descriptor string.
      */
     public String getExecutionResult() {
@@ -191,6 +203,7 @@ public class ResourcingContext implements Comparable<ResourcingContext>, Seriali
 
     /**
      * Set the execution result.
+     *
      * @param executionResult result descriptor string.
      */
     public void setExecutionResult(String executionResult) {
@@ -199,6 +212,7 @@ public class ResourcingContext implements Comparable<ResourcingContext>, Seriali
 
     /**
      * Get the execution success flag.
+     *
      * @return
      */
     public int getIsSucceed() {
@@ -208,9 +222,10 @@ public class ResourcingContext implements Comparable<ResourcingContext>, Seriali
     /**
      * Create a new resourcing request context.
      * Private constructor for preventing create outside.
-     * @param rstid resourcing request id
-     * @param rtid process rtid
-     * @param service service descriptor
+     *
+     * @param rstid    resourcing request id
+     * @param rtid     process rtid
+     * @param service  service descriptor
      * @param argsDict service argument dictionary
      */
     private ResourcingContext(String rstid, String rtid, String service, Hashtable<String, Object> argsDict) {
@@ -222,6 +237,7 @@ public class ResourcingContext implements Comparable<ResourcingContext>, Seriali
 
     /**
      * Generate a resourcing context by a entity entity.
+     *
      * @param rsrecordEntity RS Record entity
      * @return equivalent resourcing context.
      */
@@ -232,8 +248,7 @@ public class ResourcingContext implements Comparable<ResourcingContext>, Seriali
         Hashtable<String, Object> dict;
         if (CommonUtil.IsNullOrEmpty(argdDescriptor)) {
             dict = new Hashtable<>();
-        }
-        else {
+        } else {
             dict = SerializationUtil.JsonDeserialization(rsrecordEntity.getArgs(), Hashtable.class);
         }
         ResourcingContext context = new ResourcingContext(rsrecordEntity.getRstid(),
@@ -249,6 +264,7 @@ public class ResourcingContext implements Comparable<ResourcingContext>, Seriali
      * Compares this object with the specified object for order.  Returns a
      * negative integer, zero, or a positive integer as this object is less
      * than, equal to, or greater than the specified object.
+     *
      * @param o the object to be compared.
      * @return a negative integer, zero, or a positive integer as this object
      * is less than, equal to, or greater than the specified object.

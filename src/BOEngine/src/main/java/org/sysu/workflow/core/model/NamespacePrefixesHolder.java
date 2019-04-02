@@ -4,7 +4,6 @@ package org.sysu.workflow.core.model;
 import java.util.Map;
 
 /**
- *
  * 名称前缀持有器，保存了名称前缀信息，为了Xpath 表达式求值使用
  */
 public interface NamespacePrefixesHolder {

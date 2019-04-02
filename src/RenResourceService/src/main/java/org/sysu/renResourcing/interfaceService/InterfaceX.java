@@ -21,7 +21,7 @@ import org.sysu.renResourcing.dao.RenExitemEntityDAO;
  * Author: Rinkako
  * Date  : 2018/2/9
  * Usage : Implementation of Interface X of Resource Service.
- *         Interface X is responsible for process exception handling.
+ * Interface X is responsible for process exception handling.
  */
 
 @Service
@@ -37,7 +37,7 @@ public class InterfaceX {
      * Signal a workitem is failed, and redirect it to its admin launcher exception workitem pool.
      *
      * @param workitem failed workitem
-     * @param reason failed reason
+     * @param reason   failed reason
      */
     public void FailedRedirectToLauncherDomainPool(WorkitemContext workitem, String reason) {
         interfaceE.WriteLog(workitem, "", RSEventType.exception_lifecycle);
@@ -48,7 +48,7 @@ public class InterfaceX {
      * Signal a workitem is failed, and redirect it to BO WFMS admin exception workitem pool.
      *
      * @param workitem failed workitem
-     * @param reason failed reason
+     * @param reason   failed reason
      */
     public void FailedRedirecToWFMSAdminPool(WorkitemContext workitem, String reason) {
         interfaceE.WriteLog(workitem, "", RSEventType.exception_lifecycle);
@@ -67,8 +67,9 @@ public class InterfaceX {
 
     /**
      * Signal that failed workitem is redirected to launcher offered queue.
+     *
      * @param workitem failed workitem
-     * @param rtid process rtid
+     * @param rtid     process rtid
      */
     @Transactional(rollbackFor = Exception.class)
     public void RedirectToUnofferedQueue(WorkitemContext workitem, String rtid) {
@@ -79,16 +80,16 @@ public class InterfaceX {
             ree.setHandlerAuthName(handler);
             ree.setTimestamp(TimestampUtil.GetCurrentTimestamp());
             renExitemEntityDAO.saveOrUpdate(ree);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
     }
 
     /**
      * Signal that failed workitem is ignored.
+     *
      * @param workitem failed workitem
-     * @param rtid process rtid
+     * @param rtid     process rtid
      */
     @Transactional(rollbackFor = Exception.class)
     public void RedirectToIgnored(WorkitemContext workitem, String rtid) {
@@ -99,8 +100,7 @@ public class InterfaceX {
             ree.setHandlerAuthName(handler);
             ree.setTimestamp(TimestampUtil.GetCurrentTimestamp());
             renExitemEntityDAO.saveOrUpdate(ree);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
     }
@@ -109,7 +109,7 @@ public class InterfaceX {
      * Route a workitem to exception pool.
      *
      * @param workitem failed workitem
-     * @param reason reason of failure
+     * @param reason   reason of failure
      */
     @Transactional(rollbackFor = Exception.class)
     public void RouteFailedWorkitem(WorkitemContext workitem, String reason, FailedWorkitemVisibilityType visibility) {
@@ -122,8 +122,7 @@ public class InterfaceX {
             ree.setVisibility(visibility.ordinal());
             ree.setTimestamp(TimestampUtil.GetCurrentTimestamp());
             renExitemEntityDAO.saveOrUpdate(ree);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
         this.NotifyException(workitem);

@@ -14,6 +14,7 @@ public class AuthDomainHelper {
 
     /**
      * Get domain name by rtid.
+     *
      * @param rtid process rtid
      * @return domain name of this runtime
      */
@@ -23,6 +24,7 @@ public class AuthDomainHelper {
 
     /**
      * Get auth name by rtid.
+     *
      * @param rtid process rtid
      * @return domain name of this runtime
      */
@@ -32,6 +34,7 @@ public class AuthDomainHelper {
 
     /**
      * Get domain name by auth name.
+     *
      * @param authName full auth name
      * @return domain name of this runtime
      */
@@ -41,8 +44,9 @@ public class AuthDomainHelper {
 
     /**
      * Check if a auth user belong to a specific domain.
+     *
      * @param authName auth user name
-     * @param domain domain name
+     * @param domain   domain name
      * @return true if auth user belong to domain
      */
     public static Boolean IsAuthUserInDomain(String authName, String domain) {

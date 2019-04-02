@@ -29,6 +29,7 @@ public class OfferInteractionExecutor extends InteractionExecutor {
 
     /**
      * Get the binding filter.
+     *
      * @return get filter instance.
      */
     public RFilter GetFilter() {
@@ -37,8 +38,9 @@ public class OfferInteractionExecutor extends InteractionExecutor {
 
     /**
      * Create a new offer interaction executor.
+     *
      * @param ownerTaskId id of task to create this
-     * @param type type of service invoker type
+     * @param type        type of service invoker type
      */
     public OfferInteractionExecutor(String ownerTaskId, InitializationByType type) {
         super(ownerTaskId, type);
@@ -46,6 +48,7 @@ public class OfferInteractionExecutor extends InteractionExecutor {
 
     /**
      * Use allocator to handle allocation service.
+     *
      * @return Filtered Participant context set.
      */
     public Set<ParticipantContext> PerformOffer(HashSet<ParticipantContext> candidateSet, WorkitemContext workitem) {
@@ -59,6 +62,7 @@ public class OfferInteractionExecutor extends InteractionExecutor {
 
     /**
      * Binding a allocator to this executor by the principle of task.
+     *
      * @param principle allocation principle
      */
     public void BindingFilter(RPrinciple principle, String rstid, String rtid) throws Exception {

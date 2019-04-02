@@ -57,14 +57,13 @@ public class LogMiner {
     }
 
 
-
     /**
      * Get a list of durations(completed - started) of a task.
      *
-     * @param taskId        task global id
-     * @param beginStatus   begin event name
-     * @param endStatus     end event name
-     * @param rtid          process rtid
+     * @param taskId      task global id
+     * @param beginStatus begin event name
+     * @param endStatus   end event name
+     * @param rtid        process rtid
      * @return a list of Long
      */
     public static List<Long> GetDurations(String taskId, String beginStatus, String endStatus, String rtid) {

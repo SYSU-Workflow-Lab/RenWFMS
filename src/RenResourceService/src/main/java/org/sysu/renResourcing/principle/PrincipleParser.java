@@ -15,6 +15,7 @@ public final class PrincipleParser {
 
     /**
      * Parse principle descriptor to RPrinciple object.
+     *
      * @param principleDescriptor principle descriptor string
      * @return parsed object
      */
@@ -24,6 +25,7 @@ public final class PrincipleParser {
 
     /**
      * Set parser grammar dialect.
+     *
      * @param type grammar dialect enum
      */
     public static void SetParser(PrincipleDialectType type) {

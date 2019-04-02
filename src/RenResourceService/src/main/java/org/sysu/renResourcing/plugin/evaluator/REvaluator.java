@@ -8,7 +8,7 @@ package org.sysu.renResourcing.plugin.evaluator;
  * Author: Rinkako
  * Date  : 2018/2/9
  * Usage : Interface for a component that may be used by the
- *         Resource Service to evaluate the expressions.
+ * Resource Service to evaluate the expressions.
  */
 public interface REvaluator {
 
@@ -42,6 +42,7 @@ public interface REvaluator {
 
     /**
      * Get the internal evaluate engine.
+     *
      * @return evaluate engine reference
      */
     Object GetInternalEngine();

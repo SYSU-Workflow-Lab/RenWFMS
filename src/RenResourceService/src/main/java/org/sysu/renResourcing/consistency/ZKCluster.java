@@ -24,6 +24,7 @@ public class ZKCluster implements IClusterManager {
     /**
      * Get the global instance of ZKCluster manager.
      * This method is thread SAFE.
+     *
      * @return ZKCluster instance.
      */
     public static ZKCluster GetInstance() throws Exception {
@@ -196,6 +197,7 @@ public class ZKCluster implements IClusterManager {
 
     /**
      * Normalize an URI to global URL.
+     *
      * @param uri uri of path
      * @return url of path
      */

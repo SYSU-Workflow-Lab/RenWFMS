@@ -19,7 +19,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public final class LogUtil {
     /**
      * Show a structure information message.
-     * @param msg message text
+     *
+     * @param msg   message text
      * @param label message label
      */
     public static void Echo(String msg, String label) {
@@ -28,7 +29,8 @@ public final class LogUtil {
 
     /**
      * Show a structure message.
-     * @param msg message text
+     *
+     * @param msg   message text
      * @param label message label
      * @param level message level
      */
@@ -39,7 +41,8 @@ public final class LogUtil {
 
     /**
      * Log a structure information message to entity.
-     * @param msg message text
+     *
+     * @param msg   message text
      * @param label message label
      */
     public static void Log(String msg, String label, String rtid) {
@@ -48,10 +51,11 @@ public final class LogUtil {
 
     /**
      * Log a structure message to entity.
-     * @param msg message text
+     *
+     * @param msg   message text
      * @param label message label
      * @param level message level
-     * @param rtid process rtid
+     * @param rtid  process rtid
      */
     public static void Log(String msg, String label, LogLevelType level, String rtid) {
         LogUtil.ActualLog(msg, label, level, rtid, 0);
@@ -59,7 +63,8 @@ public final class LogUtil {
 
     /**
      * Write log to entity.
-     * @param msg message text
+     *
+     * @param msg   message text
      * @param label message label
      * @param level message level
      * @param depth exception depth
@@ -75,12 +80,10 @@ public final class LogUtil {
             LogMessagePackage lmp = new LogMessagePackage(rtid, msg, label, level,
                     TimestampUtil.GetCurrentTimestamp());
             LogUtil.logBuffer.add(lmp);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             LogUtil.ActualLog("When logging, exception occurred" + ex, LogUtil.class.getName(),
                     LogLevelType.ERROR, rtid, depth + 1);
-        }
-        finally {
+        } finally {
             boolean flushFlag = LogUtil.logBuffer.size() >= GlobalContext.LOG_BUFFER_SIZE;
             LogUtil.readWriteLock.readLock().unlock();
             if (flushFlag) {
@@ -112,11 +115,9 @@ public final class LogUtil {
                 rnle.setRtid(lmp.Rtid);
                 renLogEntityDAO.saveOrUpdate(rnle);
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             LogUtil.Echo("Flush log exception, " + ex, LogUtil.class.getName(), LogLevelType.ERROR);
-        }
-        finally {
+        } finally {
             LogUtil.readWriteLock.writeLock().unlock();
         }
     }

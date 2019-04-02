@@ -460,9 +460,10 @@ public class MultiStateMachineDispatcher extends SimpleDispatcher implements Ser
 
     /**
      * Generate normalized event prefix
+     *
      * @param treeId        the target tree node
      * @param currentNodeId the id of the current node
-     * @return              normalized event prefix
+     * @return normalized event prefix
      */
     @SuppressWarnings("all")
     private String normalizeEventPrefix(String treeId, String currentNodeId) {
@@ -472,9 +473,10 @@ public class MultiStateMachineDispatcher extends SimpleDispatcher implements Ser
 
     /**
      * Generate normalized event prefix
-     * @param treeId        the target tree node
-     * @param currentNode   current node
-     * @return              normalized event prefix
+     *
+     * @param treeId      the target tree node
+     * @param currentNode current node
+     * @return normalized event prefix
      */
     @SuppressWarnings("all")
     private String normalizeEventPrefix(String treeId, RTreeNode currentNode) {

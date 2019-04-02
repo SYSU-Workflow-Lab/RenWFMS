@@ -22,12 +22,12 @@ import java.util.HashSet;
  * Author: Rinkako
  * Date  : 2018/2/9
  * Usage : Implementation of Interface O of Resource Service.
- *         Interface O is responsible for resources managements. In RenWFMS, we defined
- *         resources in COrgan, and register involved resources to Participant in Name
- *         Service. Therefore we assert when Resource Service need to refer a RESOURCE,
- *         it has already been registered in entity memory as a PARTICIPANT. So, this
- *         interface just for involved resources information retrieving and participants
- *         privileges management.
+ * Interface O is responsible for resources managements. In RenWFMS, we defined
+ * resources in COrgan, and register involved resources to Participant in Name
+ * Service. Therefore we assert when Resource Service need to refer a RESOURCE,
+ * it has already been registered in entity memory as a PARTICIPANT. So, this
+ * interface just for involved resources information retrieving and participants
+ * privileges management.
  */
 
 @Service
@@ -40,6 +40,7 @@ public class InterfaceO {
      * Get current valid participant context set.
      * Current valid means that current resources set in Name Service according to process COrgan isolation type.
      * NOTICE that participant load and unload is handled in Name Service.
+     *
      * @param rtid process rtid
      * @return a Hash set for current valid participant context
      */
@@ -57,15 +58,15 @@ public class InterfaceO {
                 retSet.add(ParticipantContext.GetContext(rtid, workerItem[0]));
             }
             return retSet;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw ex;
         }
     }
 
     /**
      * Get valid participant context set according to business role in specific process runtime.
-     * @param rtid process rtid
+     *
+     * @param rtid  process rtid
      * @param brole business role name
      * @return a Hash set for current valid participant context of a business role
      */
@@ -85,17 +86,17 @@ public class InterfaceO {
                 }
             }
             return retSet;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw ex;
         }
     }
 
     /**
      * Check if a participant has a privilege.
+     *
      * @param participant participant context
-     * @param workitem workitem context
-     * @param privilege privilege enum
+     * @param workitem    workitem context
+     * @param privilege   privilege enum
      * @return true if participant has the privilege
      */
     public boolean CheckPrivilege(ParticipantContext participant, WorkitemContext workitem, PrivilegeType privilege) {
@@ -105,6 +106,7 @@ public class InterfaceO {
 
     /**
      * This method is called when sensed participant in entity is changed.
+     *
      * @param rtid process rtid
      * @return is fail-fast when organization data changed
      */

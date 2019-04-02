@@ -29,8 +29,8 @@ import java.util.List;
  * Author: Rinkako
  * Date  : 2018/2/9
  * Usage : Implementation of Interface A of Resource Service.
- *         Interface A is responsible for process load and unload, launching, and other
- *         service requests passing from NameService or BOEngine.
+ * Interface A is responsible for process load and unload, launching, and other
+ * service requests passing from NameService or BOEngine.
  */
 
 @Service

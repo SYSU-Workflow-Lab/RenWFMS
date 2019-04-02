@@ -388,6 +388,11 @@ CREATE TABLE `ren_serviceinfo` (
   `interpreter_id` varchar(64) NOT NULL,
   `location` varchar(64) NOT NULL,
   `is_active` int(11) NOT NULL,
+  `business` double DEFAULT NULL,
+  `cpu_occupancy_rate` double DEFAULT NULL,
+  `memory_occupancy_rate` double DEFAULT NULL,
+  `tomcat_concurrency` double DEFAULT NULL,
+  `workitem_count` double DEFAULT NULL,
   PRIMARY KEY (`interpreter_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

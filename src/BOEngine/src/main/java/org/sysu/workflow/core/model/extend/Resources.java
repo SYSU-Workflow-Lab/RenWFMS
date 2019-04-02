@@ -32,6 +32,7 @@ public class Resources extends ParamsContainer implements Serializable {
 
     /**
      * Add a resource item to the resources catalogue vector
+     *
      * @param r the role pending to add
      */
     public void AddRole(Role r) {
@@ -45,6 +46,7 @@ public class Resources extends ParamsContainer implements Serializable {
 
     /**
      * Add a resource item to the resources catalogue vector
+     *
      * @param r the resource to add
      */
     public void AddResource(Resource r) {
@@ -53,6 +55,7 @@ public class Resources extends ParamsContainer implements Serializable {
 
     /**
      * Get the vector of resource
+     *
      * @return the reference of resource vector
      */
     public List<Resource> GetResourceList() {
@@ -61,6 +64,7 @@ public class Resources extends ParamsContainer implements Serializable {
 
     /**
      * Get the vector of role
+     *
      * @return the reference of role vector
      */
     public List<Role> GetRoleList() {
@@ -69,6 +73,7 @@ public class Resources extends ParamsContainer implements Serializable {
 
     /**
      * Register resource to the ResourceService
+     *
      * @param exctx The ActionExecutionContext for this execution instance
      * @throws ModelException
      * @throws SCXMLExpressionException

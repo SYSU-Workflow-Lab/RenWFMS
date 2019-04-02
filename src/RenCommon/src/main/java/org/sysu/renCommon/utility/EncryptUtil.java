@@ -3,6 +3,7 @@
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
 package org.sysu.renCommon.utility;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.sysu.renCommon.GlobalConfigContext;
 
@@ -16,6 +17,7 @@ public class EncryptUtil {
 
     /**
      * Encrypt a string using SHA256 with salt.
+     *
      * @param orgStr string to be encrypted
      * @return encrypted string
      */
@@ -25,8 +27,9 @@ public class EncryptUtil {
 
     /**
      * Encrypt a string using SHA256 with custom salt.
+     *
      * @param orgStr string to be encrypted
-     * @param salt custom salt string
+     * @param salt   custom salt string
      * @return encrypted string
      */
     public static String EncryptSHA256(String orgStr, String salt) {

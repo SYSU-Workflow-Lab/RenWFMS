@@ -16,23 +16,24 @@ import java.util.Map;
  * Author: Rinkako
  * Date  : 2018/2/9
  * Usage : A grammar parser for simplest principle descriptor. A descriptor
- *         in this grammar is in a pattern of string:<br/>
- *         <b>"DistributeType@DistributorName@ArgumentDictionaryForDistributorJSON@
- *         DictionaryOfConstraintsKeyWithItsParameterDictValue"</b><br/>
- *         While distribute type and name are case sensitive.<br/>
- *         For example, shortest queue allocation is described like this:<br/>
- *         <b>"Allocate@ShortestQueue@{}@{}"</b><br/>
- *         Another example, filter for offering can be described like this:<br/>
- *         <b>"Offer@QueueLength@{"length":"lt 3"}@{"CapabilityConstraint":{"contains":"cook"}}"</b><br/>
- *         The above descriptor means offer workitem to participant who has cook capability and their
- *         queue length should less than 3 workitems.<br/>
- *         About the valid distribute type, distributor name and their parameters
- *         can see the project document.
+ * in this grammar is in a pattern of string:<br/>
+ * <b>"DistributeType@DistributorName@ArgumentDictionaryForDistributorJSON@
+ * DictionaryOfConstraintsKeyWithItsParameterDictValue"</b><br/>
+ * While distribute type and name are case sensitive.<br/>
+ * For example, shortest queue allocation is described like this:<br/>
+ * <b>"Allocate@ShortestQueue@{}@{}"</b><br/>
+ * Another example, filter for offering can be described like this:<br/>
+ * <b>"Offer@QueueLength@{"length":"lt 3"}@{"CapabilityConstraint":{"contains":"cook"}}"</b><br/>
+ * The above descriptor means offer workitem to participant who has cook capability and their
+ * queue length should less than 3 workitems.<br/>
+ * About the valid distribute type, distributor name and their parameters
+ * can see the project document.
  */
 public class RenSimplePrincipleGrammar implements PrincipleGrammar {
 
     /**
      * Parse a principle descriptor to a principle object.
+     *
      * @param descriptor principle descriptor string
      * @return parsed principle object, null if parse failure
      */
@@ -53,8 +54,7 @@ public class RenSimplePrincipleGrammar implements PrincipleGrammar {
                 }
             }
             return retPrinciple;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             LogUtil.Log(String.format("Parse (%s) failed: %s", descriptor, ex),
                     RenSimplePrincipleGrammar.class.getName(), LogLevelType.ERROR, "");
             return null;

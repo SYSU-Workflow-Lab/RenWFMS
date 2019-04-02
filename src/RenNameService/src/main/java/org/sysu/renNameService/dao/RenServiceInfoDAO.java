@@ -45,4 +45,12 @@ public class RenServiceInfoDAO {
         return renServiceInfoRepository.findRSLocation();
     }
 
+    public List<String> findBOEngineLocationByTomcatConcurrency() {
+        return renServiceInfoRepository.findBOEngineLocationByTomcatConcurrency();
+    }
+
+    public List<String> findBOEngineLocationByBusiness(double threshold) {
+        return renServiceInfoRepository.findBOEngineLocationByBusiness(threshold);
+    }
+
 }

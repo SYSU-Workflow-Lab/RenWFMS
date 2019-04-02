@@ -39,7 +39,7 @@ public class SCXMLSemanticsImpl implements BOXMLSemantics {
     private SteadyStepService steadyStepService;
 
     public SCXMLSemanticsImpl() {
-        this.steadyStepService =(SteadyStepService) SpringContextUtil.getBean("steadyStepService");
+        this.steadyStepService = (SteadyStepService) SpringContextUtil.getBean("steadyStepService");
     }
 
     /**
@@ -222,10 +222,10 @@ public class SCXMLSemanticsImpl implements BOXMLSemantics {
 
     /**
      * Perform a micro step in the execution of a state machine.
-     *
+     * <p>
      * <p/>
      * This micro step is corresponding to the Algorithm for SCXML processing microstep() procedure.
-     *
+     * <p>
      * <p/>
      *
      * @param exctx          The execution context for this step
@@ -284,10 +284,10 @@ public class SCXMLSemanticsImpl implements BOXMLSemantics {
 
     /**
      * Perform a macro step in the execution of a state machine.
-     *
+     * <p>
      * <p/>
      * This macro step is corresponding to the Algorithm for SCXML processing mainEventLoop() procedure macro step
-     *
+     * <p>
      * sub-flow, which are the first <em>3</em> steps of the described <em>4</em>, so everything up to the blocking
      * wait for an external event.
      * <p/>
@@ -555,7 +555,7 @@ public class SCXMLSemanticsImpl implements BOXMLSemantics {
 
     /**
      * This method corresponds to the Algorithm for SCXML processing selectTransitions() as well as the
-     *
+     * <p>
      * selectEventlessTransitions() procedure, depending on the event (or null) in the provided step
      * <p/>
      *

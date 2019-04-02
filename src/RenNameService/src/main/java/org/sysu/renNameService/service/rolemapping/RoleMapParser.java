@@ -3,6 +3,7 @@
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
 package org.sysu.renNameService.service.rolemapping;
+
 import java.util.AbstractMap;
 import java.util.ArrayList;
 
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 final class RoleMapParser {
     /**
      * Parse role map register descriptor to string pair of map relation.
+     *
      * @param parseStr request descriptor string
      * @return a list of pair of role map relation with pattern (BusinessRole, GlobalId)
      */

@@ -11,14 +11,14 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * Author: Rinkako
  * Date  : 2018/2/9
  * Usage : This class is a lock manager for all running processes resources
- *         contexts using ReentrantReadWriteLock.
- *         This manager is responsible for controlling context concurrency
- *         access for this ONE Resource Service. NOTICE that it has no idea
- *         about this context is used by other RS instance or not. For the
- *         consistency, we appoint: 1. Participants and their work queues
- *         MUST NOT be locked since it is probably accessing by another RS.
- *         2. Workitem can use lock, since we make sure that one workitem
- *         ONLY managed by ONE specific RS.
+ * contexts using ReentrantReadWriteLock.
+ * This manager is responsible for controlling context concurrency
+ * access for this ONE Resource Service. NOTICE that it has no idea
+ * about this context is used by other RS instance or not. For the
+ * consistency, we appoint: 1. Participants and their work queues
+ * MUST NOT be locked since it is probably accessing by another RS.
+ * 2. Workitem can use lock, since we make sure that one workitem
+ * ONLY managed by ONE specific RS.
  */
 public class ContextLockManager {
 
@@ -35,7 +35,7 @@ public class ContextLockManager {
      * the current thread becomes disabled for thread scheduling
      * purposes and lies dormant until the read lock has been acquired.
      *
-     * @param clazz context class
+     * @param clazz     context class
      * @param contextId context id
      */
     public static void ReadLock(Class<?> clazz, String contextId) {
@@ -61,7 +61,7 @@ public class ContextLockManager {
      * lies dormant until the write lock has been acquired, at which
      * time the write lock hold count is set to one.
      *
-     * @param clazz context class
+     * @param clazz     context class
      * @param contextId context id
      */
     public static void WriteLock(Class<?> clazz, String contextId) {
@@ -81,7 +81,7 @@ public class ContextLockManager {
      * <p>If the lock is held by another thread then this method
      * will return immediately with the value {@code false}.
      *
-     * @param clazz context class
+     * @param clazz     context class
      * @param contextId context id
      * @return {@code true} if the lock was free and was acquired
      * by the current thread, or the write lock was already held
@@ -95,7 +95,8 @@ public class ContextLockManager {
 
     /**
      * WriteUnlock a read lock.
-     * @param clazz context class
+     *
+     * @param clazz     context class
      * @param contextId context id
      */
     public static void ReadUnLock(Class<?> clazz, String contextId) {
@@ -108,7 +109,8 @@ public class ContextLockManager {
 
     /**
      * WriteUnlock a write lock.
-     * @param clazz context class
+     *
+     * @param clazz     context class
      * @param contextId context id
      */
     public static void WriteUnLock(Class<?> clazz, String contextId) {
@@ -122,6 +124,7 @@ public class ContextLockManager {
     /**
      * Generate a lock for a context.
      * NOTICE this method is global synchronized, since concurrent create lock is invalid.
+     *
      * @param keyId lock key id
      */
     private synchronized static void CheckEmptyLock(String keyId) {
@@ -132,6 +135,7 @@ public class ContextLockManager {
 
     /**
      * Get a key string for a context id.
+     *
      * @param originalId context id
      * @return lock key id
      */

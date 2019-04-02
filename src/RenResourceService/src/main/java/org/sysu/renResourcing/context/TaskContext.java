@@ -18,7 +18,7 @@ import java.util.Map;
  * Author: Rinkako
  * Date  : 2018/2/4
  * Usage : Task context is an encapsulation of RenRSTaskEntity in a
- *         convenient way for resourcing service.
+ * convenient way for resourcing service.
  */
 public class TaskContext implements Serializable, RCacheablesContext {
     /**
@@ -83,6 +83,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
 
     /**
      * Parse hash map into task context.
+     *
      * @param mapObj mapped object
      * @return context object
      */
@@ -105,6 +106,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
 
     /**
      * Get task global unique id.
+     *
      * @return global id, this is NOT defined in BOXML but generated at runtime.
      */
     public String getTaskGlobalId() {
@@ -113,6 +115,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
 
     /**
      * Get documentation text.
+     *
      * @return documentation string
      */
     public String getDocumentation() {
@@ -121,6 +124,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
 
     /**
      * Get the unique id.
+     *
      * @return id string
      */
     public String getTaskId() {
@@ -129,6 +133,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
 
     /**
      * Get task polymorphism name.
+     *
      * @return name string
      */
     public String getTaskName() {
@@ -137,6 +142,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
 
     /**
      * Get the global id of BO which this task belong to.
+     *
      * @return BO global id string
      */
     public String getBoid() {
@@ -145,6 +151,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
 
     /**
      * Get the global id of Process which this task belong to.
+     *
      * @return Process global id string
      */
     public String getPid() {
@@ -153,6 +160,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
 
     /**
      * Get the resourcing principle.
+     *
      * @return principle string
      */
     public String getPrinciple() {
@@ -161,6 +169,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
 
     /**
      * Get the business role name.
+     *
      * @return business role name string
      */
     public String getBrole() {
@@ -169,6 +178,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
 
     /**
      * Get the notification hooks dictionary.
+     *
      * @return HashMap of (ChangedName-NotifyURL)
      */
     public HashMap<String, ArrayList<String>> getNotifyHooks() {
@@ -177,6 +187,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
 
     /**
      * Get the callback events dictionary.
+     *
      * @return HashMap of (Status-EventName)
      */
     public HashMap<String, ArrayList<String>> getCallbackEvents() {
@@ -185,6 +196,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
 
     /**
      * Get callback events by status type.
+     *
      * @param statusType status enum
      * @return ArrayList of callback event name
      */
@@ -195,6 +207,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
 
     /**
      * Get callback hooks by status type.
+     *
      * @param statusType status enum
      * @return ArrayList of callback event name
      */
@@ -206,6 +219,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
 
     /**
      * Get the parameter vector.
+     *
      * @return ArrayList of parameter name
      */
     public ArrayList<String> getParameters() {
@@ -214,6 +228,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
 
     /**
      * Parse hooks by a descriptor in entity.
+     *
      * @param hookJSONDescriptor JSON descriptor
      */
     @SuppressWarnings("unchecked")
@@ -227,6 +242,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
 
     /**
      * Parse callback events by a descriptor in entity.
+     *
      * @param callbackJSONDescriptor JSON descriptor
      */
     @SuppressWarnings("unchecked")
@@ -240,6 +256,7 @@ public class TaskContext implements Serializable, RCacheablesContext {
 
     /**
      * Parse parameter vector by a descriptor in entity.
+     *
      * @param parametersDescriptor parameter string descriptor
      */
     @SuppressWarnings("unchecked")
@@ -251,8 +268,9 @@ public class TaskContext implements Serializable, RCacheablesContext {
 
     /**
      * Generate a task context by a entity entity.
+     *
      * @param rstaskEntity RS task entity
-     * @param pid Belong to process global id
+     * @param pid          Belong to process global id
      * @return equivalent task context.
      */
     public static TaskContext GenerateTaskContext(RenRstaskEntity rstaskEntity, String pid) {
@@ -279,12 +297,13 @@ public class TaskContext implements Serializable, RCacheablesContext {
     /**
      * Create a new context.
      * Private constructor for preventing create context without using `{@code TaskContext.GetContext}`.
-     * @param id task unique id
-     * @param name task name
-     * @param brole business role name
-     * @param pid belong to Process global id
-     * @param boid belong to BO global id
-     * @param principle resourcing principle
+     *
+     * @param id            task unique id
+     * @param name          task name
+     * @param brole         business role name
+     * @param pid           belong to Process global id
+     * @param boid          belong to BO global id
+     * @param principle     resourcing principle
      * @param documentation task documentation text
      */
     private TaskContext(String id, String name, String brole, String pid, String boid, String principle, String documentation) {
@@ -301,5 +320,6 @@ public class TaskContext implements Serializable, RCacheablesContext {
      * Create a new context.
      * Private constructor for preventing create context without using `{@code TaskContext.GetContext}`.
      */
-    private TaskContext() { }
+    private TaskContext() {
+    }
 }

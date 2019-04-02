@@ -32,20 +32,21 @@ public class EngineController {
 
     /**
      * Submit a task resourcing request from BOEngine.
-     * @param rtid process runtime record id (required)
-     * @param boname bo name (required)
-     * @param nodeId id of instance tree node which produce this task (required)
+     *
+     * @param rtid     process runtime record id (required)
+     * @param boname   bo name (required)
+     * @param nodeId   id of instance tree node which produce this task (required)
      * @param taskname task polymorphism name (required)
-     * @param args argument
+     * @param args     argument
      * @return response package
      */
     @PostMapping(value = "/submitTask", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel SubmitTask(@RequestParam(value="rtid", required = false)String rtid,
-                                  @RequestParam(value="boname", required = false)String boname,
-                                  @RequestParam(value="nodeId", required = false)String nodeId,
-                                  @RequestParam(value="taskname", required = false)String taskname,
-                                  @RequestParam(value="args", required = false)String args) {
+    public ReturnModel SubmitTask(@RequestParam(value = "rtid", required = false) String rtid,
+                                  @RequestParam(value = "boname", required = false) String boname,
+                                  @RequestParam(value = "nodeId", required = false) String nodeId,
+                                  @RequestParam(value = "taskname", required = false) String taskname,
+                                  @RequestParam(value = "args", required = false) String args) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -70,14 +71,15 @@ public class EngineController {
 
     /**
      * Signal that a process runtime has already finished.
-     * @param rtid process runtime record id (required)
+     *
+     * @param rtid        process runtime record id (required)
      * @param successFlag success flag, 0 unknown, 1 success, -1 failed, default by 1
      * @return response package
      */
     @PostMapping(value = "/finRtid", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel FinRtid(@RequestParam(value="rtid", required = false)String rtid,
-                               @RequestParam(value="successFlag", required = false)String successFlag) {
+    public ReturnModel FinRtid(@RequestParam(value = "rtid", required = false) String rtid,
+                               @RequestParam(value = "successFlag", required = false) String successFlag) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params

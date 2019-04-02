@@ -6,7 +6,6 @@ import java.util.List;
 
 /**
  * An abstract base class for state elements in SCXML that can be transitioned out from, such as State or Parallel.
- *
  */
 public abstract class TransitionalState extends EnterableState {
 
@@ -190,6 +189,7 @@ public abstract class TransitionalState extends EnterableState {
     /**
      * Get the Invoke children (may be empty).
      * 得到调用的孩子，可能是空的。
+     *
      * @return Invoke Returns the invoke.
      */
     public final List<Invoke> getInvokes() {

@@ -133,7 +133,7 @@ public class BOXMLExecutionContext implements BOXMLIOProcessor {
     /**
      * User-friendly callback notifiable id, default equals to BO name.
      */
-   public String NotifiableId = "";
+    public String NotifiableId = "";
 
     /**
      * 构造器
@@ -341,7 +341,7 @@ public class BOXMLExecutionContext implements BOXMLIOProcessor {
      * @param eventdispatcher The event dispatcher to set, if null a SimpleDispatcher instance will be used instead
      */
     protected void setEventdispatcher(EventDispatcher eventdispatcher) {
-            this.eventdispatcher = eventdispatcher != null ? eventdispatcher : new SimpleDispatcher();
+        this.eventdispatcher = eventdispatcher != null ? eventdispatcher : new SimpleDispatcher();
     }
 
     /**
@@ -560,6 +560,8 @@ public class BOXMLExecutionContext implements BOXMLIOProcessor {
         this.scInstance.Rtid = this.Rtid;
     }
 
-    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
 
 }

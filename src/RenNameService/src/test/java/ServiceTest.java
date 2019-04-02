@@ -30,13 +30,13 @@ public class ServiceTest {
     @Before
     public void initData() {
         for (int i = 1; i < 10; i++) {
-            renServiceInfoDAO.saveOrUpdate(new RenServiceInfo(String.valueOf(i), i + "." + i + "." +i + "." + i));
+            renServiceInfoDAO.saveOrUpdate(new RenServiceInfo(String.valueOf(i), i + "." + i + "." + i + "." + i));
         }
     }
 
     @Test
     public void test1() {
-        System.out.println(routerSchedulerService.getRandomBOEngineLocation());
+        System.out.println(routerSchedulerService.getBOEngineLocationByRandom());
     }
 
 }

@@ -15,7 +15,7 @@
         </onentry>
         <transition event="next" target="third"/>
     </state>
-	<state id="third">
+    <state id="third">
         <onentry>
             <log label="MAIN Second" expr="'Third'"/>
         </onentry>
