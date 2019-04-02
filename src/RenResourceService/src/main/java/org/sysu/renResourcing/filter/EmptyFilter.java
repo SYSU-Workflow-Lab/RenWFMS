@@ -42,9 +42,9 @@ public class EmptyFilter extends RFilter {
     /**
      * Create a new filter.
      *
-     * @param id          unique id for selector fetching
-     * @param type        type name string
-     * @param args        parameter dictionary in HashMap
+     * @param id   unique id for selector fetching
+     * @param type type name string
+     * @param args parameter dictionary in HashMap
      */
     public EmptyFilter(String id, String type, HashMap<String, String> args) {
         super(id, type, EmptyFilter.Descriptor, args);

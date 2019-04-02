@@ -13,6 +13,7 @@ public class AsyncPluginRunner {
 
     /**
      * Run a plugin asynchronously.
+     *
      * @param plugin plugin to launch
      */
     public static void AsyncRun(AsyncRunnablePlugin plugin) {

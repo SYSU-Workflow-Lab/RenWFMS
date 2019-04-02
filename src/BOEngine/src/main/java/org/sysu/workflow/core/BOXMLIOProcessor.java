@@ -41,6 +41,7 @@ public interface BOXMLIOProcessor {
 
     /**
      * Add a message to pending event queue.
+     *
      * @param event the event to send
      */
     void addEvent(TriggerEvent event);

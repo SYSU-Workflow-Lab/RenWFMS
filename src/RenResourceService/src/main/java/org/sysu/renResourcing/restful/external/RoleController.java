@@ -44,14 +44,15 @@ public class RoleController {
 
     /**
      * Get a role resource.
+     *
      * @param token
      * @param role
      * @return
      */
-    @PostMapping(value = "/get", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/get", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel GetRole(@RequestParam(value="token", required = false)String token,
-                               @RequestParam(value="role", required = false)String role) {
+    public ReturnModel GetRole(@RequestParam(value = "token", required = false) String token,
+                               @RequestParam(value = "role", required = false) String role) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -70,8 +71,7 @@ public class RoleController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("GetRole");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -84,16 +84,17 @@ public class RoleController {
 
     /**
      * Set a role resource.
+     *
      * @param token
      * @param role
      * @param privilege
      * @return
      */
-    @PostMapping(value = "/set", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/set", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel SetRole(@RequestParam(value="token", required = false)String token,
-                               @RequestParam(value="role", required = false)String role,
-                               @RequestParam(value="privilege", required = false)String privilege) {
+    public ReturnModel SetRole(@RequestParam(value = "token", required = false) String token,
+                               @RequestParam(value = "role", required = false) String role,
+                               @RequestParam(value = "privilege", required = false) String privilege) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -113,8 +114,7 @@ public class RoleController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("SetRole");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -127,14 +127,15 @@ public class RoleController {
 
     /**
      * Check the validity of the role.
+     *
      * @param token
      * @param role
      * @return
      */
-    @PostMapping(value = "/contain", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/contain", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel ContainRole(@RequestParam(value="token", required = false)String token,
-                                   @RequestParam(value="role", required = false)String role) {
+    public ReturnModel ContainRole(@RequestParam(value = "token", required = false) String token,
+                                   @RequestParam(value = "role", required = false) String role) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -153,8 +154,7 @@ public class RoleController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("ContainRole");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -167,16 +167,17 @@ public class RoleController {
 
     /**
      * Add a role resource.
+     *
      * @param token
      * @param role
      * @param privilege
      * @return
      */
-    @PostMapping(value = "/add", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/add", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel AddRole(@RequestParam(value="token", required = false)String token,
-                               @RequestParam(value="role", required = false)String role,
-                               @RequestParam(value="privilege", required = false)String privilege) {
+    public ReturnModel AddRole(@RequestParam(value = "token", required = false) String token,
+                               @RequestParam(value = "role", required = false) String role,
+                               @RequestParam(value = "privilege", required = false) String privilege) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -196,8 +197,7 @@ public class RoleController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("AddRole");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -210,14 +210,15 @@ public class RoleController {
 
     /**
      * Remove the role resource.
+     *
      * @param token
      * @param role
      * @return
      */
-    @PostMapping(value = "/remove", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/remove", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel RemoveRole(@RequestParam(value="token", required = false)String token,
-                                  @RequestParam(value="role", required = false)String role) {
+    public ReturnModel RemoveRole(@RequestParam(value = "token", required = false) String token,
+                                  @RequestParam(value = "role", required = false) String role) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -236,8 +237,7 @@ public class RoleController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("RemoveRole");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -250,14 +250,15 @@ public class RoleController {
 
     /**
      * Get the resource of the role.
+     *
      * @param token
      * @param role
      * @return
      */
-    @PostMapping(value = "/getinrole", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/getinrole", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel GetInRole(@RequestParam(value="token", required = false)String token,
-                                 @RequestParam(value="role", required = false)String role) {
+    public ReturnModel GetInRole(@RequestParam(value = "token", required = false) String token,
+                                 @RequestParam(value = "role", required = false) String role) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -276,8 +277,7 @@ public class RoleController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("GetInRole");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -290,14 +290,15 @@ public class RoleController {
 
     /**
      * Get the human resource of th role.
+     *
      * @param token
      * @param role
      * @return
      */
-    @PostMapping(value = "/gethumaninrole", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/gethumaninrole", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel GetHumanInRole(@RequestParam(value="token", required = false)String token,
-                                      @RequestParam(value="role", required = false)String role) {
+    public ReturnModel GetHumanInRole(@RequestParam(value = "token", required = false) String token,
+                                      @RequestParam(value = "role", required = false) String role) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -316,8 +317,7 @@ public class RoleController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("GetHumanInRole");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -330,14 +330,15 @@ public class RoleController {
 
     /**
      * Get the agent resource of the role.
+     *
      * @param token
      * @param role
      * @return
      */
-    @PostMapping(value = "/getagentinrole", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/getagentinrole", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel GetAgentInRole(@RequestParam(value="token", required = false)String token,
-                                      @RequestParam(value="role", required = false)String role) {
+    public ReturnModel GetAgentInRole(@RequestParam(value = "token", required = false) String token,
+                                      @RequestParam(value = "role", required = false) String role) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -356,8 +357,7 @@ public class RoleController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("GetAgentInRole");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 

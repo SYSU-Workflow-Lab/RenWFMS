@@ -12,6 +12,7 @@ package org.sysu.renResourcing.principle;
 public interface PrincipleGrammar {
     /**
      * Parse a principle descriptor to a principle object.
+     *
      * @param descriptor principle descriptor string
      * @return parsed principle object, null if parse failure
      */

@@ -15,8 +15,8 @@ import java.util.HashSet;
  * Author: Rinkako
  * Date  : 2018/2/2
  * Usage : This class is inherited by all selector implement class
- *         like allocator, constraint and filter, for their data set
- *         maintaining and comparing.
+ * like allocator, constraint and filter, for their data set
+ * maintaining and comparing.
  */
 public abstract class RSelector implements Comparable<RSelector>, Serializable {
 
@@ -33,11 +33,13 @@ public abstract class RSelector implements Comparable<RSelector>, Serializable {
     /**
      * Create a new Selector.
      */
-    public RSelector() { }
+    public RSelector() {
+    }
 
     /**
      * Create a new Selector.
-     * @param id unique id for selector fetching
+     *
+     * @param id   unique id for selector fetching
      * @param type type name string
      */
     public RSelector(String id, String type) {
@@ -46,8 +48,9 @@ public abstract class RSelector implements Comparable<RSelector>, Serializable {
 
     /**
      * Create a new Selector.
-     * @param id unique id for selector fetching
-     * @param type type name string
+     *
+     * @param id          unique id for selector fetching
+     * @param type        type name string
      * @param description selector description text
      */
     public RSelector(String id, String type, String description) {
@@ -56,10 +59,11 @@ public abstract class RSelector implements Comparable<RSelector>, Serializable {
 
     /**
      * Create a new Selector.
-     * @param id unique id for selector fetching
-     * @param type type name string
+     *
+     * @param id          unique id for selector fetching
+     * @param type        type name string
      * @param description selector description text
-     * @param args parameter dictionary in HashMap
+     * @param args        parameter dictionary in HashMap
      */
     public RSelector(String id, String type, String description, HashMap<String, String> args) {
         this.id = id;
@@ -70,6 +74,7 @@ public abstract class RSelector implements Comparable<RSelector>, Serializable {
 
     /**
      * Binding principle to this selector.
+     *
      * @param principle principle package
      */
     public void BindingPrinciple(RPrinciple principle) {
@@ -79,7 +84,8 @@ public abstract class RSelector implements Comparable<RSelector>, Serializable {
 
     /**
      * Add a new parameter key value pair to parameter dictionary.
-     * @param key key of param
+     *
+     * @param key   key of param
      * @param value value of param
      * @return whether replace exist param
      */
@@ -89,6 +95,7 @@ public abstract class RSelector implements Comparable<RSelector>, Serializable {
 
     /**
      * Get value in the parameter dictionary by a key.
+     *
      * @param key key to fetch
      * @return value of this key in parameter dictionary, null if not exist
      */
@@ -98,6 +105,7 @@ public abstract class RSelector implements Comparable<RSelector>, Serializable {
 
     /**
      * Comparable equal function.
+     *
      * @param other another object to compare
      * @return true if equal
      */
@@ -109,6 +117,7 @@ public abstract class RSelector implements Comparable<RSelector>, Serializable {
 
     /**
      * Get hash code of this selector.
+     *
      * @return hash code
      */
     @Override
@@ -118,6 +127,7 @@ public abstract class RSelector implements Comparable<RSelector>, Serializable {
 
     /**
      * Comparable compare function.
+     *
      * @param other another object to compare
      * @return compare result int
      */
@@ -129,6 +139,7 @@ public abstract class RSelector implements Comparable<RSelector>, Serializable {
 
     /**
      * Get selector unique id.
+     *
      * @return id string
      */
     public String getId() {
@@ -137,6 +148,7 @@ public abstract class RSelector implements Comparable<RSelector>, Serializable {
 
     /**
      * Set selector unique id.
+     *
      * @param id id to be set
      */
     public void setId(String id) {
@@ -145,6 +157,7 @@ public abstract class RSelector implements Comparable<RSelector>, Serializable {
 
     /**
      * Get type name.
+     *
      * @return type name string
      */
     public String getType() {
@@ -153,6 +166,7 @@ public abstract class RSelector implements Comparable<RSelector>, Serializable {
 
     /**
      * Get description of this selector.
+     *
      * @return description string
      */
     public String getDescription() {
@@ -161,6 +175,7 @@ public abstract class RSelector implements Comparable<RSelector>, Serializable {
 
     /**
      * Set description of this selector.
+     *
      * @param description description to be set
      */
     public void setDescription(String description) {
@@ -169,6 +184,7 @@ public abstract class RSelector implements Comparable<RSelector>, Serializable {
 
     /**
      * Get argument dictionary of this selector.
+     *
      * @return HashMap of selector argument dictionary
      */
     public HashMap<String, String> getArgsDict() {
@@ -177,6 +193,7 @@ public abstract class RSelector implements Comparable<RSelector>, Serializable {
 
     /**
      * Set argument dictionary of this selector.
+     *
      * @param argsDict HashMap of selector argument dictionary to be set
      */
     public void setArgsDict(HashMap<String, String> argsDict) {
@@ -191,9 +208,10 @@ public abstract class RSelector implements Comparable<RSelector>, Serializable {
     /**
      * Evaluate an ArrayList of HashSet according to a operation description string.
      * Operation descriptor using `|` for set union and `&` for set intersect.
-     * @param setList list of set to be calculated
+     *
+     * @param setList      list of set to be calculated
      * @param opDescriptor operation descriptor, length must be setList count minus one
-     * @param <Ty> Type of data in set
+     * @param <Ty>         Type of data in set
      * @return calculated result set
      */
     protected <Ty> HashSet<Ty> Evaluate(ArrayList<HashSet<Ty>> setList, String opDescriptor) {
@@ -219,6 +237,7 @@ public abstract class RSelector implements Comparable<RSelector>, Serializable {
 
     /**
      * Evaluate two sets by intersection.
+     *
      * @param setA left set
      * @param setB right set
      * @param <Ty> Type of data in set
@@ -236,6 +255,7 @@ public abstract class RSelector implements Comparable<RSelector>, Serializable {
 
     /**
      * Evaluate two sets by union.
+     *
      * @param setA left set
      * @param setB right set
      * @param <Ty> Type of data in set

@@ -39,6 +39,7 @@ public class EngineController {
 
     /**
      * launch a process by the rtid
+     *
      * @param rtid the runtime record of a process
      * @return response package
      */
@@ -65,6 +66,7 @@ public class EngineController {
 
     /**
      * Serialized pre-stored BO XML text and return the involved BO list.
+     *
      * @param boidlist BOs to be serialized, separated by `,`
      * @return response package
      */
@@ -91,6 +93,7 @@ public class EngineController {
 
     /**
      * Get a user-friendly descriptor of an instance tree.
+     *
      * @param rtid process rtid
      * @return response package
      */
@@ -117,6 +120,7 @@ public class EngineController {
 
     /**
      * Resume a running process from entity binlog.
+     *
      * @param rtid process rtid
      * @return response package
      */
@@ -143,6 +147,7 @@ public class EngineController {
 
     /**
      * Resume a running process from entity binlog.
+     *
      * @param rtidList process rtid in JSON list
      * @return response package
      */
@@ -171,21 +176,22 @@ public class EngineController {
 
     /**
      * Receive callback event from Name Service.
-     * @param rtid process rtid (required)
-     * @param bo from which BO (required)
-     * @param on which callback scene (required)
-     * @param event event send to engine (required)
+     *
+     * @param rtid    process rtid (required)
+     * @param bo      from which BO (required)
+     * @param on      which callback scene (required)
+     * @param event   event send to engine (required)
      * @param payload event send to engine
      * @return response package
      */
     @RequestMapping(value = "/callback", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel Callback(@RequestParam(value="rtid", required = false)String rtid,
-                                @RequestParam(value="bo", required = false)String bo,
-                                @RequestParam(value="on", required = false)String on,
-                                @RequestParam(value="id", required = false)String id,
-                                @RequestParam(value="event", required = false)String event,
-                                @RequestParam(value="payload", required = false)String payload) {
+    public ReturnModel Callback(@RequestParam(value = "rtid", required = false) String rtid,
+                                @RequestParam(value = "bo", required = false) String bo,
+                                @RequestParam(value = "on", required = false) String on,
+                                @RequestParam(value = "id", required = false) String id,
+                                @RequestParam(value = "event", required = false) String event,
+                                @RequestParam(value = "payload", required = false) String payload) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -204,8 +210,7 @@ public class EngineController {
                     LogUtil.Log("Received callback with both BO and ID, ID will be ignored.",
                             EngineController.class.getName(), LogLevelType.WARNING, rtid);
                 }
-            }
-            else {
+            } else {
                 interactionService.DispatchCallbackByNotifiableId(rtid, id, on, event, payload);
             }
             // return

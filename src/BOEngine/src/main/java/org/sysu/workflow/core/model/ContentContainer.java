@@ -19,7 +19,7 @@ package org.sysu.workflow.core.model;
 /**
  * A <code>ContentContainer</code> represents an element in the SCXML
  * document that may have a (single) child &lt;content/&gt; element
- *
+ * <p>
  * 内容包含接口
  */
 

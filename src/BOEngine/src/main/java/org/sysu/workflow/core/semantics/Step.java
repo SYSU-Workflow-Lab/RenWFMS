@@ -59,6 +59,7 @@ public class Step {
 
     /**
      * 构造函数
+     *
      * @param event The event received in this unit of progression
      */
     public Step(TriggerEvent event) {
@@ -85,6 +86,7 @@ public class Step {
 
     /**
      * 返回进入集合
+     *
      * @return Returns the entrySet.
      */
     public Set<EnterableState> getEntrySet() {
@@ -93,6 +95,7 @@ public class Step {
 
     /**
      * 默认进入集合
+     *
      * @return Returns the defaultEntrySet.
      */
     public Set<EnterableState> getDefaultEntrySet() {
@@ -101,6 +104,7 @@ public class Step {
 
     /**
      * 返回默认历史转移集合
+     *
      * @return Returns the map of default History transitions to be executed as result of entering states in this step
      */
     public Map<TransitionalState, SimpleTransition> getDefaultHistoryTransitions() {
@@ -109,6 +113,7 @@ public class Step {
 
     /**
      * 返回新的历史配置，退出一个状态的时候
+     *
      * @return Returns the map of new History configurations created as result of exiting states in this step
      */
     public Map<History, Set<EnterableState>> getNewHistoryConfigurations() {
@@ -117,6 +122,7 @@ public class Step {
 
     /**
      * 返回退出集合
+     *
      * @return Returns the exitSet.
      */
     public Set<EnterableState> getExitSet() {
@@ -125,6 +131,7 @@ public class Step {
 
     /**
      * 返回当前事件
+     *
      * @return Returns the current event.
      */
     public TriggerEvent getEvent() {
@@ -133,6 +140,7 @@ public class Step {
 
     /**
      * 返回转移集合
+     *
      * @return Returns the transitList.
      */
     public List<SimpleTransition> getTransitList() {

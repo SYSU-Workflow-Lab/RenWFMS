@@ -466,21 +466,21 @@ public class Send extends NamelistHolder implements ContentContainer {
                     + typeValue + "' with suggested delay of " + wait
                     + "ms");
         }
-        if (exctx.getEventDispatcher() instanceof MultiStateMachineDispatcher){
+        if (exctx.getEventDispatcher() instanceof MultiStateMachineDispatcher) {
             if (messageModeValue != null) {
-                BOXMLExecutionContext execctx = (BOXMLExecutionContext)exctx.getInternalIOProcessor();
+                BOXMLExecutionContext execctx = (BOXMLExecutionContext) exctx.getInternalIOProcessor();
                 exctx.getEventDispatcher().send(execctx.Rtid, execctx.NodeId, id, messageModeValue,
                         targetNameValue, targetStateValue, typeValue, eventValue, payloadDataMap, hintsValue, wait);
             } else {
                 exctx.getEventDispatcher().send(ioProcessors, id, targetValue, typeValue, eventValue,
                         payload, hintsValue, wait);
             }
-        }else if (exctx.getEventDispatcher() instanceof SimpleDispatcher){
+        } else if (exctx.getEventDispatcher() instanceof SimpleDispatcher) {
 
             exctx.getEventDispatcher().send(ioProcessors, id, targetValue, typeValue, eventValue,
                     payload, hintsValue, wait);
 
-        }else{
+        } else {
             System.out.println("the message dispatcher is not support");
         }
 

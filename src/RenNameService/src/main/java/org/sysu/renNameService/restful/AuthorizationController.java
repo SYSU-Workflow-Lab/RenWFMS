@@ -35,14 +35,15 @@ public class AuthorizationController {
 
     /**
      * Request for an auth token by an authorization username and password.
+     *
      * @param username user unique name (required)
      * @param password password (required)
      * @return response package
      */
     @PostMapping(value = "/connect", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel Connect(@RequestParam(value="username", required = false)String username,
-                               @RequestParam(value="password", required = false)String password) {
+    public ReturnModel Connect(@RequestParam(value = "username", required = false) String username,
+                               @RequestParam(value = "password", required = false) String password) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -64,12 +65,13 @@ public class AuthorizationController {
 
     /**
      * Disable an auth token.
+     *
      * @param token auth token (required)
      * @return response package
      */
     @PostMapping(value = "/disconnect", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel Disconnect(@RequestParam(value="token", required = false)String token) {
+    public ReturnModel Disconnect(@RequestParam(value = "token", required = false) String token) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -90,12 +92,13 @@ public class AuthorizationController {
 
     /**
      * Check if an auth token is valid now.
+     *
      * @param token auth token (required)
      * @return response package
      */
     @PostMapping(value = "/check", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel Check(@RequestParam(value="token", required = false)String token) {
+    public ReturnModel Check(@RequestParam(value = "token", required = false) String token) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -116,20 +119,21 @@ public class AuthorizationController {
 
     /**
      * Add a new domain.
-     * @param token auth token (required)
-     * @param name domain unique name (required)
+     *
+     * @param token    auth token (required)
+     * @param name     domain unique name (required)
      * @param password admin password (required)
-     * @param level level
-     * @param corgan COrgan gateway URL
+     * @param level    level
+     * @param corgan   COrgan gateway URL
      * @return response package
      */
     @PostMapping(value = "/domain/add", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel AddDomain(@RequestParam(value="token", required = false)String token,
-                                 @RequestParam(value="name", required = false)String name,
-                                 @RequestParam(value="password", required = false)String password,
-                                 @RequestParam(value="level", required = false)String level,
-                                 @RequestParam(value="corgan", required = false)String corgan) {
+    public ReturnModel AddDomain(@RequestParam(value = "token", required = false) String token,
+                                 @RequestParam(value = "name", required = false) String name,
+                                 @RequestParam(value = "password", required = false) String password,
+                                 @RequestParam(value = "level", required = false) String level,
+                                 @RequestParam(value = "corgan", required = false) String corgan) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -159,14 +163,15 @@ public class AuthorizationController {
 
     /**
      * Make an domain invalid.
+     *
      * @param token auth token (required)
-     * @param name domain unique name (required)
+     * @param name  domain unique name (required)
      * @return response package
      */
     @PostMapping(value = "/domain/remove", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel RemoveDomain(@RequestParam(value="token", required = false)String token,
-                                    @RequestParam(value="name", required = false)String name) {
+    public ReturnModel RemoveDomain(@RequestParam(value = "token", required = false) String token,
+                                    @RequestParam(value = "name", required = false) String name) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -181,7 +186,7 @@ public class AuthorizationController {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
-            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.RemoveDomain(name),"");
+            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.RemoveDomain(name), "");
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -192,20 +197,21 @@ public class AuthorizationController {
 
     /**
      * Update a domain.
-     * @param token auth token (required)
-     * @param name domain unique name (required)
-     * @param level new level
+     *
+     * @param token  auth token (required)
+     * @param name   domain unique name (required)
+     * @param level  new level
      * @param status new deletion state
      * @param corgan new COrgan gateway URL
      * @return response package
      */
     @PostMapping(value = "/domain/update", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel UpdateDomain(@RequestParam(value="token", required = false)String token,
-                                    @RequestParam(value="name", required = false)String name,
-                                    @RequestParam(value="level", required = false)String level,
-                                    @RequestParam(value="status", required = false)String status,
-                                    @RequestParam(value="corgan", required = false)String corgan) {
+    public ReturnModel UpdateDomain(@RequestParam(value = "token", required = false) String token,
+                                    @RequestParam(value = "name", required = false) String name,
+                                    @RequestParam(value = "level", required = false) String level,
+                                    @RequestParam(value = "status", required = false) String status,
+                                    @RequestParam(value = "corgan", required = false) String corgan) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -240,8 +246,7 @@ public class AuthorizationController {
             // return
             if (updateArgs.size() == 0) {
                 ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, "OK");
-            }
-            else {
+            } else {
                 String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.UpdateDomain(name, updateArgs, tokenLevel >= 2), "");
                 ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
             }
@@ -253,14 +258,15 @@ public class AuthorizationController {
 
     /**
      * Check if a domain exist.
+     *
      * @param token auth token
-     * @param name domain unique name
+     * @param name  domain unique name
      * @return response package
      */
     @PostMapping(value = "/domain/contain", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel ContainDomain(@RequestParam(value="token", required = false)String token,
-                                     @RequestParam(value="name", required = false)String name) {
+    public ReturnModel ContainDomain(@RequestParam(value = "token", required = false) String token,
+                                     @RequestParam(value = "name", required = false) String name) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -275,7 +281,7 @@ public class AuthorizationController {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
-            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.ContainDomain(name),"");
+            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.ContainDomain(name), "");
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -286,14 +292,15 @@ public class AuthorizationController {
 
     /**
      * Get domain by its name.
+     *
      * @param token auth token
-     * @param name domain unique name
+     * @param name  domain unique name
      * @return response package
      */
     @PostMapping(value = "/domain/get", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel GetDomain(@RequestParam(value="token", required = false)String token,
-                                 @RequestParam(value="name", required = false)String name) {
+    public ReturnModel GetDomain(@RequestParam(value = "token", required = false) String token,
+                                 @RequestParam(value = "name", required = false) String name) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -308,7 +315,7 @@ public class AuthorizationController {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
-            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.RetrieveDomain(name),"");
+            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.RetrieveDomain(name), "");
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -319,12 +326,13 @@ public class AuthorizationController {
 
     /**
      * Get domain by its name.
+     *
      * @param token auth token
      * @return response package
      */
     @PostMapping(value = "/domain/getall", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel GetAllDomain(@RequestParam(value="token", required = false)String token) {
+    public ReturnModel GetAllDomain(@RequestParam(value = "token", required = false) String token) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -338,7 +346,7 @@ public class AuthorizationController {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
-            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.RetrieveAllDomain(),"");
+            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.RetrieveAllDomain(), "");
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -349,21 +357,22 @@ public class AuthorizationController {
 
     /**
      * Add a new authorization user.
-     * @param token auth token (required)
+     *
+     * @param token    auth token (required)
      * @param username user unique name (required)
      * @param password user password (required)
-     * @param level user level (required)
-     * @param domain domain name (required)
+     * @param level    user level (required)
+     * @param domain   domain name (required)
      * @return response package
      */
     @PostMapping(value = "/user/add", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel AddAuthorization(@RequestParam(value="token", required = false)String token,
-                                        @RequestParam(value="username", required = false)String username,
-                                        @RequestParam(value="password", required = false)String password,
-                                        @RequestParam(value="level", required = false)String level,
-                                        @RequestParam(value="domain", required = false)String domain,
-                                        @RequestParam(value="gid", required = false)String gid) {
+    public ReturnModel AddAuthorization(@RequestParam(value = "token", required = false) String token,
+                                        @RequestParam(value = "username", required = false) String username,
+                                        @RequestParam(value = "password", required = false) String password,
+                                        @RequestParam(value = "level", required = false) String level,
+                                        @RequestParam(value = "domain", required = false) String domain,
+                                        @RequestParam(value = "gid", required = false) String gid) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -395,16 +404,17 @@ public class AuthorizationController {
 
     /**
      * Make an authorization user invalid.
-     * @param token auth token (required)
+     *
+     * @param token    auth token (required)
      * @param username user unique name (required)
-     * @param domain domain name (required)
+     * @param domain   domain name (required)
      * @return response package
      */
     @PostMapping(value = "/user/remove", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel RemoveAuthorization(@RequestParam(value="token", required = false)String token,
-                                           @RequestParam(value="username", required = false)String username,
-                                           @RequestParam(value="domain", required = false)String domain) {
+    public ReturnModel RemoveAuthorization(@RequestParam(value = "token", required = false) String token,
+                                           @RequestParam(value = "username", required = false) String username,
+                                           @RequestParam(value = "domain", required = false) String domain) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -422,7 +432,7 @@ public class AuthorizationController {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
-            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.RemoveAuthorizationUser(username, domain),"");
+            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.RemoveAuthorizationUser(username, domain), "");
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -433,23 +443,24 @@ public class AuthorizationController {
 
     /**
      * Update a authorization information.
-     * @param token auth token (required)
+     *
+     * @param token    auth token (required)
      * @param username user unique name (required)
-     * @param domain domain name (required)
+     * @param domain   domain name (required)
      * @param password new password
-     * @param level new level
-     * @param status new deletion status
+     * @param level    new level
+     * @param status   new deletion status
      * @return response package
      */
     @PostMapping(value = "/user/update", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel UpdateAuthorization(@RequestParam(value="token", required = false)String token,
-                                           @RequestParam(value="username", required = false)String username,
-                                           @RequestParam(value="domain", required = false)String domain,
-                                           @RequestParam(value="password", required = false)String password,
-                                           @RequestParam(value="level", required = false)String level,
-                                           @RequestParam(value="status", required = false)String status,
-                                           @RequestParam(value="gid", required = false)String gid) {
+    public ReturnModel UpdateAuthorization(@RequestParam(value = "token", required = false) String token,
+                                           @RequestParam(value = "username", required = false) String username,
+                                           @RequestParam(value = "domain", required = false) String domain,
+                                           @RequestParam(value = "password", required = false) String password,
+                                           @RequestParam(value = "level", required = false) String level,
+                                           @RequestParam(value = "status", required = false) String status,
+                                           @RequestParam(value = "gid", required = false) String gid) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -489,8 +500,7 @@ public class AuthorizationController {
             // return
             if (updateArgs.size() == 0) {
                 ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, "OK");
-            }
-            else {
+            } else {
                 String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.UpdateAuthorizationUser(username, domain, updateArgs, tokenLevel > 0), "");
                 ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
             }
@@ -502,15 +512,16 @@ public class AuthorizationController {
 
     /**
      * Get authorization context by its user name.
-     * @param token auth token
+     *
+     * @param token    auth token
      * @param username user unique name
      * @return response package
      */
     @PostMapping(value = "/user/contain", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel ContainAuthorization(@RequestParam(value="token", required = false)String token,
-                                            @RequestParam(value="username", required = false)String username,
-                                            @RequestParam(value="domain", required = false)String domain) {
+    public ReturnModel ContainAuthorization(@RequestParam(value = "token", required = false) String token,
+                                            @RequestParam(value = "username", required = false) String username,
+                                            @RequestParam(value = "domain", required = false) String domain) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -528,7 +539,7 @@ public class AuthorizationController {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
-            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.ContainAuthorizationUser(username, domain),"");
+            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.ContainAuthorizationUser(username, domain), "");
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -539,15 +550,16 @@ public class AuthorizationController {
 
     /**
      * Get authorization context by its user name.
-     * @param token auth token
+     *
+     * @param token    auth token
      * @param username user unique name
      * @return response package
      */
     @PostMapping(value = "/user/get", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel GetAuthorization(@RequestParam(value="token", required = false)String token,
-                                        @RequestParam(value="username", required = false)String username,
-                                        @RequestParam(value="domain", required = false)String domain) {
+    public ReturnModel GetAuthorization(@RequestParam(value = "token", required = false) String token,
+                                        @RequestParam(value = "username", required = false) String username,
+                                        @RequestParam(value = "domain", required = false) String domain) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -565,7 +577,7 @@ public class AuthorizationController {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
-            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.RetrieveAuthorizationUser(username, domain),"");
+            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.RetrieveAuthorizationUser(username, domain), "");
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {
@@ -576,13 +588,14 @@ public class AuthorizationController {
 
     /**
      * Get all authorization contexts.
+     *
      * @param token auth token
      * @return response package
      */
     @PostMapping(value = "/user/getall", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel GetAllAuthorization(@RequestParam(value="token", required = false)String token,
-                                           @RequestParam(value="domain", required = false)String domain) {
+    public ReturnModel GetAllAuthorization(@RequestParam(value = "token", required = false) String token,
+                                           @RequestParam(value = "domain", required = false) String domain) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -599,7 +612,7 @@ public class AuthorizationController {
                 return ReturnModelHelper.UnauthorizedResponse(token);
             }
             // logic
-            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.RetrieveAllAuthorizationUser(domain),"");
+            String jsonifyResult = SerializationUtil.JsonSerialization(authorizationService.RetrieveAllAuthorizationUser(domain), "");
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
         } catch (Exception e) {

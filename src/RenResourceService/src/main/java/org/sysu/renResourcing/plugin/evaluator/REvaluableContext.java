@@ -12,13 +12,15 @@ package org.sysu.renResourcing.plugin.evaluator;
 public interface REvaluableContext {
     /**
      * Add a variable to context.
-     * @param name variable name
+     *
+     * @param name  variable name
      * @param value variable value
      */
     void Add(String name, Object value);
 
     /**
      * Remove a variable and return it.
+     *
      * @param name variable name
      * @return removed variable object, null if not exist.
      */
@@ -26,13 +28,15 @@ public interface REvaluableContext {
 
     /**
      * Update a variable in context.
-     * @param name variable name
+     *
+     * @param name  variable name
      * @param value variable value
      */
     void Update(String name, Object value);
 
     /**
      * Retrieve a variable in context.
+     *
      * @param name variable name
      * @return variable object, null if not exist.
      */
@@ -40,6 +44,7 @@ public interface REvaluableContext {
 
     /**
      * Check if a variable name is defined in context.
+     *
      * @param name variable name
      * @return true if exist
      */
@@ -52,12 +57,14 @@ public interface REvaluableContext {
 
     /**
      * Count variables number in context.
+     *
      * @return number of variables
      */
     int Count();
 
     /**
      * Return internal context reference.
+     *
      * @return internal context
      */
     Object GetInternalContext();

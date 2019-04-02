@@ -24,7 +24,8 @@ public class RenQueueitemsEntityDAO {
     public List<RenQueueitemsEntity> findRenQueueitemsEntitiesByWorkitemId(String workitemId) {
         return renQueueitemsEntityRepository.findRenQueueitemsEntitiesByWorkitemId(workitemId);
     }
-    public     List<RenQueueitemsEntity> findRenQueueitemsEntitiesByWorkqueueId(String workqueueId) {
+
+    public List<RenQueueitemsEntity> findRenQueueitemsEntitiesByWorkqueueId(String workqueueId) {
         return renQueueitemsEntityRepository.findRenQueueitemsEntitiesByWorkqueueId(workqueueId);
     }
 

@@ -29,18 +29,35 @@ public class DAOTest {
     @Before
     public void initData() {
         for (int i = 1; i < 10; i++) {
-            renServiceInfoDAO.saveOrUpdate(new RenServiceInfo(String.valueOf(i), i + "." + i + "." +i + "." + i));
+            RenServiceInfo temp = new RenServiceInfo(String.valueOf(i), i + "." + i + "." + i + "." + i);
+            temp.setBusiness(10 - i);
+            temp.setTomcatConcurrency(10 - i);
+            renServiceInfoDAO.saveOrUpdate(temp);
         }
     }
 
     @Test
     public void test1() {
         List<String> allLocations = renServiceInfoDAO.findAllBOEngineLocation();
-        int[] index = { 1 };
+        int[] index = {1};
         allLocations.forEach((i) -> {
             String temp = index[0] + "." + index[0] + "." + index[0] + "." + index[0]++;
             Assert.assertEquals(temp, i);
         });
+    }
+
+    @Test
+    public void test2() {
+        List<String> leastBusyBOEngineLocation = renServiceInfoDAO.findBOEngineLocationByBusiness(3.2);
+        Assert.assertEquals(1, leastBusyBOEngineLocation.size());
+        Assert.assertEquals("7.7.7.7", leastBusyBOEngineLocation.get(0));
+    }
+
+    @Test
+    public void test3() {
+        List<String> leastBusyBOEngineLocation = renServiceInfoDAO.findBOEngineLocationByTomcatConcurrency();
+        Assert.assertEquals(1, leastBusyBOEngineLocation.size());
+        Assert.assertEquals("9.9.9.9", leastBusyBOEngineLocation.get(0));
     }
 
 }

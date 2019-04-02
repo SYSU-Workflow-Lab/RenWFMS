@@ -22,7 +22,7 @@ public abstract class Action implements NamespacePrefixesHolder, Serializable {
 
     /**
      * 当前这个action node里面的命名空间
-     *
+     * <p>
      * The current XML namespaces in the SCXML document for this action node,
      * preserved for deferred XPath evaluation.
      */
@@ -76,7 +76,7 @@ public abstract class Action implements NamespacePrefixesHolder, Serializable {
     /**
      * Return the {@link EnterableState} whose {@link Context} this action
      * executes in.
-     *
+     * <p>
      * 返回当前action所处的状态
      *
      * @return The parent {@link EnterableState}
@@ -131,8 +131,6 @@ public abstract class Action implements NamespacePrefixesHolder, Serializable {
     /**
      * Convenient method to convert a possible {@link Node} result from an expression evaluation to a String
      * using its {@link Node#getTextContent()} method.
-     *
-     *
      *
      * @param result the result to convert
      * @return its text content if the result is a {@link Node} otherwise the unmodified result itself

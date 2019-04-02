@@ -23,6 +23,7 @@ public enum PrivilegeType {
 
     /**
      * Get the enum tag value.
+     *
      * @return enum tag value int
      */
     public int getValue() {
@@ -31,6 +32,7 @@ public enum PrivilegeType {
 
     /**
      * Private constructor for enum.
+     *
      * @param value tag value
      */
     PrivilegeType(int value) {

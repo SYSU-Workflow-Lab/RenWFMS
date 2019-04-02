@@ -20,8 +20,8 @@ import java.util.UUID;
  * Author: Rinkako
  * Date  : 2018/2/9
  * Usage : Implementation of Interface E of Resource Service.
- *         Interface E is responsible for resourcing logging service. Here log means
- *         event records of workitems and work queues.
+ * Interface E is responsible for resourcing logging service. Here log means
+ * event records of workitems and work queues.
  */
 
 @Service

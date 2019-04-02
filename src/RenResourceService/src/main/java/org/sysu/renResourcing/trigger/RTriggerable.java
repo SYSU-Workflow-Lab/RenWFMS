@@ -13,6 +13,7 @@ public interface RTriggerable {
     /**
      * This method will be called when the Triggerable object
      * was triggered by its binding trigger.
+     *
      * @param trigger RTrigger instance.
      * @param payload Triggering payload package
      */

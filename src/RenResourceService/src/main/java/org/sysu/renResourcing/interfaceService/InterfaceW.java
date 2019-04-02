@@ -25,9 +25,9 @@ import java.util.*;
  * Author: Rinkako
  * Date  : 2018/2/21
  * Usage : Implementation of Interface W of Resource Service.
- *         Interface W is responsible for providing services for outside clients.
- *         User sub-systems use this interface for manage work queues.
- *         Usually methods in the interface will return result immediately.
+ * Interface W is responsible for providing services for outside clients.
+ * User sub-systems use this interface for manage work queues.
+ * Usually methods in the interface will return result immediately.
  */
 
 @Service
@@ -56,6 +56,7 @@ public class InterfaceW {
 
     /**
      * Accept offer a workitem.
+     *
      * @param ctx rs context
      * @return true for a successful workitem accept
      */
@@ -78,8 +79,7 @@ public class InterfaceW {
         if (participant == null) {
             if (interfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
                 interfaceX.HandleFastFail(ctx.getRtid());
-            }
-            else {
+            } else {
                 interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when AcceptOffer");
             }
             return false;
@@ -89,6 +89,7 @@ public class InterfaceW {
 
     /**
      * Deallocate a workitem.
+     *
      * @param ctx rs context
      * @return true for a successful workitem deallocate
      */
@@ -111,8 +112,7 @@ public class InterfaceW {
         if (participant == null) {
             if (interfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
                 interfaceX.HandleFastFail(ctx.getRtid());
-            }
-            else {
+            } else {
                 interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Deallocate");
             }
             return false;
@@ -122,6 +122,7 @@ public class InterfaceW {
 
     /**
      * Start a workitem.
+     *
      * @param ctx rs context
      * @return true for a successful workitem start
      */
@@ -145,8 +146,7 @@ public class InterfaceW {
         if (participant == null) {
             if (interfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
                 interfaceX.HandleFastFail(ctx.getRtid());
-            }
-            else {
+            } else {
                 interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Start");
             }
             return false;
@@ -156,6 +156,7 @@ public class InterfaceW {
 
     /**
      * Reallocate a workitem.
+     *
      * @param ctx rs context
      * @return true for a successful workitem reallocate
      */
@@ -178,8 +179,7 @@ public class InterfaceW {
         if (participant == null) {
             if (interfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
                 interfaceX.HandleFastFail(ctx.getRtid());
-            }
-            else {
+            } else {
                 interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Reallocate");
             }
             return false;
@@ -189,6 +189,7 @@ public class InterfaceW {
 
     /**
      * Accept and start a workitem.
+     *
      * @param ctx rs context
      * @return true for a successful workitem accept and start
      */
@@ -211,8 +212,7 @@ public class InterfaceW {
         if (participant == null) {
             if (interfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
                 interfaceX.HandleFastFail(ctx.getRtid());
-            }
-            else {
+            } else {
                 interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when AcceptAndStart");
             }
             return false;
@@ -222,6 +222,7 @@ public class InterfaceW {
 
     /**
      * Skip a workitem.
+     *
      * @param ctx rs context
      * @return true for a successful workitem skip
      */
@@ -244,8 +245,7 @@ public class InterfaceW {
         if (participant == null) {
             if (interfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
                 interfaceX.HandleFastFail(ctx.getRtid());
-            }
-            else {
+            } else {
                 interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Skip");
             }
             return false;
@@ -255,6 +255,7 @@ public class InterfaceW {
 
     /**
      * Suspend a workitem.
+     *
      * @param ctx rs context
      * @return true for a successful workitem suspend
      */
@@ -277,8 +278,7 @@ public class InterfaceW {
         if (participant == null) {
             if (interfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
                 interfaceX.HandleFastFail(ctx.getRtid());
-            }
-            else {
+            } else {
                 interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Suspend");
             }
             return false;
@@ -288,6 +288,7 @@ public class InterfaceW {
 
     /**
      * Unsuspend a workitem.
+     *
      * @param ctx rs context
      * @return true for a successful workitem unsuspend
      */
@@ -310,8 +311,7 @@ public class InterfaceW {
         if (participant == null) {
             if (interfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
                 interfaceX.HandleFastFail(ctx.getRtid());
-            }
-            else {
+            } else {
                 interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Unsuspend");
             }
             return false;
@@ -321,6 +321,7 @@ public class InterfaceW {
 
     /**
      * Complete a workitem.
+     *
      * @param ctx rs context
      * @return true for a successful workitem complete
      */
@@ -343,8 +344,7 @@ public class InterfaceW {
         if (participant == null) {
             if (interfaceO.SenseParticipantDataChanged(ctx.getRtid())) {
                 interfaceX.HandleFastFail(ctx.getRtid());
-            }
-            else {
+            } else {
                 interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Participant not exist when Complete");
             }
             return false;
@@ -354,6 +354,7 @@ public class InterfaceW {
 
     /**
      * Get all workitems in all types of queue of a worker.
+     *
      * @param ctx rs context
      * @return a dictionary of (WorkQueueType, ListOfWorkitemDescriptors)
      */
@@ -399,6 +400,7 @@ public class InterfaceW {
 
     /**
      * Get all workitems in a specific type of queue of a worker.
+     *
      * @param ctx rs context
      * @return workitem descriptors string in list
      */
@@ -410,8 +412,7 @@ public class InterfaceW {
         WorkQueueType wqType;
         try {
             wqType = WorkQueueType.valueOf(queueTypeName.toUpperCase());
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             LogUtil.Log("Illegal queue type: " + queueTypeName, InterfaceW.class.getName(),
                     LogLevelType.ERROR, rtid);
             throw ex;
@@ -430,6 +431,7 @@ public class InterfaceW {
 
     /**
      * Get all workitems in a specific type of queue of a list of workers.
+     *
      * @param ctx rs context
      * @return workitem descriptors string in map (workerId, list of workitem descriptor)
      */
@@ -458,6 +460,7 @@ public class InterfaceW {
 
     /**
      * Get all active(means not complete) workitems belong to a RTID in user-friendly package.
+     *
      * @param ctx rs context
      * @return List of Map of workitem data to return
      */
@@ -474,6 +477,7 @@ public class InterfaceW {
 
     /**
      * Get all workitems belong to a domain in user-friendly package.
+     *
      * @param ctx rs context
      * @return List of Map of workitem data to return
      */
@@ -490,6 +494,7 @@ public class InterfaceW {
 
     /**
      * Get all workitems belong to a participant in user-friendly package.
+     *
      * @param ctx rs context
      * @return List of Map of workitem data to return
      */
@@ -503,6 +508,7 @@ public class InterfaceW {
 
     /**
      * Get a workitem in user-friendly package.
+     *
      * @param ctx rs context
      * @return List of Map of workitem data to return
      */
@@ -519,6 +525,7 @@ public class InterfaceW {
 
     /**
      * Get all workers with any non-empty work queue in a domain.
+     *
      * @param ctx rs context
      * @return worker gid in a list
      */
@@ -535,6 +542,7 @@ public class InterfaceW {
 
     /**
      * Get all workers with a non-empty offered work queue in a domain.
+     *
      * @param ctx rs context
      * @return worker gid in a list
      */
@@ -553,6 +561,7 @@ public class InterfaceW {
 
     /**
      * Get all workers with a non-empty allocated work queue in a domain.
+     *
      * @param ctx rs context
      * @return worker gid in a list
      */
@@ -571,6 +580,7 @@ public class InterfaceW {
 
     /**
      * Get all workers with a non-empty allocated or allocated work queue in a domain.
+     *
      * @param ctx rs context
      * @return worker gid in a list
      */
@@ -581,7 +591,7 @@ public class InterfaceW {
         HashSet<String> retParticipantIds = new HashSet<>();
         for (WorkitemContext workitem : worklisted) {
             if (workitem.getEntity().getResourceStatus().equals(WorkitemResourcingStatusType.Offered.name()) ||
-                workitem.getEntity().getResourceStatus().equals(WorkitemResourcingStatusType.Allocated.name())) {
+                    workitem.getEntity().getResourceStatus().equals(WorkitemResourcingStatusType.Allocated.name())) {
                 retParticipantIds.add(workitem.getEntity().getWid());
             }
         }

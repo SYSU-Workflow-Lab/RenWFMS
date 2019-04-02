@@ -44,14 +44,15 @@ public class ResourceController {
 
     /**
      * Get resource.
+     *
      * @param token
      * @param id
      * @return
      */
-    @PostMapping(value = "/get", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/get", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel GetResource(@RequestParam(value="token", required = false)String token,
-                                   @RequestParam(value="id", required = false)String id) {
+    public ReturnModel GetResource(@RequestParam(value = "token", required = false) String token,
+                                   @RequestParam(value = "id", required = false) String id) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -70,8 +71,7 @@ public class ResourceController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("GetResource");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -84,16 +84,17 @@ public class ResourceController {
 
     /**
      * Set Resource.
+     *
      * @param token
      * @param id
      * @param description
      * @return
      */
-    @PostMapping(value = "/set", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/set", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel SetResource(@RequestParam(value="token", required = false)String token,
-                                   @RequestParam(value="id", required = false)String id,
-                                   @RequestParam(value="description", required = false)String description) {
+    public ReturnModel SetResource(@RequestParam(value = "token", required = false) String token,
+                                   @RequestParam(value = "id", required = false) String id,
+                                   @RequestParam(value = "description", required = false) String description) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -113,8 +114,7 @@ public class ResourceController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("SetResource");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -127,14 +127,15 @@ public class ResourceController {
 
     /**
      * Check the validity of the resource.
+     *
      * @param token
      * @param id
      * @return
      */
-    @PostMapping(value = "/contain", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/contain", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel ContainResource(@RequestParam(value="token", required = false)String token,
-                                       @RequestParam(value="id", required = false)String id) {
+    public ReturnModel ContainResource(@RequestParam(value = "token", required = false) String token,
+                                       @RequestParam(value = "id", required = false) String id) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -153,8 +154,7 @@ public class ResourceController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("ContainResource");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -167,14 +167,15 @@ public class ResourceController {
 
     /**
      * Add resource.
+     *
      * @param token
      * @param description
      * @return
      */
-    @PostMapping(value = "/add", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/add", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel AddResource(@RequestParam(value="token", required = false)String token,
-                                   @RequestParam(value="description", required = false)String description) {
+    public ReturnModel AddResource(@RequestParam(value = "token", required = false) String token,
+                                   @RequestParam(value = "description", required = false) String description) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -193,8 +194,7 @@ public class ResourceController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("AddResource");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -207,14 +207,15 @@ public class ResourceController {
 
     /**
      * Remove Resource.
+     *
      * @param token
      * @param id
      * @return
      */
-    @PostMapping(value = "/remove", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/remove", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel RemoveResource(@RequestParam(value="token", required = false)String token,
-                                      @RequestParam(value="id", required = false)String id) {
+    public ReturnModel RemoveResource(@RequestParam(value = "token", required = false) String token,
+                                      @RequestParam(value = "id", required = false) String id) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -233,8 +234,7 @@ public class ResourceController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("RemoveResource");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 

@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
  * A <code>NamelistHolder</code> represents an element in the SCXML
  * document that may have a namelist attribute to
  * produce payload for events or external communication.
- *
+ * <p>
  * NamelistHolder 呈现了一个SCXML文档中有一个namelist属性的容器，
  */
 public abstract class NamelistHolder extends ParamsContainer {

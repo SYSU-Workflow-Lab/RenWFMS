@@ -17,10 +17,11 @@ public class RTreeNode {
 
     /**
      * Construct a new BO tree node.
+     *
      * @param filename BO name
      * @param globalId unique id
-     * @param exect binding execution context
-     * @param parent parent tree node reference
+     * @param exect    binding execution context
+     * @param parent   parent tree node reference
      */
     public RTreeNode(String filename, String globalId, BOXMLExecutionContext exect, RTreeNode parent) {
         this.name = filename;
@@ -32,6 +33,7 @@ public class RTreeNode {
 
     /**
      * Add a child.
+     *
      * @param ttn tree node to be added
      */
     public void AddChild(RTreeNode ttn) {
@@ -41,6 +43,7 @@ public class RTreeNode {
 
     /**
      * Get global id of this node.
+     *
      * @return global id string
      */
     public String getGlobalId() {
@@ -49,6 +52,7 @@ public class RTreeNode {
 
     /**
      * Get binding BO execution context.
+     *
      * @return BOXMLExecutionContext instance
      */
     public BOXMLExecutionContext getExect() {
@@ -57,6 +61,7 @@ public class RTreeNode {
 
     /**
      * Get binding BO name.
+     *
      * @return BO name string
      */
     public String getName() {

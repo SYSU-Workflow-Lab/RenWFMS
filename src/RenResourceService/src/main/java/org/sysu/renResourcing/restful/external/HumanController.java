@@ -44,14 +44,15 @@ public class HumanController {
 
     /**
      * Get a human resource.
+     *
      * @param token
      * @param id
      * @return
      */
-    @PostMapping(value = "/get", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/get", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel GetHuman(@RequestParam(value="token", required = false)String token,
-                                @RequestParam(value="id", required = false)String id) {
+    public ReturnModel GetHuman(@RequestParam(value = "token", required = false) String token,
+                                @RequestParam(value = "id", required = false) String id) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -70,8 +71,7 @@ public class HumanController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("GetHuman");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -84,6 +84,7 @@ public class HumanController {
 
     /**
      * Set a human resource.
+     *
      * @param token
      * @param id
      * @param firstname
@@ -91,13 +92,13 @@ public class HumanController {
      * @param note
      * @return
      */
-    @PostMapping(value = "/set", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/set", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel SetHuman(@RequestParam(value="token", required = false)String token,
-                                @RequestParam(value="id", required = false)String id,
-                                @RequestParam(value="firstname", required = false)String firstname,
-                                @RequestParam(value="lastname", required = false)String lastname,
-                                @RequestParam(value="note", required = false)String note) {
+    public ReturnModel SetHuman(@RequestParam(value = "token", required = false) String token,
+                                @RequestParam(value = "id", required = false) String id,
+                                @RequestParam(value = "firstname", required = false) String firstname,
+                                @RequestParam(value = "lastname", required = false) String lastname,
+                                @RequestParam(value = "note", required = false) String note) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -119,8 +120,7 @@ public class HumanController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("SetHuman");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -133,14 +133,15 @@ public class HumanController {
 
     /**
      * Check the validity of the human resource.
+     *
      * @param token
      * @param id
      * @return
      */
-    @PostMapping(value = "/contain", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/contain", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel ContainHuman(@RequestParam(value="token", required = false)String token,
-                                    @RequestParam(value="id", required = false)String id) {
+    public ReturnModel ContainHuman(@RequestParam(value = "token", required = false) String token,
+                                    @RequestParam(value = "id", required = false) String id) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -159,8 +160,7 @@ public class HumanController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("ContainHuman");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -173,18 +173,19 @@ public class HumanController {
 
     /**
      * Add a human resource.
+     *
      * @param token
      * @param firstname
      * @param lastname
      * @param note
      * @return
      */
-    @PostMapping(value = "/add", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/add", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel AddHuman(@RequestParam(value="token", required = false)String token,
-                                @RequestParam(value="firstname", required = false)String firstname,
-                                @RequestParam(value="lastname", required = false)String lastname,
-                                @RequestParam(value="note", required = false)String note) {
+    public ReturnModel AddHuman(@RequestParam(value = "token", required = false) String token,
+                                @RequestParam(value = "firstname", required = false) String firstname,
+                                @RequestParam(value = "lastname", required = false) String lastname,
+                                @RequestParam(value = "note", required = false) String note) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -206,8 +207,7 @@ public class HumanController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("AddHuman");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -220,14 +220,15 @@ public class HumanController {
 
     /**
      * Remove the human resource.
+     *
      * @param token
      * @param id
      * @return
      */
-    @PostMapping(value = "/remove", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/remove", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel RemoveHuman(@RequestParam(value="token", required = false)String token,
-                                   @RequestParam(value="id", required = false)String id) {
+    public ReturnModel RemoveHuman(@RequestParam(value = "token", required = false) String token,
+                                   @RequestParam(value = "id", required = false) String id) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -246,8 +247,7 @@ public class HumanController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("RemoveHuman");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -260,16 +260,17 @@ public class HumanController {
 
     /**
      * Add a role to the human resource.
+     *
      * @param token
      * @param id
      * @param role
      * @return
      */
-    @PostMapping(value = "/addrole", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/addrole", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel AddHumanRole(@RequestParam(value="token", required = false)String token,
-                                    @RequestParam(value="id", required = false)String id,
-                                    @RequestParam(value="role", required = false)String role) {
+    public ReturnModel AddHumanRole(@RequestParam(value = "token", required = false) String token,
+                                    @RequestParam(value = "id", required = false) String id,
+                                    @RequestParam(value = "role", required = false) String role) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -289,8 +290,7 @@ public class HumanController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("AddHumanRole");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -303,16 +303,17 @@ public class HumanController {
 
     /**
      * Remove the role from the human resource.
+     *
      * @param token
      * @param id
      * @param role
      * @return
      */
-    @PostMapping(value = "/removerole", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/removerole", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel RemoveHumanRole(@RequestParam(value="token", required = false)String token,
-                                       @RequestParam(value="id", required = false)String id,
-                                       @RequestParam(value="role", required = false)String role) {
+    public ReturnModel RemoveHumanRole(@RequestParam(value = "token", required = false) String token,
+                                       @RequestParam(value = "id", required = false) String id,
+                                       @RequestParam(value = "role", required = false) String role) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -332,8 +333,7 @@ public class HumanController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("RemoveHumanRole");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 

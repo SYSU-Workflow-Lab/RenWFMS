@@ -15,7 +15,7 @@ import java.util.Map;
  * Author: Rinkako
  * Date  : 2017/11/15
  * Usage : Base allocator for all implemented allocators.
- *         Allocator is used to choose a participant to handle task from candidate set.
+ * Allocator is used to choose a participant to handle task from candidate set.
  */
 public abstract class RAllocator extends RSelector implements Serializable {
 
@@ -39,10 +39,11 @@ public abstract class RAllocator extends RSelector implements Serializable {
 
     /**
      * Create a new allocator.
-     * @param id unique id for selector fetching
-     * @param type type name string
+     *
+     * @param id          unique id for selector fetching
+     * @param type        type name string
      * @param description selector description text
-     * @param args parameter dictionary in HashMap
+     * @param args        parameter dictionary in HashMap
      */
     public RAllocator(String id, String type, String description, HashMap<String, String> args) {
         super(id, type, description, args);
@@ -50,8 +51,9 @@ public abstract class RAllocator extends RSelector implements Serializable {
 
     /**
      * Perform allocation on the candidate set.
+     *
      * @param candidateSet candidate participant set
-     * @param context workitem context
+     * @param context      workitem context
      * @return selected participant
      */
     public abstract ParticipantContext PerformAllocate(HashSet<ParticipantContext> candidateSet, WorkitemContext context);

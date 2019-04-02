@@ -16,6 +16,7 @@ import java.util.Random;
 public class CommonUtil {
     /**
      * Check if a string is null or empty.
+     *
      * @param str string to be checked
      * @return boolean of result
      */
@@ -25,6 +26,7 @@ public class CommonUtil {
 
     /**
      * Generate a random number in interval of [min, max)
+     *
      * @param min low border included
      * @param max up border not included
      * @return a random number in interval
@@ -37,10 +39,11 @@ public class CommonUtil {
     /**
      * Zip a key vector and a value vector to a hash map.
      * Key list and value list should have same size.
-     * @param keyList key vector, all entry should be unique
+     *
+     * @param keyList   key vector, all entry should be unique
      * @param valueList value vector
-     * @param <TyK> Key type
-     * @param <TyV> Value type
+     * @param <TyK>     Key type
+     * @param <TyV>     Value type
      * @return A HashMap for (key, value)
      */
     public static <TyK, TyV> HashMap<TyK, TyV> ZipVector(List<TyK> keyList, List<TyV> valueList) {
@@ -58,7 +61,8 @@ public class CommonUtil {
     /**
      * Zip a key vector and a value vector to a hash map in all string type.
      * Key list and value list should have same size.
-     * @param keyList key vector, all entry should be unique
+     *
+     * @param keyList   key vector, all entry should be unique
      * @param valueList value vector
      * @return A HashMap for (key, value)
      */

@@ -28,7 +28,7 @@
     </state>
     <state id="temp">
         <transition cond="boolVar and testA eq 123">
-          <log label="MAIN" expr="'and test passed'"/>
+            <log label="MAIN" expr="'and test passed'"/>
         </transition>
         <transition cond="testB + testA eq 3" target="finished">
             <log label="MAIN" expr="'+ test passed'"/>

@@ -32,12 +32,14 @@ public class EventLogWriterPlugin extends AsyncRunnablePlugin {
     /**
      * Create a new log writer.
      */
-    public EventLogWriterPlugin() { }
+    public EventLogWriterPlugin() {
+    }
 
     /**
      * Add a log entity to be written later.
+     *
      * @param eventEntity log entity
-     * @param rtid process rtid
+     * @param rtid        process rtid
      */
     public void AddEvent(RenRseventlogEntity eventEntity, String rtid) {
         if (this.isRunning) {
@@ -72,8 +74,7 @@ public class EventLogWriterPlugin extends AsyncRunnablePlugin {
             try {
                 RenRseventlogEntityDAO renRseventlogEntityDAO = (RenRseventlogEntityDAO) SpringContextUtil.getBean("renRseventlogEntityDAO");
                 renRseventlogEntityDAO.saveOrUpdate(eventEntity);
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 LogUtil.Echo(String.format("Fail to insert RS event log to entity. (Wid: %s, Pid: %s, WorkerId: %s, Evt: %s), %s",
                         eventEntity.getWid(), eventEntity.getProcessid(), eventEntity.getWorkerid(), eventEntity.getEvent(), ex),
                         EventLogWriterPlugin.class.getName(), LogLevelType.ERROR);

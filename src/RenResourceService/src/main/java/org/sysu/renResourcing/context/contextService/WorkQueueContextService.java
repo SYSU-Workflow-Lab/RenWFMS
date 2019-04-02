@@ -16,7 +16,7 @@ import org.sysu.renResourcing.utility.LogUtil;
 
 /**
  * Created by Skye on 2018/12/22.
- *
+ * <p>
  * Usage : WorkQueueContext Handler.
  */
 
@@ -31,8 +31,9 @@ public class WorkQueueContextService {
 
     /**
      * Get the specific queue context and store to entity.
+     *
      * @param ownerWorkerId queue owner worker id
-     * @param queueType queue type enum
+     * @param queueType     queue type enum
      * @return a workqueue context
      */
     public synchronized WorkQueueContext GetContext(String ownerWorkerId, WorkQueueType queueType) {
@@ -41,9 +42,10 @@ public class WorkQueueContextService {
 
     /**
      * Get the specific queue context and store to entity.
+     *
      * @param ownerWorkerId queue owner worker id
-     * @param queueType queue type enum
-     * @param forceReload force reload from entity and refresh cache
+     * @param queueType     queue type enum
+     * @param forceReload   force reload from entity and refresh cache
      * @return a workqueue context
      */
     @Transactional(rollbackFor = Exception.class)
@@ -69,8 +71,7 @@ public class WorkQueueContextService {
             WorkQueueContext generateCtx = WorkQueueContext.GenerateContext(rwqe);
             ContextCachePool.AddOrUpdate(wqid, generateCtx);
             return generateCtx;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             if (!cmtFlag) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             }
@@ -82,6 +83,7 @@ public class WorkQueueContextService {
 
     /**
      * Remove a workitem from all queue.
+     *
      * @param workitem workitem context
      */
     @Transactional(rollbackFor = Exception.class)
@@ -91,8 +93,7 @@ public class WorkQueueContextService {
         }
         try {
             renQueueitemsEntityDAO.deleteByWorkitemId(workitem.getEntity().getWid());
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             LogUtil.Log(String.format("When RemoveFromAllQueue(%s) refresh from entity exception occurred, %s",
                     workitem.getEntity().getWid(), ex), WorkQueueContextService.class.getName(),

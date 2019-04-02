@@ -3,6 +3,7 @@
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
 package org.sysu.renNameService.restful;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.sysu.renNameService.NSScheduler;
@@ -40,15 +41,16 @@ public class RoleMappingController {
 
     /**
      * Get worker's id by his business role.
-     * @param rtid process rtid (required)
+     *
+     * @param rtid  process rtid (required)
      * @param brole business role name (required)
      * @return response package
      */
     @RequestMapping(value = "/getWorkerByBRole", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel GetWorkerByBusinessRole(@RequestParam(value="token", required = false)String token,
-                                               @RequestParam(value="rtid", required = false)String rtid,
-                                               @RequestParam(value="brole", required = false)String brole) {
+    public ReturnModel GetWorkerByBusinessRole(@RequestParam(value = "token", required = false) String token,
+                                               @RequestParam(value = "rtid", required = false) String rtid,
+                                               @RequestParam(value = "brole", required = false) String brole) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -79,15 +81,16 @@ public class RoleMappingController {
 
     /**
      * Get business role by the worker's id.
+     *
      * @param rtid process rtid (required)
-     * @param gid worker global id (required)
+     * @param gid  worker global id (required)
      * @return response package
      */
     @RequestMapping(value = "/getBRoleByWorker", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel GetBusinessRoleByGlobalId(@RequestParam(value="token", required = false)String token,
-                                                 @RequestParam(value="rtid", required = false)String rtid,
-                                                 @RequestParam(value="gid", required = false)String gid) {
+    public ReturnModel GetBusinessRoleByGlobalId(@RequestParam(value = "token", required = false) String token,
+                                                 @RequestParam(value = "rtid", required = false) String rtid,
+                                                 @RequestParam(value = "gid", required = false) String gid) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -119,20 +122,21 @@ public class RoleMappingController {
 
     /**
      * Register a mapping to RoleMap Service.
-     * @param rtid process rtid (required)
-     * @param organGid organization global id (required)
+     *
+     * @param rtid        process rtid (required)
+     * @param organGid    organization global id (required)
      * @param dataVersion organization data version (required)
-     * @param map map descriptor (required)
+     * @param map         map descriptor (required)
      * @return response package
      */
     @SuppressWarnings("ConstantConditions")
     @RequestMapping(value = "/register", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel RegisterRoleMapService(@RequestParam(value="token", required = false)String token,
-                                              @RequestParam(value="rtid", required = false)String rtid,
-                                              @RequestParam(value="organgid", required = false)String organGid,
-                                              @RequestParam(value="dataversion", required = false)String dataVersion,
-                                              @RequestParam(value="map", required = false)String map) {
+    public ReturnModel RegisterRoleMapService(@RequestParam(value = "token", required = false) String token,
+                                              @RequestParam(value = "rtid", required = false) String rtid,
+                                              @RequestParam(value = "organgid", required = false) String organGid,
+                                              @RequestParam(value = "dataversion", required = false) String dataVersion,
+                                              @RequestParam(value = "map", required = false) String map) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -167,13 +171,14 @@ public class RoleMappingController {
 
     /**
      * Finish a process and delete cache.
+     *
      * @param rtid process rtid (required)
      * @return response package
      */
     @RequestMapping(value = "/fin", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel FinishRoleMapService(@RequestParam(value="token", required = false)String token,
-                                            @RequestParam(value="rtid", required = false)String rtid) {
+    public ReturnModel FinishRoleMapService(@RequestParam(value = "token", required = false) String token,
+                                            @RequestParam(value = "rtid", required = false) String rtid) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -202,13 +207,14 @@ public class RoleMappingController {
 
     /**
      * Get all resources involved in a process.
+     *
      * @param rtid process rtid (required)
      * @return response package
      */
     @RequestMapping(value = "/getInvolved", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel GetInvolvedResource(@RequestParam(value="token", required = false)String token,
-                                           @RequestParam(value="rtid", required = false)String rtid) {
+    public ReturnModel GetInvolvedResource(@RequestParam(value = "token", required = false) String token,
+                                           @RequestParam(value = "rtid", required = false) String rtid) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -237,16 +243,17 @@ public class RoleMappingController {
 
     /**
      * Load involved resources to participant for RS.
+     *
      * @param token auth token
      * @param renid ren auth user id (required)
-     * @param rtid process runtime record id (required)
+     * @param rtid  process runtime record id (required)
      * @return response package
      */
     @RequestMapping(value = "/loadParticipant", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel LoadParticipant(@RequestParam(value="token", required = false)String token,
-                                       @RequestParam(value="renid", required = false)String renid,
-                                       @RequestParam(value="rtid", required = false)String rtid) {
+    public ReturnModel LoadParticipant(@RequestParam(value = "token", required = false) String token,
+                                       @RequestParam(value = "renid", required = false) String renid,
+                                       @RequestParam(value = "rtid", required = false) String rtid) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -277,14 +284,15 @@ public class RoleMappingController {
 
     /**
      * Load involved resources to participant for RS.
+     *
      * @param token auth token
-     * @param rtid process runtime record id (required)
+     * @param rtid  process runtime record id (required)
      * @return response package
      */
     @RequestMapping(value = "/unloadParticipant", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel UnLoadParticipant(@RequestParam(value="token", required = false)String token,
-                                         @RequestParam(value="rtid", required = false)String rtid) {
+    public ReturnModel UnLoadParticipant(@RequestParam(value = "token", required = false) String token,
+                                         @RequestParam(value = "rtid", required = false) String rtid) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -313,14 +321,15 @@ public class RoleMappingController {
 
     /**
      * Get all resources from a REN user binding COrgan.
+     *
      * @param token auth token
      * @param renid ren auth user id (required)
      * @return response package
      */
     @RequestMapping(value = "/getAllResourceFromCOrgan", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel GetAllResourceFromCOrgan(@RequestParam(value="token", required = false)String token,
-                                                @RequestParam(value="renid", required = false)String renid) {
+    public ReturnModel GetAllResourceFromCOrgan(@RequestParam(value = "token", required = false) String token,
+                                                @RequestParam(value = "renid", required = false) String renid) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -349,14 +358,15 @@ public class RoleMappingController {
 
     /**
      * Get all resources from a REN user binding COrgan.
+     *
      * @param token auth token (required)
      * @param renid ren auth user id (required)
      * @return response package
      */
     @RequestMapping(value = "/getAllConnectionFromCOrgan", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel GetAllConnectionFromCOrgan(@RequestParam(value="token", required = false)String token,
-                                                  @RequestParam(value="renid", required = false)String renid) {
+    public ReturnModel GetAllConnectionFromCOrgan(@RequestParam(value = "token", required = false) String token,
+                                                  @RequestParam(value = "renid", required = false) String renid) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params
@@ -385,13 +395,14 @@ public class RoleMappingController {
 
     /**
      * Get data version from a REN user binding COrgan.
+     *
      * @param token auth token (required)
      * @return response package
      */
     @RequestMapping(value = "/getDataVersionAndGidFromCOrgan", produces = {"application/json"})
     @ResponseBody
-    public ReturnModel GetDataVersionAndGidFromCOrgan(@RequestParam(value="token", required = false)String token,
-                                                @RequestParam(value="renid", required = false)String renid) {
+    public ReturnModel GetDataVersionAndGidFromCOrgan(@RequestParam(value = "token", required = false) String token,
+                                                      @RequestParam(value = "renid", required = false) String renid) {
         ReturnModel rnModel = new ReturnModel();
         try {
             // miss params

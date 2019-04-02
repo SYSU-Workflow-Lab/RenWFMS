@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * A <code>PayloadProvider</code> is an element in the SCXML document
  * that can provide payload data for an event or an external process.
- *
+ * <p>
  * 装饰类
  */
 public abstract class PayloadProvider extends Action {

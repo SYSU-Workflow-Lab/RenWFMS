@@ -39,6 +39,7 @@ public class ConfigSlave implements IConfigSlave {
     /**
      * Get the global instance of ZKConfigService manager.
      * This method is thread SAFE.
+     *
      * @return ZKConfigService instance.
      */
     public static ConfigSlave GetInstance() throws Exception {
@@ -93,7 +94,7 @@ public class ConfigSlave implements IConfigSlave {
      * Set configuration event listener.
      *
      * @param serviceName current service name
-     * @param listener IConfigListener instance
+     * @param listener    IConfigListener instance
      */
     private void SetListenter(String serviceName, IConfigListener listener) throws Exception {
         TreeCache treeCache = new TreeCache(this.ZClient, "/" + serviceName);

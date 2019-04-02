@@ -14,7 +14,7 @@ import java.util.HashMap;
  * Author: Rinkako
  * Date  : 2018/2/4
  * Usage : Workitem context is an encapsulation of RenWorkitemEntity in a
- *         convenient way for resourcing service.
+ * convenient way for resourcing service.
  */
 public class WorkitemContext implements Serializable, RCacheablesContext {
 
@@ -42,7 +42,8 @@ public class WorkitemContext implements Serializable, RCacheablesContext {
      * Create a new workitem context.
      * Private constructor for preventing create context outside.
      */
-    public WorkitemContext() { }
+    public WorkitemContext() {
+    }
 
     /**
      * Get workitem entity.

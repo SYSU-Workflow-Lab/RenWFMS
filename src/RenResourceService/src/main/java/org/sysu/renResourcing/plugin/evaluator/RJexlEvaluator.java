@@ -47,8 +47,7 @@ public class RJexlEvaluator implements REvaluator {
         try {
             Expression jexlExpr = this.evaluatorEngine.createExpression(expr);
             return jexlExpr.evaluate((JexlContext) ctx.GetInternalContext());
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             LogUtil.Echo(String.format("Evaluate failed (Expr: %s), %s", expr, ex),
                     RJexlEvaluator.class.getName(), LogLevelType.ERROR);
             throw ex;
@@ -68,8 +67,7 @@ public class RJexlEvaluator implements REvaluator {
             Expression jexlExpr = this.evaluatorEngine.createExpression(expr);
             Object result = jexlExpr.evaluate((JexlContext) ctx.GetInternalContext());
             return result == null ? Boolean.FALSE : (Boolean) result;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             LogUtil.Echo(String.format("Evaluate condition failed (Expr: %s), %s", expr, ex),
                     RJexlEvaluator.class.getName(), LogLevelType.ERROR);
             throw ex;

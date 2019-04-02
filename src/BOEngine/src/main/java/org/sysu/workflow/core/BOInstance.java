@@ -351,7 +351,7 @@ public class BOInstance implements Serializable {
 
 
     public String getExecContextSessionId() {
-        return ((BOXMLExecutionContext)this.internalIOProcessor).getSessionId();
+        return ((BOXMLExecutionContext) this.internalIOProcessor).getSessionId();
     }
 
     /**
@@ -491,7 +491,7 @@ public class BOInstance implements Serializable {
      * @param context The context.
      */
     public void setContext(final EnterableState state,
-                    final Context context) {
+                           final Context context) {
         contexts.put(state, context);
     }
 

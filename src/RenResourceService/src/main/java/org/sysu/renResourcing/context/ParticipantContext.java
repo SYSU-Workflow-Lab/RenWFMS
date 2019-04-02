@@ -19,7 +19,7 @@ import java.io.Serializable;
  * Author: Rinkako
  * Date  : 2018/2/4
  * Usage : Task context is an encapsulation of RenRsparticipant in a
- *         convenient way for resourcing service.
+ * convenient way for resourcing service.
  */
 public class ParticipantContext implements Serializable, RCacheablesContext {
     /**
@@ -54,6 +54,7 @@ public class ParticipantContext implements Serializable, RCacheablesContext {
 
     /**
      * Get a participant context by its global id.
+     *
      * @param workerId worker global id
      * @return Participant resourcing context, null if exception occurred or assertion error
      */
@@ -63,6 +64,7 @@ public class ParticipantContext implements Serializable, RCacheablesContext {
 
     /**
      * Get a participant context by its global id.
+     *
      * @param workerId worker global id
      * @return Participant resourcing context, null if exception occurred or assertion error
      */
@@ -79,8 +81,7 @@ public class ParticipantContext implements Serializable, RCacheablesContext {
             ParticipantContext retCtx = ParticipantContext.GenerateParticipantContext(rre);
             ContextCachePool.AddOrUpdate(workerId, retCtx);
             return retCtx;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             LogUtil.Log("When json serialization exception occurred, transaction rollback. " + ex,
                     TaskContext.class.getName(), LogLevelType.ERROR, rtid);
             return null;
@@ -89,6 +90,7 @@ public class ParticipantContext implements Serializable, RCacheablesContext {
 
     /**
      * Get worker global id.
+     *
      * @return id string
      */
     public String getWorkerId() {
@@ -97,6 +99,7 @@ public class ParticipantContext implements Serializable, RCacheablesContext {
 
     /**
      * Get a user-friendly display name.
+     *
      * @return name string
      */
     public String getDisplayName() {
@@ -105,6 +108,7 @@ public class ParticipantContext implements Serializable, RCacheablesContext {
 
     /**
      * Get the worker resource type.
+     *
      * @return WorkerType enum
      */
     public WorkerType getWorkerType() {
@@ -113,6 +117,7 @@ public class ParticipantContext implements Serializable, RCacheablesContext {
 
     /**
      * Get the agent type, valid only worker type is Agent.
+     *
      * @return AgentReentrantType enum
      */
     public AgentReentrantType getAgentType() {
@@ -121,6 +126,7 @@ public class ParticipantContext implements Serializable, RCacheablesContext {
 
     /**
      * Get Agent location, null if Human.
+     *
      * @return agent location string
      */
     public String getAgentLocation() {
@@ -129,6 +135,7 @@ public class ParticipantContext implements Serializable, RCacheablesContext {
 
     /**
      * Generate a participant context by a entity entity.
+     *
      * @param rsparticipantEntity RS participant entity
      * @return equivalent participant context.
      */
@@ -147,8 +154,9 @@ public class ParticipantContext implements Serializable, RCacheablesContext {
     /**
      * Create a new participant context.
      * Private constructor for preventing create context without using `{@code ParticipantContext.GetContext}`.
+     *
      * @param workerId worker global id
-     * @param type worker type enum
+     * @param type     worker type enum
      */
     private ParticipantContext(String workerId, WorkerType type) {
         this.workerId = workerId;

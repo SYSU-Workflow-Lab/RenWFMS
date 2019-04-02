@@ -44,14 +44,15 @@ public class AgentController {
 
     /**
      * Get the agent resource.
+     *
      * @param token
      * @param id
      * @return
      */
-    @PostMapping(value = "/get", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/get", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel GetAgent(@RequestParam(value="token", required = false)String token,
-                                @RequestParam(value="id", required = false)String id) {
+    public ReturnModel GetAgent(@RequestParam(value = "token", required = false) String token,
+                                @RequestParam(value = "id", required = false) String id) {
         ReturnModel rnModel = new ReturnModel();
 
 
@@ -71,8 +72,7 @@ public class AgentController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("GetAgent");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -85,6 +85,7 @@ public class AgentController {
 
     /**
      * Set the agent resource.
+     *
      * @param token
      * @param id
      * @param name
@@ -92,13 +93,13 @@ public class AgentController {
      * @param location
      * @return
      */
-    @PostMapping(value = "/set", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/set", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel SetAgent(@RequestParam(value="token", required = false)String token,
-                                @RequestParam(value="id", required = false)String id,
-                                @RequestParam(value="name", required = false)String name,
-                                @RequestParam(value="note", required = false)String note,
-                                @RequestParam(value="location", required = false)String location) {
+    public ReturnModel SetAgent(@RequestParam(value = "token", required = false) String token,
+                                @RequestParam(value = "id", required = false) String id,
+                                @RequestParam(value = "name", required = false) String name,
+                                @RequestParam(value = "note", required = false) String note,
+                                @RequestParam(value = "location", required = false) String location) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -120,8 +121,7 @@ public class AgentController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("SetAgent");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -134,14 +134,15 @@ public class AgentController {
 
     /**
      * Check the validity of the agent resource.
+     *
      * @param token
      * @param id
      * @return
      */
-    @PostMapping(value = "/contain", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/contain", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel ContainAgent(@RequestParam(value="token", required = false)String token,
-                                    @RequestParam(value="id", required = false)String id) {
+    public ReturnModel ContainAgent(@RequestParam(value = "token", required = false) String token,
+                                    @RequestParam(value = "id", required = false) String id) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -160,8 +161,7 @@ public class AgentController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("ContainAgent");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -174,18 +174,19 @@ public class AgentController {
 
     /**
      * Add a agent resource.
+     *
      * @param token
      * @param name
      * @param note
      * @param location
      * @return
      */
-    @PostMapping(value = "/add", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/add", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel AddAgent(@RequestParam(value="token", required = false)String token,
-                                @RequestParam(value="name", required = false)String name,
-                                @RequestParam(value="note", required = false)String note,
-                                @RequestParam(value="location", required = false)String location) {
+    public ReturnModel AddAgent(@RequestParam(value = "token", required = false) String token,
+                                @RequestParam(value = "name", required = false) String name,
+                                @RequestParam(value = "note", required = false) String note,
+                                @RequestParam(value = "location", required = false) String location) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -206,8 +207,7 @@ public class AgentController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("AddAgent");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -220,14 +220,15 @@ public class AgentController {
 
     /**
      * Remove the agent resource.
+     *
      * @param token
      * @param id
      * @return
      */
-    @PostMapping(value = "/remove", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/remove", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel RemoveAgent(@RequestParam(value="token", required = false)String token,
-                                   @RequestParam(value="id", required = false)String id) {
+    public ReturnModel RemoveAgent(@RequestParam(value = "token", required = false) String token,
+                                   @RequestParam(value = "id", required = false) String id) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -246,8 +247,7 @@ public class AgentController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("RemoveAgent");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -260,16 +260,17 @@ public class AgentController {
 
     /**
      * Add a role to the agent resource.
+     *
      * @param token
      * @param id
      * @param role
      * @return
      */
-    @PostMapping(value = "/addrole", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/addrole", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel AddAgentRole(@RequestParam(value="token", required = false)String token,
-                                    @RequestParam(value="id", required = false)String id,
-                                    @RequestParam(value="role", required = false)String role) {
+    public ReturnModel AddAgentRole(@RequestParam(value = "token", required = false) String token,
+                                    @RequestParam(value = "id", required = false) String id,
+                                    @RequestParam(value = "role", required = false) String role) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -289,8 +290,7 @@ public class AgentController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("AddAgentRole");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -303,16 +303,17 @@ public class AgentController {
 
     /**
      * Remove the role from the agent resource.
+     *
      * @param token
      * @param id
      * @param role
      * @return
      */
-    @PostMapping(value = "/removerole", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/removerole", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel RemoveAgentRole(@RequestParam(value="token", required = false)String token,
-                                       @RequestParam(value="id", required = false)String id,
-                                       @RequestParam(value="role", required = false)String role) {
+    public ReturnModel RemoveAgentRole(@RequestParam(value = "token", required = false) String token,
+                                       @RequestParam(value = "id", required = false) String id,
+                                       @RequestParam(value = "role", required = false) String role) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -332,8 +333,7 @@ public class AgentController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("RemoveAgentRole");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.sysu.renCommon.entity.RenRuntimerecordEntity;
+import org.sysu.renCommon.entity.RenServiceInfo;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renResourcing.dao.RenRuntimerecordEntityDAO;
 import org.sysu.renResourcing.dao.RenServiceInfoDAO;
@@ -41,6 +42,20 @@ public class AssistantService {
     public String getBOEngineLocationByRtid(String rtid) {
         String interpreterId = renRuntimerecordEntityDAO.findInterpreterIdByRtid(rtid);
         return renServiceInfoDAO.findByInterpreterId(interpreterId).getLocation();
+    }
+
+    public synchronized void increaseWorkitemCountByRtid(String rtid) {
+        String interpreterId = renRuntimerecordEntityDAO.findInterpreterIdByRtid(rtid);
+        RenServiceInfo serviceInfo = renServiceInfoDAO.findByInterpreterId(interpreterId);
+        serviceInfo.setWorkitemCount(serviceInfo.getWorkitemCount() + 1);
+        renServiceInfoDAO.saveOrUpdate(serviceInfo);
+    }
+
+    public synchronized void decreaseWorkitemCountByRtid(String rtid) {
+        String interpreterId = renRuntimerecordEntityDAO.findInterpreterIdByRtid(rtid);
+        RenServiceInfo serviceInfo = renServiceInfoDAO.findByInterpreterId(interpreterId);
+        serviceInfo.setWorkitemCount((serviceInfo.getWorkitemCount() - 1) >= 0 ? serviceInfo.getWorkitemCount() - 1 : 0);
+        renServiceInfoDAO.saveOrUpdate(serviceInfo);
     }
 
 }

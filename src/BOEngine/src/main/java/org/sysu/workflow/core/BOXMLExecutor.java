@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * <p>The default implementation is
  * <code>org.apache.commons.scxml.semantics.SCXMLSemanticsImpl</code></p>
- *
+ * <p>
  * Modified by Rinkako, for extending Instance Tree support.
  *
  * @see BOXMLSemantics
@@ -117,7 +117,7 @@ public class BOXMLExecutor implements BOXMLIOProcessor {
      * @param evtDisp      The event dispatcher
      * @param errRep       The error reporter
      * @param semantics    The SCXML semantics
-     * @param rootNodeId      Root state machine id
+     * @param rootNodeId   Root state machine id
      */
     public BOXMLExecutor(final Evaluator expEvaluator,
                          final EventDispatcher evtDisp, final ErrorReporter errRep,

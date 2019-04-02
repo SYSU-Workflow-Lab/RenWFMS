@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * Author: Rinkako
  * Date  : 2018/2/5
  * Usage : Base class for triggers. Trigger is used to fire workitem or
- *         execute other resource service in a specific condition.
+ * execute other resource service in a specific condition.
  */
 public abstract class RTrigger implements Serializable {
     /**
@@ -61,10 +61,12 @@ public abstract class RTrigger implements Serializable {
     /**
      * Create a new trigger.
      */
-    public RTrigger() { }
+    public RTrigger() {
+    }
 
     /**
      * Create a new trigger.
+     *
      * @param id trigger id
      */
     public RTrigger(String id, String condition) {
@@ -74,6 +76,7 @@ public abstract class RTrigger implements Serializable {
 
     /**
      * Add triggerable object.
+     *
      * @param triggerable RTriggerable object.
      */
     public void AddTriggerable(RTriggerable triggerable) {
@@ -89,6 +92,7 @@ public abstract class RTrigger implements Serializable {
 
     /**
      * Get if this trigger is active.
+     *
      * @return boolean of active status
      */
     public boolean isActive() {
@@ -97,6 +101,7 @@ public abstract class RTrigger implements Serializable {
 
     /**
      * Set this trigger active status.
+     *
      * @param active destination status
      */
     public void setActive(boolean active) {
@@ -105,6 +110,7 @@ public abstract class RTrigger implements Serializable {
 
     /**
      * Get the trigger condition expression.
+     *
      * @return condition string
      */
     public String getTriggerCondition() {
@@ -113,6 +119,7 @@ public abstract class RTrigger implements Serializable {
 
     /**
      * Get the unique id of trigger.
+     *
      * @return id string
      */
     public String getId() {
@@ -121,6 +128,7 @@ public abstract class RTrigger implements Serializable {
 
     /**
      * Get timestamp of last begin this trigger.
+     *
      * @return timestamp
      */
     public Timestamp getLastBeginTimestamp() {
@@ -129,6 +137,7 @@ public abstract class RTrigger implements Serializable {
 
     /**
      * Get timestamp of last stop this trigger.
+     *
      * @return timestamp
      */
     public Timestamp getLastStopTimestamp() {
@@ -137,6 +146,7 @@ public abstract class RTrigger implements Serializable {
 
     /**
      * Get timestamp of last time this trigger successfully triggered anything.
+     *
      * @return timestamp
      */
     public Timestamp getLastTriggerTimestamp() {
@@ -182,6 +192,7 @@ public abstract class RTrigger implements Serializable {
 
     /**
      * Start the trigger once.
+     *
      * @param payload payload package to be sent to triggered object.
      * @return triggered RTriggerable object count
      */
@@ -198,6 +209,7 @@ public abstract class RTrigger implements Serializable {
 
     /**
      * Evaluate a trigger condition expression.
+     *
      * @param expr condition string
      * @return trigger condition calculated result
      */

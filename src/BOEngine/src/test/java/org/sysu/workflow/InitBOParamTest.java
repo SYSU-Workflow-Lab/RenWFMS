@@ -54,10 +54,10 @@ public class InitBOParamTest {
         executor.setStateMachine(scxml);
         executor.setRtid("testRTID");
 
-        long startTime=System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         executor.go();
-        long endTime=System.currentTimeMillis();
-        System.out.println("COST TIME： " + (endTime-startTime) + "ms");
+        long endTime = System.currentTimeMillis();
+        System.out.println("COST TIME： " + (endTime - startTime) + "ms");
 
         RInstanceTree tree = InstanceManager.GetInstanceTree("testRTID");
         BOXMLExecutionContext ctx = executor.getExctx();

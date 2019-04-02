@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EntityScan("org.sysu.renCommon.entity")
 public class RenResourceServiceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(RenResourceServiceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(RenResourceServiceApplication.class, args);
+    }
 }

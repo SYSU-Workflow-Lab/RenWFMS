@@ -17,7 +17,7 @@ import org.sysu.renResourcing.utility.LogUtil;
 
 /**
  * Created by Skye on 2018/12/22.
- *
+ * <p>
  * Usage : TaskContext Handler.
  */
 
@@ -35,8 +35,9 @@ public class TaskContextService {
 
     /**
      * Get a task context by its name and belonging BO name of one runtime.
-     * @param rtid runtime record id
-     * @param boName belong to BO id
+     *
+     * @param rtid     runtime record id
+     * @param boName   belong to BO id
      * @param taskName task name
      * @return Task resourcing context, null if exception occurred or assertion error
      */
@@ -47,8 +48,9 @@ public class TaskContextService {
 
     /**
      * Get a task context by its name and belonging BO name of one runtime.
-     * @param rtid runtime record id
-     * @param boName belong to BO id
+     *
+     * @param rtid     runtime record id
+     * @param boName   belong to BO id
      * @param taskName task name
      * @return Task resourcing context, null if exception occurred or assertion error
      */
@@ -79,8 +81,7 @@ public class TaskContextService {
             TaskContext generatedCtx = TaskContext.GenerateTaskContext(taskEntity, pid);
             ContextCachePool.AddOrUpdate(taskCtxId, generatedCtx);
             return generatedCtx;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             if (!cmtFlag) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             }

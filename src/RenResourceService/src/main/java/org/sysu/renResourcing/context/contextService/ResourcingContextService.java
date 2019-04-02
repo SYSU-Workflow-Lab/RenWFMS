@@ -21,7 +21,7 @@ import java.util.UUID;
 
 /**
  * Created by Skye on 2018/12/22.
- *
+ * <p>
  * Usage : ResourcingContext Handler.
  */
 
@@ -33,9 +33,10 @@ public class ResourcingContextService {
 
     /**
      * Get a resourcing request context.
-     * @param rstid resourcing request global id, null if create a new one
-     * @param rtid process rtid
-     * @param service service type enum
+     *
+     * @param rstid    resourcing request global id, null if create a new one
+     * @param rtid     process rtid
+     * @param service  service type enum
      * @param argsDict service argument dict
      * @return Resourcing request context, null if exception occurred or assertion error
      */
@@ -46,10 +47,11 @@ public class ResourcingContextService {
 
     /**
      * Get a resourcing request context.
-     * @param rstid resourcing request global id, null if create a new one
-     * @param rtid process rtid
-     * @param service service type enum
-     * @param argsDict service argument dict
+     *
+     * @param rstid       resourcing request global id, null if create a new one
+     * @param rtid        process rtid
+     * @param service     service type enum
+     * @param argsDict    service argument dict
      * @param forceReload force reload from entity and refresh cache
      * @return Resourcing request context, null if exception occurred or assertion error
      */
@@ -88,8 +90,7 @@ public class ResourcingContextService {
             ResourcingContext generatedCtx = ResourcingContext.GenerateResourcingContext(renRsrecordEntity);
             ContextCachePool.AddOrUpdate(rstid, generatedCtx);
             return generatedCtx;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             if (!cmtFlag) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             }
@@ -101,6 +102,7 @@ public class ResourcingContextService {
 
     /**
      * Save changes context to entity memory.
+     *
      * @param context context to be saved
      */
     @Transactional(rollbackFor = Exception.class)
@@ -119,8 +121,7 @@ public class ResourcingContextService {
             rre.setIsSucceed(context.getIsSucceed());
             rre.setExecutionTimespan(context.getExecutionTimespan());
             renRsrecordEntityDAO.saveOrUpdate(rre);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             LogUtil.Log("Save resourcing request context but exception occurred, " + ex,
                     ResourcingContextService.class.getName(), LogLevelType.ERROR, context.getRtid());

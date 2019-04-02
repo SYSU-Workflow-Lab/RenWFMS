@@ -3,6 +3,7 @@
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
 package org.sysu.renNameService;
+
 import org.sysu.renCommon.enums.TrackerPhase;
 import org.sysu.renNameService.transaction.NameServiceTransaction;
 import org.sysu.renNameService.utility.LogUtil;
@@ -14,13 +15,14 @@ import java.util.Observer;
  * Author: Rinkako
  * Date  : 2018/1/27
  * Usage : Tracker is used to manage the queued name service transaction and
- *         supervise its context and executor, and always be supervised by
- *         the main scheduler.
+ * supervise its context and executor, and always be supervised by
+ * the main scheduler.
  */
 public class NSTracker extends Observable implements Observer {
 
     /**
      * Create a new asynchronously tracker.
+     *
      * @param supervisorScheduler scheduler instance to supervise tracker
      */
     public NSTracker(Observer supervisorScheduler) {
@@ -30,6 +32,7 @@ public class NSTracker extends Observable implements Observer {
 
     /**
      * Execute a transaction asynchronously.
+     *
      * @param nsTransaction transaction context to be executed.
      */
     public void ExecuteAsync(NameServiceTransaction nsTransaction) {
@@ -45,6 +48,7 @@ public class NSTracker extends Observable implements Observer {
 
     /**
      * Get the tracker runtime record id.
+     *
      * @return rtid string
      */
     public String GetTrackerRtid() {
@@ -54,6 +58,7 @@ public class NSTracker extends Observable implements Observer {
 
     /**
      * Get the tracker context transaction.
+     *
      * @return NameServiceTransaction instance.
      */
     public NameServiceTransaction getContext() {
@@ -62,6 +67,7 @@ public class NSTracker extends Observable implements Observer {
 
     /**
      * Get current phase of this tracker.
+     *
      * @return tracker phase enum
      */
     public TrackerPhase getPhase() {
@@ -70,7 +76,8 @@ public class NSTracker extends Observable implements Observer {
 
     /**
      * This method will be called when the binding executor state is changed.
-     * @param o the observable object.
+     *
+     * @param o   the observable object.
      * @param arg an argument passed to the <code>notifyObservers</code>
      */
     @Override

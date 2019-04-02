@@ -44,16 +44,17 @@ public class ClusterController {
 
     /**
      * Diki
+     *
      * @param token
      * @param from
      * @param timestamp
      * @return
      */
-    @PostMapping(value = "/doki", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/doki", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel Diki(@RequestParam(value="token", required = false)String token,
-                            @RequestParam(value="from", required = false)String from,
-                            @RequestParam(value="timestamp", required = false)String timestamp) {
+    public ReturnModel Diki(@RequestParam(value = "token", required = false) String token,
+                            @RequestParam(value = "from", required = false) String from,
+                            @RequestParam(value = "timestamp", required = false) String timestamp) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -73,8 +74,7 @@ public class ClusterController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("Diki");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -87,16 +87,17 @@ public class ClusterController {
 
     /**
      * Synchronize the cluster.
+     *
      * @param token
      * @param from
      * @param timestamp
      * @return
      */
-    @PostMapping(value = "/sync", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/sync", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel Sync(@RequestParam(value="token", required = false)String token,
-                            @RequestParam(value="from", required = false)String from,
-                            @RequestParam(value="timestamp", required = false)String timestamp) {
+    public ReturnModel Sync(@RequestParam(value = "token", required = false) String token,
+                            @RequestParam(value = "from", required = false) String from,
+                            @RequestParam(value = "timestamp", required = false) String timestamp) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -116,8 +117,7 @@ public class ClusterController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("Sync");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -130,18 +130,19 @@ public class ClusterController {
 
     /**
      * Delegate a resource service to RS.
+     *
      * @param token
      * @param from
      * @param to
      * @param timestamp
      * @return
      */
-    @PostMapping(value = "/delegate", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/delegate", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel Delegate(@RequestParam(value="token", required = false)String token,
-                                @RequestParam(value="from", required = false)String from,
-                                @RequestParam(value="to", required = false)String to,
-                                @RequestParam(value="timestamp", required = false)String timestamp) {
+    public ReturnModel Delegate(@RequestParam(value = "token", required = false) String token,
+                                @RequestParam(value = "from", required = false) String from,
+                                @RequestParam(value = "to", required = false) String to,
+                                @RequestParam(value = "timestamp", required = false) String timestamp) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -162,8 +163,7 @@ public class ClusterController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("Delegate");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -176,14 +176,15 @@ public class ClusterController {
 
     /**
      * Flush to the storage.
+     *
      * @param token
      * @param to
      * @return
      */
-    @PostMapping(value = "/flush", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/flush", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel Flush(@RequestParam(value="token", required = false)String token,
-                             @RequestParam(value="to", required = false)String to) {
+    public ReturnModel Flush(@RequestParam(value = "token", required = false) String token,
+                             @RequestParam(value = "to", required = false) String to) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -202,8 +203,7 @@ public class ClusterController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("Flush");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -216,14 +216,15 @@ public class ClusterController {
 
     /**
      * Finish the service.
+     *
      * @param token
      * @param to
      * @return
      */
-    @PostMapping(value = "/fin", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/fin", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel Fin(@RequestParam(value="token", required = false)String token,
-                           @RequestParam(value="to", required = false)String to) {
+    public ReturnModel Fin(@RequestParam(value = "token", required = false) String token,
+                           @RequestParam(value = "to", required = false) String to) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -242,8 +243,7 @@ public class ClusterController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("Fin");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 

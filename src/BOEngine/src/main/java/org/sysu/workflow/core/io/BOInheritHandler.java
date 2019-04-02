@@ -1,4 +1,5 @@
 package org.sysu.workflow.core.io;
+
 import org.sysu.workflow.core.model.extend.InheritableContext;
 import org.sysu.workflow.core.model.SCXML;
 
@@ -13,7 +14,8 @@ import java.util.Stack;
 public class BOInheritHandler {
     /**
      * Handle inherit relationship for a scxml model object.
-     * @param deliver scxml instance
+     *
+     * @param deliver  scxml instance
      * @param baseName base scxml of this scxml
      * @return inheritable context for this scxml instance
      */
@@ -30,12 +32,13 @@ public class BOInheritHandler {
 
     /**
      * Generate inherit stack recursively.
-     * @param baseName scxml model name
+     *
+     * @param baseName     scxml model name
      * @param inheritStack inherit stack
      */
     private static void RecursiveInheritHandler(String baseName, Stack<SCXML> inheritStack) throws Exception {
-        URL url = BOInheritHandler.class.getClassLoader().getResource(baseName+".xml");
-        System.out.println("url:"+url);
+        URL url = BOInheritHandler.class.getClassLoader().getResource(baseName + ".xml");
+        System.out.println("url:" + url);
         String nextBase = BOInheritHandler.PushSCXML(url, inheritStack);
         if (nextBase == null || nextBase.length() <= 0) {
             return;
@@ -45,7 +48,8 @@ public class BOInheritHandler {
 
     /**
      * Activate a scxml instance and push it to inherit stack
-     * @param baseUrl URL object for scxml model file
+     *
+     * @param baseUrl      URL object for scxml model file
      * @param inheritStack inherit stack
      * @return the base object id for this scxml
      */
@@ -57,7 +61,8 @@ public class BOInheritHandler {
 
     /**
      * Generate Inheritable Context from a prepared inherit link stack.
-     * @param ctx a empty inheritable context object
+     *
+     * @param ctx    a empty inheritable context object
      * @param iStack inherit stack
      */
     private static void GenerateInheritableContext(InheritableContext ctx, Stack<SCXML> iStack) {

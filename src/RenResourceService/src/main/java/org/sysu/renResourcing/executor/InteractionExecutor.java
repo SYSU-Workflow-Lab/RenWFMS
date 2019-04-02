@@ -16,12 +16,14 @@ public abstract class InteractionExecutor {
     /**
      * Create a new Interaction executor.
      */
-    public InteractionExecutor() { }
+    public InteractionExecutor() {
+    }
 
     /**
      * Create a new Interaction executor.
+     *
      * @param ownerTaskId belong to task global id
-     * @param type initiator type
+     * @param type        initiator type
      */
     public InteractionExecutor(String ownerTaskId, InitializationByType type) {
         this.initiator = type;
@@ -30,6 +32,7 @@ public abstract class InteractionExecutor {
 
     /**
      * Get the initiator type.
+     *
      * @return initiator type enum
      */
     public InitializationByType getInitiatorType() {
@@ -38,6 +41,7 @@ public abstract class InteractionExecutor {
 
     /**
      * Get the owner task global id.
+     *
      * @return task gid string
      */
     public String getOwnerTaskId() {

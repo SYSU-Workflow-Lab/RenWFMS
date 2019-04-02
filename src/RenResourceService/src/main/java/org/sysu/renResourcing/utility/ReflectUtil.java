@@ -16,9 +16,10 @@ import org.sysu.renResourcing.filter.RFilter;
 public final class ReflectUtil {
     /**
      * Create a new allocator by its name.
+     *
      * @param allocatorName name of allocator to be created
-     * @param rstid rs request id
-     * @param rtid process rtid
+     * @param rstid         rs request id
+     * @param rtid          process rtid
      * @return Specific allocator
      * @throws Exception reflect instance create failed
      */
@@ -26,8 +27,7 @@ public final class ReflectUtil {
         try {
             Class classType = Class.forName(ReflectUtil.ALLOCATOR_PACKAGE_PATH + allocatorName + ReflectUtil.ALLOCATOR_POSTFIX);
             return (RAllocator) classType.newInstance();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             LogUtil.Log(String.format("Request %s, Reflect create allocator (%s) failed, %s", rstid, allocatorName, ex),
                     ReflectUtil.class.getName(), LogLevelType.ERROR, rtid);
             throw ex;  // rethrow to engine
@@ -36,9 +36,10 @@ public final class ReflectUtil {
 
     /**
      * Create a new filter by its name.
+     *
      * @param filterName name of filter to be created
-     * @param rstid rs request id
-     * @param rtid process rtid
+     * @param rstid      rs request id
+     * @param rtid       process rtid
      * @return Specific filter
      * @throws Exception reflect instance create failed
      */
@@ -46,8 +47,7 @@ public final class ReflectUtil {
         try {
             Class classType = Class.forName(ReflectUtil.FILTER_PACKAGE_PATH + filterName + ReflectUtil.FILTER_POSTFIX);
             return (RFilter) classType.newInstance();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             LogUtil.Log(String.format("Request %s, Reflect create filter (%s) failed, %s", rstid, filterName, ex),
                     ReflectUtil.class.getName(), LogLevelType.ERROR, rtid);
             throw ex;  // rethrow to engine

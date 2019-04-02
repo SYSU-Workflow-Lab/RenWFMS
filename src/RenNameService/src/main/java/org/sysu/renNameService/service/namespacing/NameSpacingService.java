@@ -97,7 +97,7 @@ public class NameSpacingService {
             // send to engine for get business role
             HashMap<String, String> args = new HashMap<>();
             args.put("boidlist", boid);
-            String involveBRs = GlobalContext.Interaction.Send(routerSchedulerService.getRandomBOEngineLocation() + LocationContext.URL_BOENGINE_SERIALIZEBO, args, "");
+            String involveBRs = GlobalContext.Interaction.Send(routerSchedulerService.getBOEngineLocationByRandom() + LocationContext.URL_BOENGINE_SERIALIZEBO, args, "");
             return new AbstractMap.SimpleEntry<>(boid, involveBRs);
         } catch (Exception ex) {
             LogUtil.Log("Upload BO but exception occurred, " + ex, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, "");
@@ -293,7 +293,7 @@ public class NameSpacingService {
             // interaction with BO Engine
             HashMap<String, String> args = new HashMap<>();
             args.put("rtid", rtid);
-            GlobalContext.Interaction.Send(routerSchedulerService.getRandomBOEngineLocation() + LocationContext.URL_BOENGINE_START, args, rtid);
+            GlobalContext.Interaction.Send(routerSchedulerService.getBOEngineLocationByRandom() + LocationContext.URL_BOENGINE_START, args, rtid);
         } catch (Exception ex) {
             LogUtil.Log("Cannot interaction with BO Engine for RTID: " + rtid, NameSpacingService.class.getName(), LogUtil.LogLevelType.ERROR, rtid);
             throw ex;

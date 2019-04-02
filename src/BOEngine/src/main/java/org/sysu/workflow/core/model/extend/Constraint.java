@@ -33,6 +33,7 @@ public class Constraint extends ParamsContainer implements Serializable {
 
     /**
      * Generate descriptor for this constraint.
+     *
      * @return string descriptor
      */
     public String GenerateDescriptor(Evaluator evaluator, Context ctx) throws Exception {

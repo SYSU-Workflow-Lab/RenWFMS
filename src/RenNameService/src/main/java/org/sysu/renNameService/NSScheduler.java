@@ -3,6 +3,7 @@
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
 package org.sysu.renNameService;
+
 import org.springframework.stereotype.Component;
 import org.sysu.renCommon.utility.TimestampUtil;
 import org.sysu.renNameService.transaction.NameServiceTransaction;
@@ -34,6 +35,7 @@ public class NSScheduler implements Observer {
 
     /**
      * Schedule a name service transaction and process pending queue.
+     *
      * @param nst NameServiceTransaction instance
      */
     public Object Schedule(NameServiceTransaction nst) {
@@ -70,6 +72,7 @@ public class NSScheduler implements Observer {
 
     /**
      * Actually handle a name service transaction launching process by transaction tracker.
+     *
      * @param nst NameServiceTransaction instance
      */
     private void LaunchTransaction(NameServiceTransaction nst) {
@@ -78,6 +81,7 @@ public class NSScheduler implements Observer {
 
     /**
      * Synchronously handle a name service transaction launching process.
+     *
      * @param nst NameServiceTransaction instance
      * @return execution result
      */
@@ -97,7 +101,8 @@ public class NSScheduler implements Observer {
      * application calls an <tt>Observable</tt> object's
      * <code>notifyObservers</code> method to have all the object's
      * observers notified of the change.
-     * @param o the observable object.
+     *
+     * @param o   the observable object.
      * @param arg an argument passed to the <code>notifyObservers</code>
      */
     @Override
@@ -112,8 +117,7 @@ public class NSScheduler implements Observer {
                     if (result.get("execCode").equals(GlobalContext.TRANSACTION_EXECUTOR_SUCCESS)) {
                         LogUtil.Log(String.format("RoleMap NSTransaction is finished: %s (%s)", result.get("nsid"), result.get("action")),
                                 NSScheduler.class.getName(), (String) result.get("rtid"));
-                    }
-                    else {
+                    } else {
                         LogUtil.Log(String.format("RoleMap NSTransaction is failed: %s (%s)", result.get("nsid"), result.get("action")),
                                 NSScheduler.class.getName(), (String) result.get("rtid"));
                     }
@@ -123,8 +127,7 @@ public class NSScheduler implements Observer {
                     if (result.get("execCode").equals(GlobalContext.TRANSACTION_EXECUTOR_SUCCESS)) {
                         LogUtil.Log(String.format("NameSpacing NSTransaction is finished: %s (%s)", ns_nsid == null ? "" : ns_nsid, result.get("action")),
                                 NSScheduler.class.getName(), (String) result.get("rtid"));
-                    }
-                    else {
+                    } else {
                         LogUtil.Log(String.format("NameSpacing NSTransaction is failed: %s (%s)", ns_nsid == null ? "" : ns_nsid, result.get("action")),
                                 NSScheduler.class.getName(), (String) result.get("rtid"));
                     }

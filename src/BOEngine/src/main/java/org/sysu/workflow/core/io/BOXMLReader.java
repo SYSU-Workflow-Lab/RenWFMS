@@ -270,9 +270,9 @@ public final class BOXMLReader {
     private static final String ATTR_BOO_INSTANCESEXPR = "instancesExpr";
     private static final String ATTR_BOO_IDEXPR = "idExpr";
     /*send extend*/
-    private static final String ATTR_BOO_MESSAGEMODE="messageMode";
-    private static final String ATTR_BOO_TARGETNAME="targetName";
-    private static final String ATTR_BOO_TARGETSTATE="targetState";
+    private static final String ATTR_BOO_MESSAGEMODE = "messageMode";
+    private static final String ATTR_BOO_TARGETNAME = "targetName";
+    private static final String ATTR_BOO_TARGETSTATE = "targetState";
     /*task extend*/
     private static final String ATTR_BOO_BROLE = "brole";
     private static final String ATTR_BOO_ON = "on";
@@ -601,11 +601,10 @@ public final class BOXMLReader {
         // handle inheritable context
         String baseBOName = scxml.getBaseBusinessObjectName();
         if (baseBOName != null && baseBOName.length() > 0) {
-            try{
+            try {
                 InheritableContext inheritor = BOInheritHandler.InheritConnect(scxml, scxml.getBaseBusinessObjectName());
                 scxml.setInheritedContext(inheritor);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -1059,7 +1058,7 @@ public final class BOXMLReader {
         List<Data> dm_current = dm.getData();//获取当前实例化的BO的Data List
         //获取InheritableContext中的Data List
         InheritableContext inheritableContext = scxml.getInheritedContext();
-        if(inheritableContext != null) {
+        if (inheritableContext != null) {
             Datamodel dm_inherit = inheritableContext.getInheritedDatamodel();
             if (dm_inherit.getData() != null) {
                 //基类继承父类的datamodel
@@ -1079,7 +1078,7 @@ public final class BOXMLReader {
         }
 
         dm = new Datamodel();
-        for(Data d:dm_current){
+        for (Data d : dm_current) {
             dm.addData(d);
         }
 
@@ -1099,7 +1098,7 @@ public final class BOXMLReader {
      *                            errors in the SCXML document that may not be identified by the schema).
      */
     private static void readTasks(final XMLStreamReader reader, final Configuration configuration,
-                                      final SCXML scxml, final TransitionalState parent)
+                                  final SCXML scxml, final TransitionalState parent)
             throws XMLStreamException, ModelException {
         Tasks tasks = new Tasks();
 
@@ -1114,7 +1113,7 @@ public final class BOXMLReader {
                     if (XMLNS_SCXML.equals(nsURI)) {
                         if (ELEM_BOO_TASK.equals(name)) {
                             readTask(reader, configuration, tasks);
-                        } else if(ELEM_BOO_SUBPROCESS.equals(name)) {
+                        } else if (ELEM_BOO_SUBPROCESS.equals(name)) {
                             readSubProcess(reader, configuration, tasks);
                         } else {
                             reportIgnoredElement(reader, configuration, ELEM_BOO_TASKS, nsURI, name);
@@ -1137,43 +1136,43 @@ public final class BOXMLReader {
 
         //获取InheritableContext中的task列表和subprocess列表
         InheritableContext inheritableContext = scxml.getInheritedContext();
-        if(inheritableContext != null){
+        if (inheritableContext != null) {
             Tasks tks_inherit = inheritableContext.getInheritedTasks();
             List<Task> task_inherit = tks_inherit.getTaskList();
             List<SubProcess> process_inherit = tks_inherit.getProcessList();
             //将子类的Tasks更新到InheritableContext的Tasks列表中
-            for(Task task:task_current){
+            for (Task task : task_current) {
                 boolean temp = false;
-                for(int i = 0; i < task_inherit.size();i++){
-                    if(task_inherit.get(i).getName().equals(task.getName())) {
+                for (int i = 0; i < task_inherit.size(); i++) {
+                    if (task_inherit.get(i).getName().equals(task.getName())) {
                         task_inherit.set(i, task);
                         temp = true;
                         break;
                     }
                 }
-                if(!temp){
+                if (!temp) {
                     task_inherit.add(task);
                 }
             }
-            for(SubProcess sp:process_current){
+            for (SubProcess sp : process_current) {
                 boolean temp = false;
-                for(int i = 0; i < process_inherit.size();i++){
-                    if(process_inherit.get(i).getName().equals(sp.getName())) {
+                for (int i = 0; i < process_inherit.size(); i++) {
+                    if (process_inherit.get(i).getName().equals(sp.getName())) {
                         process_inherit.set(i, sp);
                         temp = true;
                         break;
                     }
                 }
-                if(!temp){
+                if (!temp) {
                     process_inherit.add(sp);
                 }
             }
 
             Tasks tks = new Tasks();
-            for(Task task:task_inherit){
+            for (Task task : task_inherit) {
                 tks.addTask(task);
             }
-            for(SubProcess sp:process_inherit){
+            for (SubProcess sp : process_inherit) {
                 tks.addProcess(sp);
             }
             inheritableContext.setInheritedTasks(tks);
@@ -1195,7 +1194,7 @@ public final class BOXMLReader {
      *                            errors in the SCXML document that may not be identified by the schema).
      */
     private static void readResources(final XMLStreamReader reader, final Configuration configuration,
-                                  final SCXML scxml, final TransitionalState parent)
+                                      final SCXML scxml, final TransitionalState parent)
             throws XMLStreamException, ModelException {
         Resources resources = new Resources();
 
@@ -1212,8 +1211,7 @@ public final class BOXMLReader {
                             readResource(reader, configuration, resources);
                         } else if (ELEM_BOO_ROLE.equals(name)) {
                             readRole(reader, configuration, resources);
-                        }
-                        else {
+                        } else {
                             reportIgnoredElement(reader, configuration, ELEM_BOO_RESOURCES, nsURI, name);
                         }
                     } else {
@@ -1274,17 +1272,13 @@ public final class BOXMLReader {
                     if (XMLNS_SCXML.equals(nsURI)) {
                         if (ELEM_PARAM.equals(name)) {
                             readParam(reader, configuration, tk);
-                        }
-                        else if (ELEM_BOO_PRINCIPLE.equals(name)) {
+                        } else if (ELEM_BOO_PRINCIPLE.equals(name)) {
                             readPrinciple(reader, configuration, tk);
-                        }
-                        else if (ELEM_BOO_CALLBACK.equals(name)) {
+                        } else if (ELEM_BOO_CALLBACK.equals(name)) {
                             readCallback(reader, configuration, tk);
-                        }
-                        else if (ELEM_BOO_DOCUMENTATION.equals(name)) {
+                        } else if (ELEM_BOO_DOCUMENTATION.equals(name)) {
                             readDocumentation(reader, configuration, tk);
-                        }
-                        else {
+                        } else {
                             reportIgnoredElement(reader, configuration, ELEM_BOO_TASK, nsURI, name);
                         }
                     } else {
@@ -1370,8 +1364,7 @@ public final class BOXMLReader {
                     if (XMLNS_SCXML.equals(nsURI)) {
                         if (ELEM_PARAM.equals(name)) {
                             readParam(reader, configuration, pr);
-                        }
-                        else if (ELEM_BOO_CONSTRAINT.equals(name)) {
+                        } else if (ELEM_BOO_CONSTRAINT.equals(name)) {
                             readConstraint(reader, configuration, pr);
                         } else {
                             reportIgnoredElement(reader, configuration, ELEM_BOO_PRINCIPLE, nsURI, name);
@@ -1414,8 +1407,7 @@ public final class BOXMLReader {
                     if (XMLNS_SCXML.equals(nsURI)) {
                         if (ELEM_PARAM.equals(name)) {
                             readParam(reader, configuration, constraint);
-                        }
-                        else {
+                        } else {
                             reportIgnoredElement(reader, configuration, ELEM_BOO_CONSTRAINT, nsURI, name);
                         }
                     } else {
@@ -1439,7 +1431,7 @@ public final class BOXMLReader {
      * @param reader        The {@link XMLStreamReader} providing the SCXML document to parse.
      * @param configuration The {@link Configuration} to use while parsing.
      * @param tasks         The parent {@link Tasks} for this subprocess.
-     * @throws XMLStreamException   An exception processing the underlying {@link XMLStreamReader}.
+     * @throws XMLStreamException An exception processing the underlying {@link XMLStreamReader}.
      * @throws ModelException
      */
     private static void readSubProcess(final XMLStreamReader reader, final Configuration configuration, final Tasks tasks)
@@ -2204,9 +2196,9 @@ public final class BOXMLReader {
         }
         readNamespaces(configuration, send);
 
-        send.setMessageMode(readAV(reader,ATTR_BOO_MESSAGEMODE));
-        send.setTargetName(readAV(reader,ATTR_BOO_TARGETNAME));
-        send.setTargetState(readAV(reader,ATTR_BOO_TARGETSTATE));
+        send.setMessageMode(readAV(reader, ATTR_BOO_MESSAGEMODE));
+        send.setTargetName(readAV(reader, ATTR_BOO_TARGETNAME));
+        send.setTargetState(readAV(reader, ATTR_BOO_TARGETSTATE));
 
         loop:
         while (reader.hasNext()) {
@@ -2496,6 +2488,7 @@ public final class BOXMLReader {
 
     /**
      * Read newbo label content.
+     *
      * @param reader        The {@link XMLStreamReader} providing the SCXML document to parse.
      * @param configuration The {@link Configuration} to use while parsing.
      * @param executable    The parent {@link Executable} for this action.
@@ -3342,7 +3335,7 @@ public final class BOXMLReader {
         /**
          * Get the current namespaces at this point in the StAX reading.
          *
-         * @return Map<String,String> The namespace map (keys are prefixes and values are the corresponding current
+         * @return Map<String, String> The namespace map (keys are prefixes and values are the corresponding current
          * namespace URIs).
          */
         Map<String, String> getCurrentNamespaces() {

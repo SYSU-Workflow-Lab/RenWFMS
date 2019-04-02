@@ -43,14 +43,15 @@ public class LogController {
 
     /**
      * Get the log.
+     *
      * @param token
      * @param filter
      * @return
      */
-    @PostMapping(value = "/get", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/get", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel GetLog(@RequestParam(value="token", required = false)String token,
-                              @RequestParam(value="filter", required = false)String filter) {
+    public ReturnModel GetLog(@RequestParam(value = "token", required = false) String token,
+                              @RequestParam(value = "filter", required = false) String filter) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -69,8 +70,7 @@ public class LogController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("GetLog");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -83,18 +83,19 @@ public class LogController {
 
     /**
      * Add log.
+     *
      * @param token
      * @param type
      * @param event
      * @param timestamp
      * @return
      */
-    @PostMapping(value = "/add", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/add", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel AddLog(@RequestParam(value="token", required = false)String token,
-                              @RequestParam(value="type", required = false)String type,
-                              @RequestParam(value="event", required = false)String event,
-                              @RequestParam(value="timestamp", required = false)String timestamp) {
+    public ReturnModel AddLog(@RequestParam(value = "token", required = false) String token,
+                              @RequestParam(value = "type", required = false) String type,
+                              @RequestParam(value = "event", required = false) String event,
+                              @RequestParam(value = "timestamp", required = false) String timestamp) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -115,8 +116,7 @@ public class LogController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("AddLog");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -129,14 +129,15 @@ public class LogController {
 
     /**
      * Remove the log.
+     *
      * @param token
      * @param id
      * @return
      */
-    @PostMapping(value = "/remove", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/remove", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel RemoveLog(@RequestParam(value="token", required = false)String token,
-                                 @RequestParam(value="id", required = false)String id) {
+    public ReturnModel RemoveLog(@RequestParam(value = "token", required = false) String token,
+                                 @RequestParam(value = "id", required = false) String id) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -155,8 +156,7 @@ public class LogController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("RemoveLog");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -169,14 +169,15 @@ public class LogController {
 
     /**
      * Get workitem log.
+     *
      * @param token
      * @param filter
      * @return
      */
-    @PostMapping(value = "/getworkitem", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/getworkitem", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel GetWorkitemLog(@RequestParam(value="token", required = false)String token,
-                                      @RequestParam(value="filter", required = false)String filter) {
+    public ReturnModel GetWorkitemLog(@RequestParam(value = "token", required = false) String token,
+                                      @RequestParam(value = "filter", required = false) String filter) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -195,8 +196,7 @@ public class LogController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("GetWorkitemLog");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -209,14 +209,15 @@ public class LogController {
 
     /**
      * Get engine log.
+     *
      * @param token
      * @param filter
      * @return
      */
-    @PostMapping(value = "/getengine", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/getengine", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel GetEngineLog(@RequestParam(value="token", required = false)String token,
-                                    @RequestParam(value="filter", required = false)String filter) {
+    public ReturnModel GetEngineLog(@RequestParam(value = "token", required = false) String token,
+                                    @RequestParam(value = "filter", required = false) String filter) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -235,8 +236,7 @@ public class LogController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("GetEngineLog");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -249,14 +249,15 @@ public class LogController {
 
     /**
      * Get resource log.
+     *
      * @param token
      * @param id
      * @return
      */
-    @PostMapping(value = "/getresource", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/getresource", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel GetResourceLog(@RequestParam(value="token", required = false)String token,
-                                      @RequestParam(value="id", required = false)String id) {
+    public ReturnModel GetResourceLog(@RequestParam(value = "token", required = false) String token,
+                                      @RequestParam(value = "id", required = false) String id) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -275,8 +276,7 @@ public class LogController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("GetResourceLog");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -289,14 +289,15 @@ public class LogController {
 
     /**
      * Get scheduling log.
+     *
      * @param token
      * @param rsid
      * @return
      */
-    @PostMapping(value = "/getscheduling", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/getscheduling", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel GetSchedulingLog(@RequestParam(value="token", required = false)String token,
-                                        @RequestParam(value="rsid", required = false)String rsid) {
+    public ReturnModel GetSchedulingLog(@RequestParam(value = "token", required = false) String token,
+                                        @RequestParam(value = "rsid", required = false) String rsid) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -315,8 +316,7 @@ public class LogController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("GetSchedulingLog");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -329,12 +329,13 @@ public class LogController {
 
     /**
      * Flush the log to disk.
+     *
      * @param token
      * @return
      */
-    @PostMapping(value = "/flush", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/flush", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel FlushLog(@RequestParam(value="token", required = false)String token) {
+    public ReturnModel FlushLog(@RequestParam(value = "token", required = false) String token) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -352,8 +353,7 @@ public class LogController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("FlushLog");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 
@@ -366,12 +366,13 @@ public class LogController {
 
     /**
      * Synchronize the log.
+     *
      * @param token
      * @return
      */
-    @PostMapping(value = "/sync", produces = { "application/json", "application/xml"})
+    @PostMapping(value = "/sync", produces = {"application/json", "application/xml"})
     @ResponseBody
-    public ReturnModel SyncLog(@RequestParam(value="token", required = false)String token) {
+    public ReturnModel SyncLog(@RequestParam(value = "token", required = false) String token) {
         ReturnModel rnModel = new ReturnModel();
 
         try {
@@ -389,8 +390,7 @@ public class LogController {
                 ReturnElement returnElement = new ReturnElement();
                 returnElement.setData("SyncLog");
                 rnModel.setReturnElement(returnElement);
-            }
-            else {
+            } else {
                 rnModel = UnauthorizeHandlerFunction();
             }
 

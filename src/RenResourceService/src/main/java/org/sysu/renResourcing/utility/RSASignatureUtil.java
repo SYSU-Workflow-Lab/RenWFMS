@@ -19,6 +19,7 @@ import java.security.spec.X509EncodedKeySpec;
 public class RSASignatureUtil {
     /**
      * Generate a pair of RSA key.
+     *
      * @return Key pair instance
      */
     public static KeyPair GenerateKeyPair() {
@@ -26,8 +27,7 @@ public class RSASignatureUtil {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(KEY_ALGORITHM);
             keyPairGenerator.initialize(1024);
             return keyPairGenerator.generateKeyPair();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             LogUtil.Log("GenerateKeyPair but exception occurred, " + ex, RSASignatureUtil.class.getName(),
                     LogLevelType.ERROR, "");
             return null;
@@ -36,7 +36,8 @@ public class RSASignatureUtil {
 
     /**
      * Signature a data.
-     * @param data data to be signature in string
+     *
+     * @param data       data to be signature in string
      * @param privateKey signature using private key in Base64 string
      * @return signature data in Base64
      */
@@ -50,8 +51,7 @@ public class RSASignatureUtil {
             signature.initSign(priKey);
             signature.update(data.getBytes());
             return new String(Base64.encodeBase64(signature.sign()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             LogUtil.Log("Signature but exception occurred, " + ex, RSASignatureUtil.class.getName(),
                     LogLevelType.ERROR, "");
             return null;
@@ -60,9 +60,10 @@ public class RSASignatureUtil {
 
     /**
      * Verify a signature of its signed data.
-     * @param data data to be verify in string
+     *
+     * @param data      data to be verify in string
      * @param publicKey public key in Base64 string
-     * @param sign signature string
+     * @param sign      signature string
      * @return boolean of verify result
      */
     public static boolean Verify(String data, String publicKey, String sign) {
@@ -75,8 +76,7 @@ public class RSASignatureUtil {
             signature.initVerify(pubKey);
             signature.update(data.getBytes());
             return signature.verify(Base64.decodeBase64(sign));
-        }
-            catch (Exception ex) {
+        } catch (Exception ex) {
             LogUtil.Log("Verify but exception occurred, " + ex, RSASignatureUtil.class.getName(),
                     LogLevelType.ERROR, "");
             return false;
@@ -85,6 +85,7 @@ public class RSASignatureUtil {
 
     /**
      * Translate a Base64 string to URL safe Base64 string.
+     *
      * @param encodeBase64 Base64 string to be translated
      * @return URL safe string
      */
@@ -97,6 +98,7 @@ public class RSASignatureUtil {
 
     /**
      * Translate a URL safe Base64 string to original Base64 string.
+     *
      * @param safeBase64Str URL safe Base64 string
      * @return original Base64 string
      */

@@ -116,6 +116,7 @@ public class Invoke extends NamelistHolder implements PathResolverHolder, Conten
 
     /**
      * 返回idlocation
+     *
      * @return the idlocation
      */
     public String getIdlocation() {
@@ -295,6 +296,7 @@ public class Invoke extends NamelistHolder implements PathResolverHolder, Conten
 
     /**
      * 返回local context 变量名字，
+     *
      * @return The local context variable name under which the current BOXMLExecutionContext is provided to the Invoke
      */
     public String getCurrentSCXMLExecutionContextKey() {
@@ -333,6 +335,7 @@ public class Invoke extends NamelistHolder implements PathResolverHolder, Conten
 
     /**
      * 执行函数
+     *
      * @param axctx action执行上下文
      * @throws ModelException
      */

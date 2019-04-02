@@ -3,6 +3,7 @@
  * Rinkako, Ariana, Gordan. SYSU SDCS.
  */
 package org.sysu.renNameService.transaction;
+
 import org.springframework.stereotype.Service;
 import org.sysu.renNameService.GlobalContext;
 import org.sysu.renCommon.entity.RenNsTransactionEntity;
@@ -22,9 +23,10 @@ public class TransactionCreator {
 
     /**
      * Create a name service transaction package and save to entity.
-     * @param type transaction type
+     *
+     * @param type   transaction type
      * @param action action name
-     * @param args argument dictionary
+     * @param args   argument dictionary
      * @return {@code NameServiceTransaction} instance
      */
     public NameServiceTransaction Create(TransactionType type, String action, HashMap<String, String> args) {
@@ -47,8 +49,7 @@ public class TransactionCreator {
 //            LogUtil.Log(String.format("Name service transaction created: %s (%s, %s)", nsid, type.name(), action),
 //                    TransactionCreator.class.getName(), rtid == null ? "" : rtid);
             return nst;
-        }
-        finally {
+        } finally {
 //            HibernateUtil.CloseLocalSession();
         }
     }

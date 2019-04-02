@@ -48,6 +48,7 @@ public final class RPrinciple implements Serializable {
 
     /**
      * Get distribution type of task.
+     *
      * @return distribution type enum
      */
     public WorkitemDistributionType getDistributionType() {
@@ -56,6 +57,7 @@ public final class RPrinciple implements Serializable {
 
     /**
      * Get distributor name of task.
+     *
      * @return name of distributor to be reflection created
      */
     public String getDistributorName() {
@@ -64,6 +66,7 @@ public final class RPrinciple implements Serializable {
 
     /**
      * Get filter condition of task.
+     *
      * @return filter condition map
      */
     public HashMap getDistributorArgsMap() {
@@ -72,6 +75,7 @@ public final class RPrinciple implements Serializable {
 
     /**
      * Add a constraint to principle.
+     *
      * @param constraintName constraint name
      * @param constraintArgs argument dictionary
      */
@@ -82,7 +86,8 @@ public final class RPrinciple implements Serializable {
 
     /**
      * Set parsed principle data.
-     * @param type distribution type enum
+     *
+     * @param type            distribution type enum
      * @param distributorName distributor name for reflect instance generated
      * @param distributorArgs filter arguments map
      */

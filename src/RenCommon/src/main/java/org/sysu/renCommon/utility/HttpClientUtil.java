@@ -22,8 +22,9 @@ import java.util.Map;
 public class HttpClientUtil {
     /**
      * Send HTTP request by GET method.
+     *
      * @param sendUrl url to send
-     * @param rtid process rtid
+     * @param rtid    process rtid
      * @return response string
      */
     public static String SendGet(String sendUrl, String rtid) throws Exception {
@@ -43,14 +44,12 @@ public class HttpClientUtil {
                 sb.append(line);
             }
             return sb.toString();
-        }
-        finally {
+        } finally {
             try {
                 if (in != null) {
                     in.close();
                 }
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 // nothing
             }
         }
@@ -59,9 +58,10 @@ public class HttpClientUtil {
     /**
      * Send HTTP request by POST method.
      * NOTICE DO NOT use this method directly, instead use {@code InteractionRouter}
+     *
      * @param sendUrl url to send
-     * @param args arguments to be encoded
-     * @param rtid process rtid
+     * @param args    arguments to be encoded
+     * @param rtid    process rtid
      * @return response string
      */
     public static String SendPost(String sendUrl, Map<String, String> args, String rtid) throws Exception {
