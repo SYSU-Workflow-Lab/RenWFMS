@@ -13,7 +13,7 @@ import org.sysu.renCommon.enums.WorkitemStatusType;
 import org.sysu.renCommon.utility.SerializationUtil;
 import org.sysu.renCommon.utility.TimestampUtil;
 import org.sysu.renResourcing.GlobalContext;
-import org.sysu.renResourcing.consistency.ContextCachePool;
+import org.sysu.renResourcing.consistency.ContextLockManager;
 import org.sysu.renResourcing.context.TaskContext;
 import org.sysu.renResourcing.context.WorkitemContext;
 import org.sysu.renResourcing.dao.RenBoEntityDAO;
@@ -130,13 +130,24 @@ public class WorkitemContextService {
     public ArrayList<HashMap<String, String>> GenerateResponseWorkitems(ArrayList<WorkitemContext> wList, boolean onlyActive) {
         ArrayList<HashMap<String, String>> retList = new ArrayList<>();
         for (WorkitemContext workitem : wList) {
-            String status = workitem.getEntity().getStatus();
-            if (onlyActive && (status.equals(WorkitemStatusType.Complete.name())
-                    || status.equals(WorkitemStatusType.ForcedComplete.name())
-                    || status.equals(WorkitemStatusType.Discarded.name()))) {
+            boolean isLock = ContextLockManager.ReadTryLock(workitem.getClass(), workitem.getEntity().getWid());
+            if (onlyActive && !isLock) {
+                System.out.println(workitem.getEntity().getWid() + "get read lock failed!!!");
                 continue;
             }
-            retList.add(this.GenerateResponseWorkitem(workitem));
+            try {
+                // 再次获取workitem状态数据
+                String status = renWorkitemEntityDAO.findByWid(workitem.getEntity().getWid()).getStatus();
+                if (onlyActive && (status.equals(WorkitemStatusType.Complete.name())
+                        || status.equals(WorkitemStatusType.ForcedComplete.name())
+                        || status.equals(WorkitemStatusType.Discarded.name()))) {
+                    continue;
+                }
+                retList.add(this.GenerateResponseWorkitem(workitem));
+            }
+            finally {
+                ContextLockManager.ReadUnLock(workitem.getClass(), workitem.getEntity().getWid());
+            }
         }
         return retList;
     }
@@ -147,7 +158,6 @@ public class WorkitemContextService {
      * @param rtid process rtid
      * @return ArrayList of workitem context
      */
-    @Transactional(rollbackFor = Exception.class)
     public ArrayList<WorkitemContext> GetContextRTID(String rtid) {
         ArrayList<WorkitemContext> retList = new ArrayList<>();
         try {
@@ -157,7 +167,6 @@ public class WorkitemContextService {
             }
             return retList;
         } catch (Exception ex) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return null;
         }
     }
@@ -168,7 +177,6 @@ public class WorkitemContextService {
      * @param domain domain name
      * @return ArrayList of workitem context
      */
-    @Transactional(rollbackFor = Exception.class)
     public ArrayList<WorkitemContext> GetContextInDomain(String domain) {
         ArrayList<WorkitemContext> retList = new ArrayList<>();
         try {
@@ -178,7 +186,6 @@ public class WorkitemContextService {
             }
             return retList;
         } catch (Exception ex) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return null;
         }
     }
@@ -189,28 +196,7 @@ public class WorkitemContextService {
      * @param wid workitem global id
      * @return workitem context
      */
-    @Transactional(rollbackFor = Exception.class)
     public WorkitemContext GetContext(String wid, String rtid) {
-        return this.GetContext(wid, rtid, false);
-//        return null;
-    }
-
-    /**
-     * Get an exist workitem context.
-     *
-     * @param wid         workitem global id
-     * @param rtid        process rtid
-     * @param forceReload force reload from entity and refresh cache
-     * @return workitem context
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public WorkitemContext GetContext(String wid, String rtid, boolean forceReload) {
-        WorkitemContext cachedCtx = ContextCachePool.Retrieve(WorkitemContext.class, wid);
-        // fetch cache
-        if (cachedCtx != null && !forceReload) {
-            return cachedCtx;
-        }
-        boolean cmtFlag = false;
         try {
             RenWorkitemEntity rwe = renWorkitemEntityDAO.findByWid(wid);
             if (rwe == null) {
@@ -222,17 +208,12 @@ public class WorkitemContextService {
             String boId = rte.getBoid();
             RenBoEntity rbe = renBoEntityDAO.findByBoId(boId);
             String boName = rbe.getBoName();
-            cmtFlag = true;
             WorkitemContext retCtx = new WorkitemContext();
             retCtx.setEntity(rwe);
             retCtx.setArgsDict(SerializationUtil.JsonDeserialization(rwe.getArguments(), HashMap.class));
             retCtx.setTaskContext(taskContextService.GetContext(rwe.getRtid(), boName, taskName));
-            ContextCachePool.AddOrUpdate(wid, retCtx);
             return retCtx;
         } catch (Exception ex) {
-            if (!cmtFlag) {
-//                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            }
             LogUtil.Log("Get workitem context but exception occurred, " + ex,
                     WorkitemContextService.class.getName(), LogLevelType.ERROR, rtid);
             throw ex;

@@ -128,7 +128,7 @@ CREATE TABLE `ren_human` (
 -- ----------------------------
 -- Records of ren_human
 -- ----------------------------
-INSERT INTO `ren_human` VALUES ('Human_868c2791-24db-11e8-af0e-2c4d54f01cf2', 'User', '', '', '');
+INSERT INTO `ren_human` VALUES ('Human_868c2791-24db-11e8-af0e-2c4d54f01cf2', 'Bob', '', '', '');
 
 -- ----------------------------
 -- Table structure for `ren_log`

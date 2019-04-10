@@ -104,82 +104,87 @@ public class InterfaceB {
 
         // generate workitem
         WorkitemContext workitem = workitemContextService.GenerateContext(taskContext, ctx.getRtid(), (HashMap) ctx.getArgs().get("taskArgumentsVector"), nodeId);
+        ContextLockManager.WriteLock(WorkitemContext.class, workitem.getEntity().getWid());
 
-        // parse resourcing principle
-        RPrinciple principle = PrincipleParser.Parse(taskContext.getPrinciple());
-        if (principle == null) {
-            LogUtil.Log(String.format("Cannot parse principle %s", taskContext.getPrinciple()), InterfaceB.class.getName(),
-                    LogLevelType.ERROR, ctx.getRtid());
-            interfaceX.PrincipleParseFailedRedirectToDomainPool(workitem);
-            return;
-        }
-        // get valid resources
-        HashSet<ParticipantContext> validParticipants = interfaceO.GetParticipantByBRole(ctx.getRtid(), taskContext.getBrole());
-        if (validParticipants.isEmpty()) {
-            LogUtil.Log("A task cannot be allocated to any valid resources, so it will be put into admin unoffered queue.",
-                    InterfaceB.class.getName(), LogLevelType.WARNING, ctx.getRtid());
-            // move workitem to admin unoffered queue
-            WorkQueueContainer adminContainer = workQueueContainerService.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + domain);
-            adminContainer.AddToQueue(workitem, WorkQueueType.UNOFFERED);
-            return;
-        }
-        switch (principle.getDistributionType()) {
-            case Allocate:
-                // create an allocate interaction
-                AllocateInteractionExecutor allocateInteraction = new AllocateInteractionExecutor(
-                        taskContext.getTaskId(), InitializationByType.SYSTEM_INITIATED);
-                // create an allocator for task principle
-                allocateInteraction.BindingAllocator(principle, ctx.getRstid(), ctx.getRtid());
-                // do allocate to select a participant for handle this workitem
-                ParticipantContext chosenOne = allocateInteraction.PerformAllocation(validParticipants, workitem);
-                // put workitem to the chosen participant allocated queue
-                WorkQueueContainer container = workQueueContainerService.GetContext(chosenOne.getWorkerId());
-                container.AddToQueue(workitem, WorkQueueType.ALLOCATED);
-                // change workitem status
-                workitem.getEntity().setFiringTime(TimestampUtil.GetCurrentTimestamp());
-                this.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Allocated, null);
-                // notify if agent
-                if (chosenOne.getWorkerType() == WorkerType.Agent) {
-                    AgentNotifyPlugin allocateAnp = new AgentNotifyPlugin();
-                    HashMap<String, String> allocateNotifyMap = new HashMap<>(workitemContextService.GenerateResponseWorkitem(workitem));
-                    allocateAnp.AddNotification(chosenOne, allocateNotifyMap, ctx.getRtid());
-                    AsyncPluginRunner.AsyncRun(allocateAnp);
-                }
-                assistantService.increaseWorkitemCountByRtid(ctx.getRtid());
-                break;
-            case Offer:
-                // create a filter interaction
-                OfferInteractionExecutor offerInteraction = new OfferInteractionExecutor(
-                        taskContext.getTaskId(), InitializationByType.SYSTEM_INITIATED);
-                // create a filter for task principle
-                offerInteraction.BindingFilter(principle, ctx.getRstid(), ctx.getRtid());
-                // do filter to select a set of participants for this workitem
-                Set<ParticipantContext> chosenSet = offerInteraction.PerformOffer(validParticipants, workitem);
-                // put workitem to chosen participants offered queue
-                AgentNotifyPlugin offerAnp = new AgentNotifyPlugin();
-                HashMap<String, String> offerNotifyMap = new HashMap<>(workitemContextService.GenerateResponseWorkitem(workitem));
-                for (ParticipantContext oneInSet : chosenSet) {
-                    WorkQueueContainer oneInSetContainer = workQueueContainerService.GetContext(oneInSet.getWorkerId());
-                    oneInSetContainer.AddToQueue(workitem, WorkQueueType.OFFERED);
+        try {
+            // parse resourcing principle
+            RPrinciple principle = PrincipleParser.Parse(taskContext.getPrinciple());
+            if (principle == null) {
+                LogUtil.Log(String.format("Cannot parse principle %s", taskContext.getPrinciple()), InterfaceB.class.getName(),
+                        LogLevelType.ERROR, ctx.getRtid());
+                interfaceX.PrincipleParseFailedRedirectToDomainPool(workitem);
+                return;
+            }
+            // get valid resources
+            HashSet<ParticipantContext> validParticipants = interfaceO.GetParticipantByBRole(ctx.getRtid(), taskContext.getBrole());
+            if (validParticipants.isEmpty()) {
+                LogUtil.Log("A task cannot be allocated to any valid resources, so it will be put into admin unoffered queue.",
+                        InterfaceB.class.getName(), LogLevelType.WARNING, ctx.getRtid());
+                // move workitem to admin unoffered queue
+                WorkQueueContainer adminContainer = workQueueContainerService.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + domain);
+                adminContainer.AddToQueue(workitem, WorkQueueType.UNOFFERED);
+                return;
+            }
+            switch (principle.getDistributionType()) {
+                case Allocate:
+                    // create an allocate interaction
+                    AllocateInteractionExecutor allocateInteraction = new AllocateInteractionExecutor(
+                            taskContext.getTaskId(), InitializationByType.SYSTEM_INITIATED);
+                    // create an allocator for task principle
+                    allocateInteraction.BindingAllocator(principle, ctx.getRstid(), ctx.getRtid());
+                    // do allocate to select a participant for handle this workitem
+                    ParticipantContext chosenOne = allocateInteraction.PerformAllocation(validParticipants, workitem);
+                    // put workitem to the chosen participant allocated queue
+                    WorkQueueContainer container = workQueueContainerService.GetContext(chosenOne.getWorkerId());
+                    container.AddToQueue(workitem, WorkQueueType.ALLOCATED);
+                    // change workitem status
+                    workitem.getEntity().setFiringTime(TimestampUtil.GetCurrentTimestamp());
+                    this.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Allocated, null);
                     // notify if agent
-                    if (oneInSet.getWorkerType() == WorkerType.Agent) {
-                        offerAnp.AddNotification(oneInSet, offerNotifyMap, ctx.getRtid());
+                    if (chosenOne.getWorkerType() == WorkerType.Agent) {
+                        AgentNotifyPlugin allocateAnp = new AgentNotifyPlugin();
+                        HashMap<String, String> allocateNotifyMap = new HashMap<>(workitemContextService.GenerateResponseWorkitem(workitem));
+                        allocateAnp.AddNotification(chosenOne, allocateNotifyMap, ctx.getRtid());
+                        AsyncPluginRunner.AsyncRun(allocateAnp);
                     }
-                }
-                // change workitem status
-                workitem.getEntity().setFiringTime(TimestampUtil.GetCurrentTimestamp());
-                this.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Offered, null);
-                // do notify
-                if (offerAnp.Count(ctx.getRtid()) > 0) {
-                    AsyncPluginRunner.AsyncRun(offerAnp);
-                }
-                assistantService.increaseWorkitemCountByRtid(ctx.getRtid());
-                break;
-            case AutoAllocateIfOfferFailed:
-                // todo not implementation
-                break;
-            default:
-                throw new IllegalArgumentException();
+                    assistantService.increaseWorkitemCountByRtid(ctx.getRtid());
+                    break;
+                case Offer:
+                    // create a filter interaction
+                    OfferInteractionExecutor offerInteraction = new OfferInteractionExecutor(
+                            taskContext.getTaskId(), InitializationByType.SYSTEM_INITIATED);
+                    // create a filter for task principle
+                    offerInteraction.BindingFilter(principle, ctx.getRstid(), ctx.getRtid());
+                    // do filter to select a set of participants for this workitem
+                    Set<ParticipantContext> chosenSet = offerInteraction.PerformOffer(validParticipants, workitem);
+                    // put workitem to chosen participants offered queue
+                    AgentNotifyPlugin offerAnp = new AgentNotifyPlugin();
+                    HashMap<String, String> offerNotifyMap = new HashMap<>(workitemContextService.GenerateResponseWorkitem(workitem));
+                    for (ParticipantContext oneInSet : chosenSet) {
+                        WorkQueueContainer oneInSetContainer = workQueueContainerService.GetContext(oneInSet.getWorkerId());
+                        oneInSetContainer.AddToQueue(workitem, WorkQueueType.OFFERED);
+                        // notify if agent
+                        if (oneInSet.getWorkerType() == WorkerType.Agent) {
+                            offerAnp.AddNotification(oneInSet, offerNotifyMap, ctx.getRtid());
+                        }
+                    }
+                    // change workitem status
+                    workitem.getEntity().setFiringTime(TimestampUtil.GetCurrentTimestamp());
+                    this.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Offered, null);
+                    // do notify
+                    if (offerAnp.Count(ctx.getRtid()) > 0) {
+                        AsyncPluginRunner.AsyncRun(offerAnp);
+                    }
+                    assistantService.increaseWorkitemCountByRtid(ctx.getRtid());
+                    break;
+                case AutoAllocateIfOfferFailed:
+                    // todo not implementation
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+            }
+        } finally {
+            ContextLockManager.WriteUnLock(WorkitemContext.class, workitem.getEntity().getWid());
         }
     }
 
@@ -289,7 +294,6 @@ public class InterfaceB {
      * @param payload     payload in JSON encoded string
      * @return true for a successful workitem start
      */
-    @Transactional(rollbackFor = Exception.class)
     public boolean StartWorkitem(ParticipantContext participant, WorkitemContext workitem, String payload) {
         try {
             WorkQueueContainer container = workQueueContainerService.GetContext(participant.getWorkerId());
@@ -505,19 +509,13 @@ public class InterfaceB {
      * @param notify             whether need to process callback and hook
      */
     private void WorkitemChanged(WorkitemContext workitem, WorkitemStatusType toStatus, WorkitemResourcingStatusType toResourcingStatus, String payload, boolean notify) {
-        // refresh changed to entity
-        ContextLockManager.WriteLock(workitem.getClass(), workitem.getEntity().getWid());
-        try {
-            if (toStatus != null) {
-                workitem.getEntity().setStatus(toStatus.name());
-            }
-            if (toResourcingStatus != null) {
-                workitem.getEntity().setResourceStatus(toResourcingStatus.name());
-            }
-            workitemContextService.SaveToSteady(workitem);
-        } finally {
-            ContextLockManager.WriteUnLock(workitem.getClass(), workitem.getEntity().getWid());
+        if (toStatus != null) {
+            workitem.getEntity().setStatus(toStatus.name());
         }
+        if (toResourcingStatus != null) {
+            workitem.getEntity().setResourceStatus(toResourcingStatus.name());
+        }
+        workitemContextService.SaveToSteady(workitem);
         // handle callbacks and hooks
         if (notify) {
             try {

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.sysu.renResourcing.RScheduler;
 import org.sysu.renCommon.enums.RServiceType;
+import org.sysu.renResourcing.consistency.ContextLockManager;
 import org.sysu.renResourcing.context.ResourcingContext;
 import org.sysu.renResourcing.context.WorkitemContext;
 import org.sysu.renCommon.dto.ReturnModel;
@@ -77,12 +78,17 @@ public class WorkitemController {
                 args.put("payload", payload);
             }
             ResourcingContext rCtx = resourcingContextService.GetContext(null, workitem.getEntity().getRtid(), RServiceType.StartWorkitem, args);
+            if (rCtx != null) {
+                ContextLockManager.WriteLock(WorkitemContext.class, workitemId);
+            }
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
 
         } catch (Exception e) {
             ReturnModelHelper.ExceptionResponse(rnModel, e.getClass().getName());
+        } finally {
+            ContextLockManager.WriteUnLock(WorkitemContext.class, workitemId);
         }
         return rnModel;
     }
@@ -119,12 +125,17 @@ public class WorkitemController {
             }
             ResourcingContext rCtx = resourcingContextService.GetContext(null, workitem.getEntity().getRtid(),
                     RServiceType.AcceptWorkitem, args);
+            if (rCtx != null) {
+                ContextLockManager.WriteLock(WorkitemContext.class, workitemId);
+            }
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
 
         } catch (Exception e) {
             ReturnModelHelper.ExceptionResponse(rnModel, e.getClass().getName());
+        } finally {
+            ContextLockManager.WriteUnLock(WorkitemContext.class, workitemId);
         }
         return rnModel;
     }
@@ -161,12 +172,17 @@ public class WorkitemController {
             }
             ResourcingContext rCtx = resourcingContextService.GetContext(null, workitem.getEntity().getRtid(),
                     RServiceType.AcceptAndStartWorkitem, args);
+            if (rCtx != null) {
+                ContextLockManager.WriteLock(WorkitemContext.class, workitemId);
+            }
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
 
         } catch (Exception e) {
             ReturnModelHelper.ExceptionResponse(rnModel, e.getClass().getName());
+        } finally {
+            ContextLockManager.WriteUnLock(WorkitemContext.class, workitemId);
         }
         return rnModel;
     }
@@ -203,12 +219,17 @@ public class WorkitemController {
             }
             ResourcingContext rCtx = resourcingContextService.GetContext(null, workitem.getEntity().getRtid(),
                     RServiceType.CompleteWorkitem, args);
+            if (rCtx != null) {
+                ContextLockManager.WriteLock(WorkitemContext.class, workitemId);
+            }
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
 
         } catch (Exception e) {
             ReturnModelHelper.ExceptionResponse(rnModel, e.getClass().getName());
+        } finally {
+            ContextLockManager.WriteUnLock(WorkitemContext.class, workitemId);
         }
         return rnModel;
     }
@@ -245,12 +266,17 @@ public class WorkitemController {
             }
             ResourcingContext rCtx = resourcingContextService.GetContext(null, workitem.getEntity().getRtid(),
                     RServiceType.SuspendWorkitem, args);
+            if (rCtx != null) {
+                ContextLockManager.WriteLock(WorkitemContext.class, workitemId);
+            }
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
 
         } catch (Exception e) {
             ReturnModelHelper.ExceptionResponse(rnModel, e.getClass().getName());
+        } finally {
+            ContextLockManager.WriteUnLock(WorkitemContext.class, workitemId);
         }
         return rnModel;
     }
@@ -287,12 +313,17 @@ public class WorkitemController {
             }
             ResourcingContext rCtx = resourcingContextService.GetContext(null, workitem.getEntity().getRtid(),
                     RServiceType.UnsuspendWorkitem, args);
+            if (rCtx != null) {
+                ContextLockManager.WriteLock(WorkitemContext.class, workitemId);
+            }
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
 
         } catch (Exception e) {
             ReturnModelHelper.ExceptionResponse(rnModel, e.getClass().getName());
+        } finally {
+            ContextLockManager.WriteUnLock(WorkitemContext.class, workitemId);
         }
         return rnModel;
     }
@@ -329,12 +360,17 @@ public class WorkitemController {
             }
             ResourcingContext rCtx = resourcingContextService.GetContext(null, workitem.getEntity().getRtid(),
                     RServiceType.SkipWorkitem, args);
+            if (rCtx != null) {
+                ContextLockManager.WriteLock(WorkitemContext.class, workitemId);
+            }
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
 
         } catch (Exception e) {
             ReturnModelHelper.ExceptionResponse(rnModel, e.getClass().getName());
+        } finally {
+            ContextLockManager.WriteUnLock(WorkitemContext.class, workitemId);
         }
         return rnModel;
     }
@@ -371,12 +407,17 @@ public class WorkitemController {
             }
             ResourcingContext rCtx = resourcingContextService.GetContext(null, workitem.getEntity().getRtid(),
                     RServiceType.ReallocateWorkitem, args);
+            if (rCtx != null) {
+                ContextLockManager.WriteLock(WorkitemContext.class, workitemId);
+            }
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
 
         } catch (Exception e) {
             ReturnModelHelper.ExceptionResponse(rnModel, e.getClass().getName());
+        } finally {
+            ContextLockManager.WriteUnLock(WorkitemContext.class, workitemId);
         }
         return rnModel;
     }
@@ -413,12 +454,17 @@ public class WorkitemController {
             }
             ResourcingContext rCtx = resourcingContextService.GetContext(null, workitem.getEntity().getRtid(),
                     RServiceType.DeallocateWorkitem, args);
+            if (rCtx != null) {
+                ContextLockManager.WriteLock(WorkitemContext.class, workitemId);
+            }
             String jsonifyResult = rScheduler.ScheduleSync(rCtx);
             // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
 
         } catch (Exception e) {
             ReturnModelHelper.ExceptionResponse(rnModel, e.getClass().getName());
+        } finally {
+            ContextLockManager.WriteUnLock(WorkitemContext.class, workitemId);
         }
         return rnModel;
     }

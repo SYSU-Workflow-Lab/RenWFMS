@@ -389,7 +389,6 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
                 }
             }
         } catch (Exception ex) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             LogUtil.Log(String.format("When WorkQueue(%s of %s, %s) flush add changes to entity exception occurred, %s",
                     this.queueId, this.ownerWorkerId, this.type.name(), ex), WorkQueueContext.class.getName(),
                     LogLevelType.ERROR, "");

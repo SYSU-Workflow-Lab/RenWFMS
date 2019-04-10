@@ -5,14 +5,11 @@
 package org.sysu.renResourcing.context;
 
 import org.springframework.transaction.annotation.Transactional;
-import org.sysu.renResourcing.GlobalContext;
 import org.sysu.renCommon.enums.WorkQueueContainerType;
 import org.sysu.renCommon.enums.WorkQueueType;
-import org.sysu.renResourcing.consistency.ContextCachePool;
 import org.sysu.renResourcing.context.contextService.WorkQueueContextService;
 import org.sysu.renResourcing.utility.SpringContextUtil;
 
-import java.util.Collections;
 import java.util.Set;
 
 /**

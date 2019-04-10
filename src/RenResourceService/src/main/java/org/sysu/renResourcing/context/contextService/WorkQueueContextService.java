@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renCommon.enums.WorkQueueType;
-import org.sysu.renResourcing.consistency.ContextCachePool;
 import org.sysu.renResourcing.context.WorkQueueContext;
 import org.sysu.renResourcing.context.WorkitemContext;
 import org.sysu.renResourcing.dao.RenQueueitemsEntityDAO;
@@ -36,26 +35,9 @@ public class WorkQueueContextService {
      * @param queueType     queue type enum
      * @return a workqueue context
      */
-    public synchronized WorkQueueContext GetContext(String ownerWorkerId, WorkQueueType queueType) {
-        return this.GetContext(ownerWorkerId, queueType, false);
-    }
-
-    /**
-     * Get the specific queue context and store to entity.
-     *
-     * @param ownerWorkerId queue owner worker id
-     * @param queueType     queue type enum
-     * @param forceReload   force reload from entity and refresh cache
-     * @return a workqueue context
-     */
     @Transactional(rollbackFor = Exception.class)
-    public synchronized WorkQueueContext GetContext(String ownerWorkerId, WorkQueueType queueType, boolean forceReload) {
+    public synchronized WorkQueueContext GetContext(String ownerWorkerId, WorkQueueType queueType) {
         String wqid = String.format("WQ_%s_%s", queueType.name(), ownerWorkerId);
-        WorkQueueContext retCtx = ContextCachePool.Retrieve(WorkQueueContext.class, wqid);
-        // fetch cache
-        if (retCtx != null && !forceReload) {
-            return retCtx;
-        }
         boolean cmtFlag = false;
         try {
             RenWorkqueueEntity rwqe = renWorkqueueEntityDAO.findByOwnerIdAndType(ownerWorkerId, queueType.ordinal());
@@ -68,9 +50,7 @@ public class WorkQueueContextService {
                 renWorkqueueEntityDAO.saveOrUpdate(rwqe);
             }
             cmtFlag = true;
-            WorkQueueContext generateCtx = WorkQueueContext.GenerateContext(rwqe);
-            ContextCachePool.AddOrUpdate(wqid, generateCtx);
-            return generateCtx;
+            return WorkQueueContext.GenerateContext(rwqe);
         } catch (Exception ex) {
             if (!cmtFlag) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
