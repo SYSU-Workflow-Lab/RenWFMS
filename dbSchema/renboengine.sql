@@ -147,7 +147,7 @@ CREATE TABLE `ren_exitem` (
 DROP TABLE IF EXISTS `ren_log`;
 CREATE TABLE `ren_log` (
   `logid` varchar(64) NOT NULL,
-  `label` varchar(64) DEFAULT NULL,
+  `label` varchar(1000) DEFAULT NULL,
   `level` varchar(16) DEFAULT NULL,
   `message` text,
   `timestamp` datetime DEFAULT NULL,

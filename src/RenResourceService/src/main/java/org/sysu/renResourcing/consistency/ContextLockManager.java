@@ -38,10 +38,10 @@ public class ContextLockManager {
      * @param clazz     context class
      * @param contextId context id
      */
-    public static void ReadLock(Class<?> clazz, String contextId) {
+    public static boolean ReadTryLock(Class<?> clazz, String contextId) {
         String lockId = ContextLockManager.GenerateLockKey(clazz, contextId);
         ContextLockManager.CheckEmptyLock(lockId);
-        ContextLockManager.lockTable.get(lockId).readLock().lock();
+        return ContextLockManager.lockTable.get(lockId).readLock().tryLock();
     }
 
     /**
@@ -87,7 +87,7 @@ public class ContextLockManager {
      * by the current thread, or the write lock was already held
      * by the current thread; and {@code false} otherwise.
      */
-    public static boolean TryWriteLock(Class<?> clazz, String contextId) {
+    public static boolean WriteTryLock(Class<?> clazz, String contextId) {
         String lockId = ContextLockManager.GenerateLockKey(clazz, contextId);
         ContextLockManager.CheckEmptyLock(lockId);
         return ContextLockManager.lockTable.get(lockId).writeLock().tryLock();
@@ -104,6 +104,7 @@ public class ContextLockManager {
         ReentrantReadWriteLock lock = ContextLockManager.lockTable.get(lockId);
         if (lock != null) {
             lock.readLock().unlock();
+            ContextLockManager.lockTable.remove(lockId);
         }
     }
 
@@ -118,6 +119,7 @@ public class ContextLockManager {
         ReentrantReadWriteLock lock = ContextLockManager.lockTable.get(lockId);
         if (lock != null) {
             lock.writeLock().unlock();
+            ContextLockManager.lockTable.remove(lockId);
         }
     }
 

@@ -8,7 +8,6 @@ import org.sysu.renCommon.entity.RenRsparticipantEntity;
 import org.sysu.renCommon.enums.AgentReentrantType;
 import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renCommon.enums.WorkerType;
-import org.sysu.renResourcing.consistency.ContextCachePool;
 import org.sysu.renResourcing.dao.RenRsparticipantEntityDAO;
 import org.sysu.renResourcing.utility.LogUtil;
 import org.sysu.renResourcing.utility.SpringContextUtil;
@@ -59,31 +58,13 @@ public class ParticipantContext implements Serializable, RCacheablesContext {
      * @return Participant resourcing context, null if exception occurred or assertion error
      */
     public static ParticipantContext GetContext(String rtid, String workerId) {
-        return ParticipantContext.GetContext(rtid, workerId, false);
-    }
-
-    /**
-     * Get a participant context by its global id.
-     *
-     * @param workerId worker global id
-     * @return Participant resourcing context, null if exception occurred or assertion error
-     */
-    public static ParticipantContext GetContext(String rtid, String workerId, boolean forceReload) {
-        ParticipantContext cachedCtx = ContextCachePool.Retrieve(ParticipantContext.class, workerId);
-        // fetch cache
-        if (cachedCtx != null && !forceReload) {
-            return cachedCtx;
-        }
-        boolean cmtFlag = false;
         try {
             RenRsparticipantEntityDAO renRsparticipantEntityDAO = (RenRsparticipantEntityDAO) SpringContextUtil.getBean("renRsparticipantEntityDAO");
             RenRsparticipantEntity rre = renRsparticipantEntityDAO.findByWorkerGid(workerId);
-            ParticipantContext retCtx = ParticipantContext.GenerateParticipantContext(rre);
-            ContextCachePool.AddOrUpdate(workerId, retCtx);
-            return retCtx;
+            return ParticipantContext.GenerateParticipantContext(rre);
         } catch (Exception ex) {
-            LogUtil.Log("When json serialization exception occurred, transaction rollback. " + ex,
-                    TaskContext.class.getName(), LogLevelType.ERROR, rtid);
+            LogUtil.Log("Get context exception occurred. " + ex,
+                    ParticipantContext.class.getName(), LogLevelType.ERROR, rtid);
             return null;
         }
     }

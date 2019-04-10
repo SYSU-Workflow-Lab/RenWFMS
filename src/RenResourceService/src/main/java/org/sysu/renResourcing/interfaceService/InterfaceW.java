@@ -126,7 +126,6 @@ public class InterfaceW {
      * @param ctx rs context
      * @return true for a successful workitem start
      */
-    @Transactional(rollbackFor = Exception.class)
     public boolean Start(ResourcingContext ctx) {
         String workitemId = (String) ctx.getArgs().get("workitemId");
         String workerId = (String) ctx.getArgs().get("workerId");

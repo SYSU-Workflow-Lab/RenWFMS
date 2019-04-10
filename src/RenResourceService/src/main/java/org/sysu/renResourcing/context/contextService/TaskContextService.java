@@ -2,13 +2,10 @@ package org.sysu.renResourcing.context.contextService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.sysu.renCommon.entity.RenBoEntity;
 import org.sysu.renCommon.entity.RenRstaskEntity;
 import org.sysu.renCommon.entity.RenRuntimerecordEntity;
 import org.sysu.renCommon.enums.LogLevelType;
-import org.sysu.renResourcing.consistency.ContextCachePool;
 import org.sysu.renResourcing.context.TaskContext;
 import org.sysu.renResourcing.dao.RenBoEntityDAO;
 import org.sysu.renResourcing.dao.RenRstaskEntityDAO;
@@ -41,28 +38,7 @@ public class TaskContextService {
      * @param taskName task name
      * @return Task resourcing context, null if exception occurred or assertion error
      */
-    @Transactional(rollbackFor = Exception.class)
     public TaskContext GetContext(String rtid, String boName, String taskName) {
-        return this.GetContext(rtid, boName, taskName, false);
-    }
-
-    /**
-     * Get a task context by its name and belonging BO name of one runtime.
-     *
-     * @param rtid     runtime record id
-     * @param boName   belong to BO id
-     * @param taskName task name
-     * @return Task resourcing context, null if exception occurred or assertion error
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public TaskContext GetContext(String rtid, String boName, String taskName, boolean forceReload) {
-        String taskCtxId = String.format("%s_%s_%s", rtid, boName, taskName);
-        TaskContext cachedCtx = ContextCachePool.Retrieve(TaskContext.class, taskCtxId);
-        // fetch cache
-        if (cachedCtx != null && !forceReload) {
-            return cachedCtx;
-        }
-        boolean cmtFlag = false;
         try {
             RenRuntimerecordEntity rre = renRuntimerecordEntityDAO.findByRtid(rtid);
             if (rre == null) {
@@ -77,14 +53,8 @@ public class TaskContextService {
             if (taskEntity == null) {
                 throw new RuntimeException("RenRstaskEntity is NULL!");
             }
-            cmtFlag = true;
-            TaskContext generatedCtx = TaskContext.GenerateTaskContext(taskEntity, pid);
-            ContextCachePool.AddOrUpdate(taskCtxId, generatedCtx);
-            return generatedCtx;
+            return TaskContext.GenerateTaskContext(taskEntity, pid);
         } catch (Exception ex) {
-            if (!cmtFlag) {
-                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            }
             LogUtil.Log("When json serialization exception occurred, transaction rollback. " + ex,
                     TaskContextService.class.getName(), LogLevelType.ERROR, rtid);
             return null;

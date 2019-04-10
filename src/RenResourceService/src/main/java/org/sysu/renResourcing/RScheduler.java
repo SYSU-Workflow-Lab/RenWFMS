@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.sysu.renCommon.context.ObservableMessage;
 import org.sysu.renCommon.enums.LogLevelType;
-import org.sysu.renResourcing.consistency.ContextCachePool;
 import org.sysu.renResourcing.context.ResourcingContext;
 import org.sysu.renResourcing.context.contextService.ResourcingContextService;
 import org.sysu.renResourcing.utility.LogUtil;
@@ -195,7 +194,6 @@ public class RScheduler implements Observer {
                     break;
             }
             resourcingContextService.SaveToSteady(rCtx);
-            ContextCachePool.Remove(ResourcingContext.class, rCtx.getRstid());
         } catch (Exception ex) {
             try {
                 LogUtil.Log(String.format("Achieving resourcing context(%s: %s) but exception occurred, %S",

@@ -53,29 +53,29 @@ public class ApplicationRunningHelper {
     /**
      * Update engine information per 10 seconds.
      */
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(initialDelay = 5000, fixedRate = 10000)
     public void MonitorRunner() {
         try {
             // CPU Load
             OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
             double cpuValue = operatingSystemMXBean.getProcessCpuLoad();
-            log.info("当前CPU占用率：" + (cpuValue * 100) + "%");
+//            log.info("当前CPU占用率：" + (cpuValue * 100) + "%");
 
             // Memory Usage
             MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
             MemoryUsage heapMemory = memoryMXBean.getHeapMemoryUsage();
             double memoryResult = heapMemory.getUsed() * 1.0 / heapMemory.getCommitted();
-            log.info("当前Memory占用率：" + (memoryResult * 100) + "%");
+//            log.info("当前Memory占用率：" + (memoryResult * 100) + "%");
 
             // Tomcat Threads
             MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-            ObjectName name = ObjectName.getInstance("Tomcat:name=\"http-nio-10232\",type=ThreadPool");
+            ObjectName name = ObjectName.getInstance("Tomcat:name=\"http-nio-" + environment.getProperty("server.port") + "\",type=ThreadPool");
             AttributeList list = mBeanServer.getAttributes(name, new String[]{"currentThreadsBusy"});
             Attribute att = (Attribute)list.get(0);
             Integer tomcatValue  = (Integer)att.getValue();
             double maxThreads = Double.valueOf(environment.getProperty("server.tomcat.max-threads"));
             double tomcatResult = tomcatValue / maxThreads;
-            log.info("当前Tomcat并发数：" + tomcatValue);
+//            log.info("当前Tomcat并发数：" + tomcatValue);
 
             RenServiceInfo serviceInfo = renServiceInfoDAO.findByInterpreterId(GlobalContext.ENGINE_GLOBAL_ID);
             serviceInfo.setCpuOccupancyRate(cpuValue);
