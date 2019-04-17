@@ -202,21 +202,6 @@ public class InterfaceB {
             rre.setFinishTimestamp(TimestampUtil.GetCurrentTimestamp());
             rre.setIsSucceed(Integer.parseInt(successFlag));
             renRuntimerecordEntityDAO.saveOrUpdate(rre);
-            String participantCache = rre.getParticipantCache();
-            String[] participantItem = participantCache.split(",");
-            for (String participantGid : participantItem) {
-                // Gid is in pattern of "WorkerGlobalId:BRoleName"
-                String workerId = participantGid.split(":")[0];
-                RenRsparticipantEntity rpe = renRsparticipantEntityDAO.findByWorkerGid(workerId);
-                if (rpe != null) {
-                    rpe.setReferenceCounter(rpe.getReferenceCounter() - 1);
-                    if (rpe.getReferenceCounter() <= 0) {
-                        renRsparticipantEntityDAO.delete(rpe);
-                    } else {
-                        renRsparticipantEntityDAO.saveOrUpdate(rpe);
-                    }
-                }
-            }
             RenProcessEntity processEntity = renProcessEntityDAO.findByPid(rre.getProcessId());
             processEntity.setSuccessCount(processEntity.getSuccessCount() + 1);
             renProcessEntityDAO.saveOrUpdate(processEntity);

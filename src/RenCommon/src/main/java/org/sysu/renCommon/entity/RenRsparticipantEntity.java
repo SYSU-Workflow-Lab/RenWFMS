@@ -10,7 +10,6 @@ public class RenRsparticipantEntity {
     private String displayname;
     private int type;
     private int reentrantType;
-    private int referenceCounter;
     private String agentLocation;
     private String note;
 
@@ -55,16 +54,6 @@ public class RenRsparticipantEntity {
     }
 
     @Basic
-    @Column(name = "referenceCounter")
-    public int getReferenceCounter() {
-        return referenceCounter;
-    }
-
-    public void setReferenceCounter(int referenceCounter) {
-        this.referenceCounter = referenceCounter;
-    }
-
-    @Basic
     @Column(name = "agentLocation")
     public String getAgentLocation() {
         return agentLocation;
@@ -91,7 +80,6 @@ public class RenRsparticipantEntity {
         RenRsparticipantEntity that = (RenRsparticipantEntity) o;
         return type == that.type &&
                 reentrantType == that.reentrantType &&
-                referenceCounter == that.referenceCounter &&
                 Objects.equals(workerid, that.workerid) &&
                 Objects.equals(displayname, that.displayname) &&
                 Objects.equals(agentLocation, that.agentLocation) &&
@@ -101,6 +89,6 @@ public class RenRsparticipantEntity {
     @Override
     public int hashCode() {
 
-        return Objects.hash(workerid, displayname, type, reentrantType, referenceCounter, agentLocation, note);
+        return Objects.hash(workerid, displayname, type, reentrantType, agentLocation, note);
     }
 }
