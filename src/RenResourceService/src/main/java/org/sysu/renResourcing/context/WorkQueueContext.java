@@ -58,8 +58,8 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
      * @param workitem workitem entity.
      */
     public synchronized void AddOrUpdate(WorkitemContext workitem) {
-        this.RefreshFromSteady();
-        this.workitems.put(workitem.getEntity().getWid(), workitem);
+//        this.RefreshFromSteady();
+//        this.workitems.put(workitem.getEntity().getWid(), workitem);
         this.AddChangesToSteady(workitem);
         this.LogEvent(workitem);
     }
@@ -108,9 +108,9 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
      */
     @Transactional(rollbackFor = Exception.class)
     public synchronized void Remove(WorkitemContext workitem) {
-        this.RefreshFromSteady();
+//        this.RefreshFromSteady(workitem.getEntity().getWid());
         String wid = workitem.getEntity().getWid();
-        this.workitems.remove(wid);
+//        this.workitems.remove(wid);
         this.RemoveChangesToSteady(wid);
     }
 
@@ -401,7 +401,6 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
      * NOTICE this method will be called when perform GET DATA type of queue context
      * to make sure data consistency among all RS.
      */
-    @Transactional(rollbackFor = Exception.class)
     @SuppressWarnings("unchecked")
     public synchronized void RefreshFromSteady() {
         // TODO: whether WORKLISTED is auto-generated or not is not clear. Here we generate by add up 4 queue.
@@ -436,7 +435,6 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
             } else {
                 RenQueueitemsEntityDAO renQueueitemsEntityDAO = (RenQueueitemsEntityDAO) SpringContextUtil.getBean("renQueueitemsEntityDAO");
                 List<RenQueueitemsEntity> inSteady = renQueueitemsEntityDAO.findRenQueueitemsEntitiesByWorkqueueId(this.queueId);
-                cmtFlag = true;
                 for (RenQueueitemsEntity rqe : inSteady) {
                     WorkitemContext workitem = workitemContextService.GetContext(rqe.getWorkitemId(), "#RS_INTERNAL_" + GlobalContext.RESOURCE_SERVICE_GLOBAL_ID);
                     newMaps.put(rqe.getWorkitemId(), workitem);
@@ -444,9 +442,6 @@ public class WorkQueueContext implements Serializable, RCacheablesContext {
             }
             this.workitems = newMaps;
         } catch (Exception ex) {
-            if (!cmtFlag) {
-                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            }
             LogUtil.Log(String.format("When WorkQueue(%s of %s, %s) refresh from entity exception occurred, %s",
                     this.queueId, this.ownerWorkerId, this.type.name(), ex), WorkQueueContext.class.getName(),
                     LogLevelType.ERROR, "");
