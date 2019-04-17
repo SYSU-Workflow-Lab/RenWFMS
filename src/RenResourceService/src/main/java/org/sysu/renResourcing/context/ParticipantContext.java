@@ -4,12 +4,11 @@
  */
 package org.sysu.renResourcing.context;
 
+import lombok.extern.slf4j.Slf4j;
 import org.sysu.renCommon.entity.RenRsparticipantEntity;
 import org.sysu.renCommon.enums.AgentReentrantType;
-import org.sysu.renCommon.enums.LogLevelType;
 import org.sysu.renCommon.enums.WorkerType;
 import org.sysu.renResourcing.dao.RenRsparticipantEntityDAO;
-import org.sysu.renResourcing.utility.LogUtil;
 import org.sysu.renResourcing.utility.SpringContextUtil;
 
 import java.io.Serializable;
@@ -20,6 +19,7 @@ import java.io.Serializable;
  * Usage : Task context is an encapsulation of RenRsparticipant in a
  * convenient way for resourcing service.
  */
+@Slf4j
 public class ParticipantContext implements Serializable, RCacheablesContext {
     /**
      * Serial version UID.
@@ -63,8 +63,7 @@ public class ParticipantContext implements Serializable, RCacheablesContext {
             RenRsparticipantEntity rre = renRsparticipantEntityDAO.findByWorkerGid(workerId);
             return ParticipantContext.GenerateParticipantContext(rre);
         } catch (Exception ex) {
-            LogUtil.Log("Get context exception occurred. " + ex,
-                    ParticipantContext.class.getName(), LogLevelType.ERROR, rtid);
+            log.error("Get context but" + ex + " occurred. [workerId:" + workerId + ", rtid:" + rtid + "]");
             return null;
         }
     }

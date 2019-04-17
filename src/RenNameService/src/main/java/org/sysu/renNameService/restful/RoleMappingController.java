@@ -283,43 +283,6 @@ public class RoleMappingController {
     }
 
     /**
-     * Load involved resources to participant for RS.
-     *
-     * @param token auth token
-     * @param rtid  process runtime record id (required)
-     * @return response package
-     */
-    @RequestMapping(value = "/unloadParticipant", produces = {"application/json"})
-    @ResponseBody
-    public ReturnModel UnLoadParticipant(@RequestParam(value = "token", required = false) String token,
-                                         @RequestParam(value = "rtid", required = false) String rtid) {
-        ReturnModel rnModel = new ReturnModel();
-        try {
-            // miss params
-            List<String> missingParams = new ArrayList<>();
-            if (token == null) missingParams.add("token");
-            if (rtid == null) missingParams.add("rtid");
-            if (missingParams.size() > 0) {
-                return ReturnModelHelper.MissingParametersResponse(missingParams);
-            }
-            // token check
-            if (!authorizationService.CheckValid(token)) {
-                return ReturnModelHelper.UnauthorizedResponse(token);
-            }
-            // logic
-            HashMap<String, String> args = new HashMap<>();
-            args.put("rtid", rtid);
-            NameServiceTransaction t = transactionCreator.Create(TransactionType.BusinessRoleMapping, "unloadParticipant", args);
-            String jsonifyResult = (String) this.scheduler.Schedule(t);
-            // return
-            ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResult);
-        } catch (Exception e) {
-            ReturnModelHelper.ExceptionResponse(rnModel, e.getClass().getName());
-        }
-        return rnModel;
-    }
-
-    /**
      * Get all resources from a REN user binding COrgan.
      *
      * @param token auth token

@@ -132,7 +132,7 @@ public class WorkitemContextService {
         for (WorkitemContext workitem : wList) {
             boolean isLock = ContextLockManager.ReadTryLock(workitem.getClass(), workitem.getEntity().getWid());
             if (onlyActive && !isLock) {
-                System.out.println(workitem.getEntity().getWid() + "get read lock failed!!!");
+//                System.out.println(workitem.getEntity().getWid() + "get read lock failed!!!");
                 continue;
             }
             try {

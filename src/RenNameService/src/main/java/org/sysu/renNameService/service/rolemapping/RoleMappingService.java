@@ -126,12 +126,9 @@ public class RoleMappingService {
                 String workerGid = mp.getKey();
                 HashMap workerItem = mp.getValue();
                 RenRsparticipantEntity rpe = renRsparticipantEntityDAO.findByWorkerGid(workerGid);
-                if (rpe != null) {
-                    rpe.setReferenceCounter(rpe.getReferenceCounter() + 1);
-                } else {
+                if (rpe == null) {
                     rpe = new RenRsparticipantEntity();
                     rpe.setWorkerid(workerGid);
-                    rpe.setReferenceCounter(1);
                     rpe.setNote((String) workerItem.get("Note"));
                     if (workerGid.startsWith("Human_")) {
                         rpe.setDisplayname((String) workerItem.get("PersonId"));
@@ -142,40 +139,12 @@ public class RoleMappingService {
                         rpe.setReentrantType((Integer) workerItem.get("Type"));
                         rpe.setAgentLocation((String) workerItem.get("Location"));
                     }
+                    renRsparticipantEntityDAO.saveOrUpdate(rpe);
                 }
-                renRsparticipantEntityDAO.saveOrUpdate(rpe);
             }
             RenRuntimerecordEntity rre = renRuntimerecordEntityDAO.findByRtid(rtid);
             rre.setParticipantCache(workerList);
             renRuntimerecordEntityDAO.saveOrUpdate(rre);
-        } catch (Exception ex) {
-            LogUtil.Log("When load participant, exception occurred, " + ex.toString() + ", service rollback",
-                    RoleMappingService.class.getName(), LogUtil.LogLevelType.ERROR, rtid);
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            throw ex;
-        }
-    }
-
-    /**
-     * Unload participants for a process to be shutdown soon.
-     *
-     * @param rtid process rtid
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public void UnloadParticipant(String rtid) {
-        try {
-            RenRuntimerecordEntity rre = renRuntimerecordEntityDAO.findByRtid(rtid);
-            String participantCache = rre.getParticipantCache();
-            String[] participantItem = participantCache.split(",");
-            for (String participantGid : participantItem) {
-                RenRsparticipantEntity rpe = renRsparticipantEntityDAO.findByWorkerGid(participantGid);
-                rpe.setReferenceCounter(rpe.getReferenceCounter() - 1);
-                if (rpe.getReferenceCounter() < 1) {
-                    renRsparticipantEntityDAO.delete(rpe);
-                } else {
-                    renRsparticipantEntityDAO.saveOrUpdate(rpe);
-                }
-            }
         } catch (Exception ex) {
             LogUtil.Log("When load participant, exception occurred, " + ex.toString() + ", service rollback",
                     RoleMappingService.class.getName(), LogUtil.LogLevelType.ERROR, rtid);

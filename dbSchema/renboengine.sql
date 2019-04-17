@@ -296,7 +296,6 @@ CREATE TABLE `ren_rsparticipant` (
   `displayname` text COMMENT 'user friendly display name',
   `type` int(11) NOT NULL DEFAULT '0' COMMENT '0-human,1-agent',
   `reentrantType` int(11) NOT NULL DEFAULT '0' COMMENT 'is agent reentrant, 0-yes, 1-no',
-  `referenceCounter` int(11) NOT NULL DEFAULT '0' COMMENT 'reference counter for running processes',
   `agentLocation` text,
   `note` text,
   PRIMARY KEY (`workerid`)

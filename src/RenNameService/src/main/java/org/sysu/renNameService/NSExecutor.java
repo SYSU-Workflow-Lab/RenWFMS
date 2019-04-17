@@ -102,10 +102,6 @@ public class NSExecutor extends Observable {
                             roleMappingService.LoadParticipant((String) args.get("renid"), rtid, nst.getTransactionContext().getNsid());
                             retStr = "OK";
                             break;
-                        case "unloadParticipant":
-                            roleMappingService.UnloadParticipant(rtid);
-                            retStr = "OK";
-                            break;
                     }
                     // prepare execution result
                     execResult.put("execCode", GlobalContext.TRANSACTION_EXECUTOR_SUCCESS);
