@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.sysu.renCommon.entity.RenProcessEntity;
-import org.sysu.renCommon.entity.RenRsparticipantEntity;
 import org.sysu.renCommon.entity.RenRuntimerecordEntity;
 import org.sysu.renCommon.entity.RenWorkitemEntity;
 import org.sysu.renCommon.utility.AuthDomainHelper;
@@ -21,7 +20,6 @@ import org.sysu.renResourcing.context.contextService.WorkQueueContainerService;
 import org.sysu.renResourcing.context.contextService.WorkQueueContextService;
 import org.sysu.renResourcing.context.contextService.WorkitemContextService;
 import org.sysu.renResourcing.dao.RenProcessEntityDAO;
-import org.sysu.renResourcing.dao.RenRsparticipantEntityDAO;
 import org.sysu.renResourcing.dao.RenRuntimerecordEntityDAO;
 import org.sysu.renResourcing.executor.AllocateInteractionExecutor;
 import org.sysu.renResourcing.executor.OfferInteractionExecutor;
@@ -65,9 +63,6 @@ public class InterfaceB {
     private RenRuntimerecordEntityDAO renRuntimerecordEntityDAO;
 
     @Autowired
-    private RenRsparticipantEntityDAO renRsparticipantEntityDAO;
-
-    @Autowired
     private RenProcessEntityDAO renProcessEntityDAO;
 
     /**
@@ -99,7 +94,7 @@ public class InterfaceB {
         TaskContext taskContext = TaskContext.ParseHashMap(mapTaskCtx);
 
         // use runtime record to get the admin auth name for admin queue identifier
-        RenRuntimerecordEntity runtimeRecord = assistantService.IBfindRuntimerecordEntityByRtid(ctx.getRtid());
+        RenRuntimerecordEntity runtimeRecord = renRuntimerecordEntityDAO.findByRtid(ctx.getRtid());
         String domain = AuthDomainHelper.GetDomainByRTID(runtimeRecord.getRtid());
 
         // generate workitem
@@ -147,7 +142,7 @@ public class InterfaceB {
                         allocateAnp.AddNotification(chosenOne, allocateNotifyMap, ctx.getRtid());
                         AsyncPluginRunner.AsyncRun(allocateAnp);
                     }
-                    assistantService.increaseWorkitemCountByRtid(ctx.getRtid());
+                    assistantService.increaseWorkitemCount();
                     break;
                 case Offer:
                     // create a filter interaction
@@ -175,7 +170,7 @@ public class InterfaceB {
                     if (offerAnp.Count(ctx.getRtid()) > 0) {
                         AsyncPluginRunner.AsyncRun(offerAnp);
                     }
-                    assistantService.increaseWorkitemCountByRtid(ctx.getRtid());
+                    assistantService.increaseWorkitemCount();
                     break;
                 case AutoAllocateIfOfferFailed:
                     // todo not implementation
@@ -258,7 +253,7 @@ public class InterfaceB {
                 WorkQueueContainer container = workQueueContainerService.GetContext(participant.getWorkerId());
                 container.MoveAllocatedToOffered(workitem);
                 this.WorkitemChanged(workitem, WorkitemStatusType.Fired, WorkitemResourcingStatusType.Offered, payload);
-                assistantService.decreaseWorkitemCountByRtid(workitem.getEntity().getRtid());
+                assistantService.decreaseWorkitemCount();
                 return true;
             } catch (Exception ex) {
                 interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Deallocate but exception occurred: " + ex);
@@ -295,7 +290,7 @@ public class InterfaceB {
             }
             // start by admin
             if (workitem.getEntity().getResourceStatus().equals(WorkitemResourcingStatusType.Unoffered.name())) {
-                RenRuntimerecordEntity runtimeRecord = assistantService.IBfindRuntimerecordEntityByRtid(workitem.getEntity().getRtid());
+                RenRuntimerecordEntity runtimeRecord = renRuntimerecordEntityDAO.findByRtid(workitem.getEntity().getRtid());
                 // get admin queue for this auth user
                 String adminQueuePostfix = runtimeRecord.getSessionId().split("_")[1];
                 WorkQueueContainer adminContainer = workQueueContainerService.GetContext(GlobalContext.WORKQUEUE_ADMIN_PREFIX + adminQueuePostfix);
@@ -398,7 +393,7 @@ public class InterfaceB {
                 container.RemoveFromQueue(workitem, WorkQueueType.ALLOCATED);
                 this.WorkitemChanged(workitem, WorkitemStatusType.ForcedComplete, WorkitemResourcingStatusType.Skipped, payload);
                 interfaceE.WriteLog(workitem, participant.getWorkerId(), RSEventType.skip);
-                assistantService.decreaseWorkitemCountByRtid(workitem.getEntity().getRtid());
+                assistantService.decreaseWorkitemCount();
                 return true;
             } catch (Exception ex) {
                 interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Skip but exception occurred: " + ex);
@@ -432,7 +427,7 @@ public class InterfaceB {
             container.RemoveFromQueue(workitem, WorkQueueType.STARTED);
             this.WorkitemChanged(workitem, WorkitemStatusType.Complete, WorkitemResourcingStatusType.Completed, payload);
             interfaceE.WriteLog(workitem, participant.getWorkerId(), RSEventType.complete);
-            assistantService.decreaseWorkitemCountByRtid(workitem.getEntity().getRtid());
+            new Thread(() -> assistantService.decreaseWorkitemCount()).start();
             return true;
         } catch (Exception ex) {
             interfaceX.FailedRedirectToLauncherDomainPool(workitem, "Complete but exception occurred: " + ex);

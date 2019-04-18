@@ -17,6 +17,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
 import java.net.InetAddress;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Skye on 2019/1/2.
@@ -33,6 +34,8 @@ public class ApplicationRunningHelper {
     private Environment environment;
 
     private String URL;
+
+    private AtomicInteger workitemCount = new AtomicInteger(0);
 
     @PostConstruct
     public void postConstruct() {
@@ -70,8 +73,8 @@ public class ApplicationRunningHelper {
             MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
             ObjectName name = ObjectName.getInstance("Tomcat:name=\"http-nio-" + environment.getProperty("server.port") + "\",type=ThreadPool");
             AttributeList list = mBeanServer.getAttributes(name, new String[]{"currentThreadsBusy"});
-            Attribute att = (Attribute)list.get(0);
-            Integer tomcatValue  = (Integer)att.getValue();
+            Attribute att = (Attribute) list.get(0);
+            Integer tomcatValue = (Integer) att.getValue();
             double maxThreads = Double.valueOf(environment.getProperty("server.tomcat.max-threads"));
             double tomcatResult = tomcatValue / maxThreads;
 //            log.info("当前Tomcat并发数：" + tomcatValue);
@@ -80,6 +83,7 @@ public class ApplicationRunningHelper {
             serviceInfo.setCpuOccupancyRate(cpuValue);
             serviceInfo.setMemoryOccupancyRate(memoryResult);
             serviceInfo.setTomcatConcurrency(tomcatResult);
+            serviceInfo.setWorkitemCount(workitemCount.get());
             serviceInfo.updateBusiness();
             renServiceInfoDAO.saveOrUpdate(serviceInfo);
         } catch (MalformedObjectNameException | InstanceNotFoundException | ReflectionException e) {
@@ -87,4 +91,7 @@ public class ApplicationRunningHelper {
         }
     }
 
+    public AtomicInteger getWorkitemCount() {
+        return workitemCount;
+    }
 }
