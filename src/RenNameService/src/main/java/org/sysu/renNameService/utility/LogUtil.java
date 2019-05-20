@@ -76,25 +76,25 @@ public final class LogUtil {
      */
     private static void ActualLog(String msg, String label, LogLevelType level, String rtid, int depth) {
         LogUtil.Echo(msg, label, level);
-        if (depth > 1) {
-            return;
-        }
-        try {
-            // use read lock to prevent flush
-            LogUtil.readWriteLock.readLock().lock();
-            LogMessagePackage lmp = new LogMessagePackage(rtid, msg, label, level,
-                    TimestampUtil.GetCurrentTimestamp());
-            LogUtil.logBuffer.add(lmp);
-        } catch (Exception ex) {
-            LogUtil.ActualLog("When logging, exception occurred" + ex, LogUtil.class.getName(),
-                    LogLevelType.ERROR, rtid, depth + 1);
-        } finally {
-            boolean flushFlag = LogUtil.logBuffer.size() >= GlobalContext.LOG_BUFFER_SIZE;
-            LogUtil.readWriteLock.readLock().unlock();
-            if (flushFlag) {
-                LogUtil.FlushLog();
-            }
-        }
+//        if (depth > 1) {
+//            return;
+//        }
+//        try {
+//            // use read lock to prevent flush
+//            LogUtil.readWriteLock.readLock().lock();
+//            LogMessagePackage lmp = new LogMessagePackage(rtid, msg, label, level,
+//                    TimestampUtil.GetCurrentTimestamp());
+//            LogUtil.logBuffer.add(lmp);
+//        } catch (Exception ex) {
+//            LogUtil.ActualLog("When logging, exception occurred" + ex, LogUtil.class.getName(),
+//                    LogLevelType.ERROR, rtid, depth + 1);
+//        } finally {
+//            boolean flushFlag = LogUtil.logBuffer.size() >= GlobalContext.LOG_BUFFER_SIZE;
+//            LogUtil.readWriteLock.readLock().unlock();
+//            if (flushFlag) {
+//                LogUtil.FlushLog();
+//            }
+//        }
     }
 
     /**
