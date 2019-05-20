@@ -142,7 +142,7 @@ public class InterfaceB {
                         allocateAnp.AddNotification(chosenOne, allocateNotifyMap, ctx.getRtid());
                         AsyncPluginRunner.AsyncRun(allocateAnp);
                     }
-                    assistantService.increaseWorkitemCount();
+                    new Thread(()->assistantService.increaseWorkitemCount()).start();
                     break;
                 case Offer:
                     // create a filter interaction
@@ -170,7 +170,7 @@ public class InterfaceB {
                     if (offerAnp.Count(ctx.getRtid()) > 0) {
                         AsyncPluginRunner.AsyncRun(offerAnp);
                     }
-                    assistantService.increaseWorkitemCount();
+                    new Thread(()->assistantService.increaseWorkitemCount()).start();
                     break;
                 case AutoAllocateIfOfferFailed:
                     // todo not implementation
